@@ -111,8 +111,15 @@ def pool():
             "DATABASE_URL, to enable accounts and submissions.")
     from psycopg_pool import ConnectionPool          # noqa: PLC0415
 
-    _pool = ConnectionPool(url, min_size=1, max_size=8, open=True,
-                           timeout=30, kwargs={"connect_timeout": 20})
+    # On a long-lived server a warm spare connection is what spares the
+    # department the Neon cold start. On a serverless host the opposite is
+    # true: each invocation builds its own pool, so min_size=1 makes every
+    # cold start block on a connection the request may never need, inside a
+    # execution window measured in seconds. VERCEL is set by the platform.
+    serverless = bool(os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"))
+    _pool = ConnectionPool(url, min_size=0 if serverless else 1, max_size=8,
+                           open=True, timeout=30,
+                           kwargs={"connect_timeout": 20})
     # Closed deliberately at exit. Left to the garbage collector, the pool's
     # worker threads outlive the interpreter's shutdown and every run ends
     # with a PythonFinalizationError traceback that looks like a real fault.
