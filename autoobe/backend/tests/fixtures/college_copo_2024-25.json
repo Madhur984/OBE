@@ -1,0 +1,3952 @@
+[
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "KAS-302",
+  "course_title": "MATHEMATICS-III",
+  "cos": [
+   {
+    "co": "C201.1",
+    "statement": "Apply the concept of Laplace transform and apply in solving real life problems.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C201.2",
+    "statement": "Apply the concept of Fourier and Z – transform to evaluate engineering problems",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C201.3",
+    "statement": "Apply the concept of Formal Logic ,Group and Rings to evaluate real life problems",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C201.4",
+    "statement": "Apply the concept of Set, Relation, function and Counting Techniques",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C201.5",
+    "statement": "Apply the concept of Lattices and Boolean Algebra to create Logic Gates and Circuits, Truth Table, Boolean Functions, Karnaugh Maps",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "KVE-301",
+  "course_title": "UHVPE",
+  "cos": [
+   {
+    "co": "C202.1",
+    "statement": "Demonstrate the significance of value inputs in a classroom, distinguish between values and skills, analyse the need, basic guidelines, content and process of value education, explore the meaning of happiness and prosperity and do a correct appraisal of the current scenario in the society",
+    "levels": {
+     "PO6": 3,
+     "PO7": 2,
+     "PO8": 2,
+     "PO9": 3,
+     "PO12": 3
+    }
+   },
+   {
+    "co": "C202.2",
+    "statement": "Distinguish between the Self and the Body, understand the meaning of Harmony in the Self the Co-existence of Self and Body.",
+    "levels": {
+     "PO6": 3,
+     "PO7": 2,
+     "PO8": 2,
+     "PO9": 3,
+     "PO12": 3
+    }
+   },
+   {
+    "co": "C202.3",
+    "statement": "Analyse the value of harmonious relationship based on trust, respect and other naturally acceptable feelings in human-human relationships and explore their role in ensuring a harmonious society",
+    "levels": {
+     "PO6": 3,
+     "PO7": 2,
+     "PO8": 2,
+     "PO9": 3,
+     "PO12": 3
+    }
+   },
+   {
+    "co": "C202.4",
+    "statement": "Analyse the harmony in nature and existence, and work out their mutually fulfilling participation in the nature.",
+    "levels": {
+     "PO6": 3,
+     "PO7": 3,
+     "PO8": 2,
+     "PO9": 3,
+     "PO12": 3
+    }
+   },
+   {
+    "co": "C202.5",
+    "statement": "Distinguish between ethical and unethical practices, and start working out the strategy to actualize a harmonious environment wherever they work.",
+    "levels": {
+     "PO6": 3,
+     "PO7": 3,
+     "PO8": 3,
+     "PO9": 3,
+     "PO12": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": null,
+   "PO2": null,
+   "PO3": null,
+   "PO4": null,
+   "PO5": null,
+   "PO6": 3,
+   "PO7": 2.4,
+   "PO8": 2.2,
+   "PO9": 3,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": null,
+   "PSO2": null
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BEC-301",
+  "course_title": "Electronic Devices",
+  "cos": [
+   {
+    "co": "C203.1",
+    "statement": "Describe the principles of semiconductor physics",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C203.2",
+    "statement": "Explain the carrier transport in semiconductors.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C203.3",
+    "statement": "Analyze and find application of special purpose diodes",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C203.4",
+    "statement": "Demonstrate the working principle and design of bipolar junction transistor.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C203.5",
+    "statement": "Realize the mathematical models of MOS transistors.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 2.2,
+   "PO2": 2.2,
+   "PO3": 1.8,
+   "PO4": 2.2,
+   "PO5": 2.2,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 1.6,
+   "PSO2": 2.2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BEC-302",
+  "course_title": "Digital System Design",
+  "cos": [
+   {
+    "co": "C204.1",
+    "statement": "Perform numerous arithmetic and logic simplification using various methods",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C204.2",
+    "statement": "Design and analyze modular combinational circuits with MUX / DEMUX, Decoder &enco",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C204.3",
+    "statement": "Design &amp; analyze synchronous sequential logic circuits.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C204.4",
+    "statement": "Analyze various logic families and design circuits using PLDs.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C204.5",
+    "statement": "Design various ADCs and DACs according to the given specifications.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.8,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.8
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BEC303",
+  "course_title": "Network Analysis and Synthesis",
+  "cos": [
+   {
+    "co": "C205.1",
+    "statement": "Understand basics electrical circuits with nodal and mesh analysis.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 2,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C205.2",
+    "statement": "Apply electrical network theorems.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 2,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C205.3",
+    "statement": "Apply Laplace transform for steady state and transient behaviour of network circuit.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 2,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C205.4",
+    "statement": "Determine different network functions of Two Port network",
+    "levels": {
+     "PO1": 2,
+     "PO2": 2,
+     "PO3": 2,
+     "PO4": 2,
+     "PO5": 2,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C205.4",
+    "statement": "Determine different network functions of Two Port network",
+    "levels": {
+     "PO1": 2,
+     "PO2": 2,
+     "PO3": 2,
+     "PO4": 2,
+     "PO5": 2,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 1
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 2.6,
+   "PO2": 2.6,
+   "PO3": 2,
+   "PO4": 2.6,
+   "PO5": 2,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2.6,
+   "PSO2": 2.2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BEC353",
+  "course_title": "Network Analysis and Synthesis Lab",
+  "cos": [
+   {
+    "co": "C208.1",
+    "statement": "Apply basics of electrical circuits with nodal and mesh analysis.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C208.2",
+    "statement": "Apply the electrical network theorems.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C208.3",
+    "statement": "Analyse RLC circuits.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C208.4",
+    "statement": "Determine the stability of an electrical circuit.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C208.5",
+    "statement": "Design network filters.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.2,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BEC352",
+  "course_title": "Digital System Design Lab",
+  "cos": [
+   {
+    "co": "C207.1",
+    "statement": "Design and analyze combinational logic circuits.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C207.2",
+    "statement": "Design & analyze modular combinational circuits with MUX/DEMUX, decoder, encoder.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C207.3",
+    "statement": "Design & analyze synchronous sequential logic circuits.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C207.4",
+    "statement": "Design & build mini project using digital ICs.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 3,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 3
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BEC351",
+  "course_title": "Electronic Devices Lab",
+  "cos": [
+   {
+    "co": "C206.1",
+    "statement": "Demonstrate the working of basic electronics lab equipment.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C206.2",
+    "statement": "Demonstrate the working of PN junction diode and its applications.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C206.3",
+    "statement": "Demonstrate the characteristics of Zener diode.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C206.4",
+    "statement": "Design a voltage regulator using Zener diode.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C206.5",
+    "statement": "Demonstrate the working of BJT, FET, MOSFET and apply the concept in designing of amplifiers.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.2,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BEC-354",
+  "course_title": "Mini Project/ Internship",
+  "cos": [
+   {
+    "co": "C211.1",
+    "statement": "Demonstrate the functioning of Analog & Digital electronics circuits through Multisim simulations or 8085 programming.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO10": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C211.2",
+    "statement": "Present their work in form of powerpoint presentations.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO10": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C211.3",
+    "statement": "Effectively write the learnt simulation and theory principles in form of report.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO10": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": 3,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BCC-302",
+  "course_title": "PYTHON PROGRAMMING",
+  "cos": [
+   {
+    "co": "C210.1",
+    "statement": "To read and write simple Python programs.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO9": 2,
+     "PO10": 3,
+     "PO11": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C210.2",
+    "statement": "To develop Python programs with conditionals and loops.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO9": 3,
+     "PO10": 3,
+     "PO11": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C210.3",
+    "statement": "To define Python functions and to use Python data structures – lists, tuples, dictionaries",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO9": 2,
+     "PO10": 3,
+     "PO11": 2,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C210.4",
+    "statement": "To do input/output with files in Python",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO9": 3,
+     "PO10": 3,
+     "PO11": 3,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C210.5",
+    "statement": "To do searching ,sorting and merging in Python",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO9": 2,
+     "PO10": 2,
+     "PO11": 2,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.4,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": 2.4,
+   "PO10": 2.8,
+   "PO11": 2.6,
+   "PO12": 3,
+   "PSO1": 2.4,
+   "PSO2": 2.6
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BAS-402",
+  "course_title": "Technical Communication",
+  "cos": [
+   {
+    "co": "C213.1",
+    "statement": "Students will be able to UNDERSTAND the nature and objective of Technical Communication relevant for the work place as Engineers.",
+    "levels": {
+     "PO6": 2,
+     "PO7": 2,
+     "PO8": 2,
+     "PO9": 2,
+     "PO10": 2,
+     "PO11": 2
+    }
+   },
+   {
+    "co": "C213.2",
+    "statement": "Students will be able to DEVELOP an understanding of key concepts of writing, designing and speaking.",
+    "levels": {
+     "PO6": 1,
+     "PO7": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 1,
+     "PO11": 1
+    }
+   },
+   {
+    "co": "C213.3",
+    "statement": "Students will be able to UTILIZE the technical writing skills for the purposes of Technical Communication and its exposure in various dimensions.",
+    "levels": {
+     "PO6": 3,
+     "PO7": 3,
+     "PO8": 3,
+     "PO9": 3,
+     "PO10": 3,
+     "PO11": 3
+    }
+   },
+   {
+    "co": "C213.4",
+    "statement": "Students will be able BUILD UP interpersonal communication traits that will make the transition from institution to workplace smoother and help them to excel in their jobs.",
+    "levels": {
+     "PO6": 1,
+     "PO7": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 1,
+     "PO11": 1
+    }
+   },
+   {
+    "co": "C213.5",
+    "statement": "Students will be able to APPLY technical communication to build their personal brand and handle crisis communication.",
+    "levels": {
+     "PO6": 3,
+     "PO7": 3,
+     "PO8": 3,
+     "PO9": 3,
+     "PO10": 3,
+     "PO11": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": null,
+   "PO2": null,
+   "PO3": null,
+   "PO4": null,
+   "PO5": null,
+   "PO6": 2,
+   "PO7": 2,
+   "PO8": 2,
+   "PO9": 2,
+   "PO10": 2,
+   "PO11": 2,
+   "PO12": null,
+   "PSO1": null,
+   "PSO2": null
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BEC-401",
+  "course_title": "Communication Engineering",
+  "cos": [
+   {
+    "co": "C214.1",
+    "statement": "Students will be able to examine and compare different analog modulation schemes for their efficiency and bandwidth.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C214.2",
+    "statement": "Students will be able to describe the behavior of a communication system in presence of noise.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C214.3",
+    "statement": "Students will be able to differentiate various pulsed modulation system and examine their system performance.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C214.4",
+    "statement": "Students will be able to classify and describe various multiplexing techniques.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C214.5",
+    "statement": "Students will be able to evaluate different digital modulation schemes and compute the bit error performance.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 2.2,
+   "PO2": 2.2,
+   "PO3": 1.8,
+   "PO4": 2.2,
+   "PO5": 2.2,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2.2,
+   "PSO2": 1.8
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BEC-402",
+  "course_title": "Analog Circuits",
+  "cos": [
+   {
+    "co": "C215.1",
+    "statement": "Students will be able to describe the characterstics of diodes and transistors.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C215.2",
+    "statement": "Students will be able to implement and differentiate different types of feedback.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C215.3",
+    "statement": "Students will be able to explain and design oscillators.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C215.4",
+    "statement": "Students will be able to describe current mirrors and design op-amp.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C215.5",
+    "statement": ". Students will be able to classify the applications of op-amp and design of active filters.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 2.6,
+   "PO2": 2.6,
+   "PO3": 2.4,
+   "PO4": 2.6,
+   "PO5": 2.6,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2.6,
+   "PSO2": 2.4
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BEC-403",
+  "course_title": "SIGNAL SYSTEM",
+  "cos": [
+   {
+    "co": "C216.1",
+    "statement": "Analyze different types of signals",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C216.2",
+    "statement": "Analyze linear shift-invariant (LSI) systems",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C216.3",
+    "statement": "Represent continuous and discrete systems in time and frequency domain using Fourier series and transform.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C216.4",
+    "statement": "Analyze discrete time signals in z-domain.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C216.5",
+    "statement": "Perform sampling and reconstruction of a signal.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 2.2,
+   "PO2": 2.2,
+   "PO3": 1.6,
+   "PO4": 2.2,
+   "PO5": 2.2,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2.2,
+   "PSO2": 1.6
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BEC451",
+  "course_title": "Communication Engineering Lab",
+  "cos": [
+   {
+    "co": "C217.1",
+    "statement": "Analyze and compare different analog modulation schemes for their modulation factor and power.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C217.2",
+    "statement": ". Demonstrate pulse amplitude modulation.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C217.3",
+    "statement": ". Analyze different digital modulation schemes and can compute the bit error performance.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C217.4",
+    "statement": ". Study and simulate the Phase shift keying.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C217.5",
+    "statement": ". Design a front end BPSK modulator and demodulator.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.2,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BEC452",
+  "course_title": "Analog Circuit Lab",
+  "cos": [
+   {
+    "co": "C218.1",
+    "statement": ". Verify and demonstrate the characteristics of transistors.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C218.2",
+    "statement": ". Design and analyze various configurations of amplifier circuits.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C218.3",
+    "statement": ". Design sinusoidal and non-sinusoidal oscillators.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C218.4",
+    "statement": ". Verify the functioning of OP-AMP and design OP-AMP based circuits.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C218.5",
+    "statement": ". Design ADC and DAC.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.4,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.4
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BEC453",
+  "course_title": "Signal System Lab",
+  "cos": [
+   {
+    "co": "C219.1",
+    "statement": ". Demonstrate the basics operation of MATLAB.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C219.2",
+    "statement": ". Analyse the time domain and frequency domain signals.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C219.3",
+    "statement": ". Implement the concept of Fourier series and Fourier transforms.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C219.4",
+    "statement": ". Find the stability of system using pole-zero diagrams and bode diagram.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C219.5",
+    "statement": ". Design frequency response of the system.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.2,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 2nd",
+  "course_code": "BCC-401",
+  "course_title": "Cyber Security",
+  "cos": [
+   {
+    "co": "C220.1",
+    "statement": "Understand the basic concepts of cyber security and cybercrimes.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C220.2",
+    "statement": "Understand the security policies and cyber laws.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C220.3",
+    "statement": "Understand the tools and methods used in cyber crime",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C220.4",
+    "statement": "Understand the concepts of cyber forensics.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C220.5",
+    "statement": "Understand the cyber security policies and cyber laws",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2,
+   "PSO2": 2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-501",
+  "course_title": "Integrated Circuits",
+  "cos": [
+   {
+    "co": "CO301.1",
+    "statement": "Students will be able to define and describe the basic of analog IC design and a complete analysis of 741-IC Op-Amp",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "CO301.2",
+    "statement": "Students will be able to apply knowledge about Op-Amp based circuits and basic components of ICs to implement various types of filters.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "CO301.3",
+    "statement": "Students will be able to apply the concept of Op-Amp based non-linear and wave-shaping circuits.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "CO301.4",
+    "statement": "Students will be able to design CMOS digital integrated circuits and digital memory circuits.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "CO301.5",
+    "statement": "Students will be able to describe the working principle of data converters along with application specific ICs such as 555 timer and PLL.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 2.6,
+   "PO2": 2.6,
+   "PO3": 2,
+   "PO4": 2.6,
+   "PO5": 2.6,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2.6,
+   "PSO2": 2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC502",
+  "course_title": "Microprocessor & Microcontroller",
+  "cos": [
+   {
+    "co": "C302.1",
+    "statement": "Apply a basic concept of digital fundamentals to Microprocessor based personal computer system.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C302.2",
+    "statement": "Analyze a detailed software & hardware structure of the Microprocessor.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C302.3",
+    "statement": "Learn the basics of 8086 Microprocessor and Peripheral Devices like timer, USART etc.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C302.4",
+    "statement": "Understand the difference between Microprocessors & Microcontrollers, and details Architecture of 8051 Microcontroller.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C302.5",
+    "statement": "Learn the concept of 8051 instruction set and implement them to design projects on real timeproblems.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 1.8,
+   "PO2": 1.8,
+   "PO3": 1.4,
+   "PO4": 1.8,
+   "PO5": 1.8,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 1.8,
+   "PSO2": 1.4
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC503",
+  "course_title": "Digital Signal Processing",
+  "cos": [
+   {
+    "co": "C303.1",
+    "statement": "Design and describe different types of realizations of digital systems (IIR and FIR) and theirutilities",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C303.2",
+    "statement": "Select design parameters of analog IIR digital filters (Butterworth and Chebyshev filters) andimplement various methods such as impulse invariant transformation and bilineartransformation of conversion of analog to digital filters.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C303.3",
+    "statement": "Design FIR filter using various types of window functions.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C303.4",
+    "statement": "Define the principle of discrete Fourier transform & its various properties and concept ofcircular and linear convolution. Also, students will be able to define and implement FFT i.e. afast computation method of DFT.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C303.5",
+    "statement": "Define the concept of decimation and interpolation. Also, they will be able to implement it invarious practical applications.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 2.2,
+   "PO2": 2.2,
+   "PO3": 2.2,
+   "PO4": 2.2,
+   "PO5": 2.2,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2.2,
+   "PSO2": 2.2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-053",
+  "course_title": "VLSI TECHNOLOGY",
+  "cos": [
+   {
+    "co": "C304.1",
+    "statement": ". Interpret the basics of crystal growth, wafer preparation and wafer cleaning.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C304.2",
+    "statement": ". Evaluate the process of Epitaxy and oxidation.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C304.3",
+    "statement": ". Differentiate the lithography, etching and deposition process.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C304.4",
+    "statement": ". Analyze the process of diffusion and ion implantation.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C304.5",
+    "statement": ". Express the basic process involved in metallization and packaging.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.4,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.4
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-05",
+  "course_title": "Optical Communication",
+  "cos": [
+   {
+    "co": "C305.1",
+    "statement": "Define and explain the basic concepts and theory of optical communication.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C305.2",
+    "statement": "Describe the signal losses with their computation and dispersion mechanism occurring inside the optical fiber cable.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C305.3",
+    "statement": "Differentiate the optical sources used in optical communication with their comparative study.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C305.4",
+    "statement": "Identify different optical components on receiver side; assemble them to solve real world problems related to optical communication systems.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C305.5",
+    "statement": "Evaluate the performance of an optical receiver to get idea about power budget and ultimately be an engineer with adequate knowledge in optical domain.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 2.6,
+   "PO2": 2.6,
+   "PO3": 2,
+   "PO4": 2.6,
+   "PO5": 2.6,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2.6,
+   "PSO2": 2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-551",
+  "course_title": "INTEGRATED CIRCUITS LAB",
+  "cos": [
+   {
+    "co": "C306.1",
+    "statement": ". Design different non-linear applications of operational amplifiers such as log, antilog amplifiers and voltage comparators amplifiers and voltage comparators.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C306.2",
+    "statement": ". Explain and design different linear applications of operational amplifiers such as filters.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C306.3",
+    "statement": ". Demonstrate the function of waveforms generator using op-Amp.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C306.4",
+    "statement": ". Construct multivibrator and oscillator circuits using IC555 and IC566 and perform measurements of frequency and time.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C306.5",
+    "statement": ". Design and practically demonstrate the applications based on IC555 and IC566.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.8,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.8
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-552",
+  "course_title": "MICROPROCESSOR & MICROCONTROLLER LAB",
+  "cos": [
+   {
+    "co": "C307.1",
+    "statement": ". Use techniques, skills, modern engineering tools, instrumentation and software/hardware appropriately to list and demonstrate arithmetic and logical operations on 8 bit data using microprocessor 8085.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C307.2",
+    "statement": ". Examine 8085 & 8086 microprocessor and its interfacing with peripheral devices.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C307.3",
+    "statement": ". State various conversion techniques using 8085 & 8086 and generate waveforms using 8085.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C307.4",
+    "statement": ". Implement programming concept of 8051 Microcontroller.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C307.5",
+    "statement": ". Design concepts to Interface peripheral devices with Microcontroller so as to design Microcontroller based projects.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.2,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-553",
+  "course_title": "DIGITAL SIGNAL PROCESSING LAB",
+  "cos": [
+   {
+    "co": "C308.1",
+    "statement": ". Create and visualize various discrete/digital signals using MATLAB/Scilab.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C308.2",
+    "statement": ". Implement and test the basic operations of Signal processing.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C308.3",
+    "statement": ". Examine and analyse the spectral parameters of window functions.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C308.4",
+    "statement": ". Design IIR and FIR filters for band pass, band stop, low pass and high pass filters.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C308.5",
+    "statement": ". Design the signal processing algorithms using MATLAB/Scilab.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.4,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.4
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-554",
+  "course_title": "Mini Project/ Internship",
+  "cos": [
+   {
+    "co": "C309.1",
+    "statement": ". Demonstrate the technical aspects of the training module completed.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO10": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C309.2",
+    "statement": ". Present their work in form of powerpoint presentations.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO10": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C309.3",
+    "statement": ". Effectively write the learnt simulation and theory principles in form of report.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO10": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": 3,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BNC-501",
+  "course_title": "Constitution of India, Law and Engineering",
+  "cos": [
+   {
+    "co": "C310.1",
+    "statement": "Identify and explore the basic features and modalities about Indian constitution.",
+    "levels": {
+     "PO6": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 1,
+     "PO12": 1
+    }
+   },
+   {
+    "co": "",
+    "statement": "C310. 2 Differentiate and relate the functioning of Indian parliamentary system at the center and state level.",
+    "levels": {
+     "PO6": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO11": 3,
+     "PO12": 1
+    }
+   },
+   {
+    "co": "C310.3",
+    "statement": "Differentiate different aspects of Indian Legal System and its related bodies.",
+    "levels": {
+     "PO6": 1,
+     "PO7": 3,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 2,
+     "PO12": 3
+    }
+   },
+   {
+    "co": "C310.4",
+    "statement": "Discover and apply different laws and regulations related to engineering practices.",
+    "levels": {
+     "PO6": 3,
+     "PO7": 3,
+     "PO8": 3,
+     "PO9": 3,
+     "PO10": 2,
+     "PO11": 2,
+     "PO12": 3
+    }
+   },
+   {
+    "co": "C310.5",
+    "statement": "Correlate role of engineers with different organizations and governance models.",
+    "levels": {
+     "PO6": 3,
+     "PO7": 3,
+     "PO8": 3,
+     "PO9": 3,
+     "PO11": 2,
+     "PO12": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": null,
+   "PO2": null,
+   "PO3": null,
+   "PO4": null,
+   "PO5": null,
+   "PO6": 2.3333333333333335,
+   "PO7": 3,
+   "PO8": 2.3333333333333335,
+   "PO9": 2.3333333333333335,
+   "PO10": 2,
+   "PO11": 2,
+   "PO12": 2.6666666666666665,
+   "PSO1": null,
+   "PSO2": null
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-601",
+  "course_title": "Digital Communication",
+  "cos": [
+   {
+    "co": "C311.1",
+    "statement": "Students will demonstrate the ability to formulate basic statistics involved in communication theory.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C311.2",
+    "statement": "Students will demonstrate the ability to formulate basic statistics involved in communication theory.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C311.3",
+    "statement": "Students will demonstrate the ability to explain the concepts of digital modulation schemes.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C311.4",
+    "statement": "Students will demonstrate the ability to analyze the performance of digital communication systems.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C311.5",
+    "statement": "Students will demonstrate the ability to apply the concept of information theory in digital systems.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 2.6,
+   "PO2": 2.6,
+   "PO3": 1.8,
+   "PO4": 2.6,
+   "PO5": 2.6,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2.6,
+   "PSO2": 1.8
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-602",
+  "course_title": "Control System",
+  "cos": [
+   {
+    "co": "C312.1",
+    "statement": "Describe the basics of control systems along with different types of feedback and its effect. Additionally, they will also be able to explain the techniques such as block diagrams reduction, signal flow graph and modelling of various physical systems along with modelling of DC servomotor.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C312.2",
+    "statement": "Explain the concept of state variables for the representation of LTI system.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C312.3",
+    "statement": "Interpret the time domain response analysis for various types of inputs along with the time domain specifications.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C312.4",
+    "statement": "Distinguish the concepts of absolute and relative stability for continuous data systems along with different methods.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C312.5",
+    "statement": "Interpret the concept of frequency domain response analysis and their specifications.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 2.6,
+   "PO2": 2.6,
+   "PO3": 1.8,
+   "PO4": 2.6,
+   "PO5": 2.6,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2.6,
+   "PSO2": 1.8
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-603",
+  "course_title": "Antenna & Wave Propagation",
+  "cos": [
+   {
+    "co": "C313.1",
+    "statement": "Student will Identify different coordinate systems and their applications in electromagnetic field theory to establish a relation between any two systems using the vector calculus.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C313.2",
+    "statement": "Student will explain the concept of static electric field, current and properties of conductors.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C313.3",
+    "statement": "Students will Demonstrate the knowledge of antenna fundamentals and radiation mechanism of the antenna",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C313.4",
+    "statement": "Students will Analyze and design different types of basic antennas",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C313.5",
+    "statement": "Students will Express the basic concepts of ground, space, sky wave propagation mechanism",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 1.8,
+   "PO2": 1.8,
+   "PO3": 1.4,
+   "PO4": 1.8,
+   "PO5": 1.8,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 1.8,
+   "PSO2": 1.4
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-062",
+  "course_title": "DATA COMM. NETWORKS",
+  "cos": [
+   {
+    "co": "314.1",
+    "statement": ". Identify the issues and challenges in the architecture of a network.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "314.2",
+    "statement": ". Analyze the services and features of various protocol layers in data layer.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "314.3",
+    "statement": ".Demonstrate the knowledge of multiple access to design a access technique for a particular application.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 2,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "314.4",
+    "statement": ". Realize protocols at different layers of a network hierarchy.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 2,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "314.5",
+    "statement": ". Recognize security issues in a network and various application of application layer.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 2.2,
+   "PO2": 2.2,
+   "PO3": 2.2,
+   "PO4": 1.8,
+   "PO5": 2.2,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2.2,
+   "PSO2": 1.8
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-651",
+  "course_title": "DIGITAL COMMUNICATION LAB",
+  "cos": [
+   {
+    "co": "316.1",
+    "statement": ". To formulate basic concepts of pulse shaping in digital communication.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "316.2",
+    "statement": ". To identify different line coding techniques and demonstrate the concepts.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "316.3",
+    "statement": ". To design equipments related to digital modulation and demodulation schemes.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "316.4",
+    "statement": ". To analyze the performance of various digital communication systems and evaluate the key parameters.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "316.5",
+    "statement": ". To conceptualize error detection & correction using different coding schemes in digital comm.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.4,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.4
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-652",
+  "course_title": "CONTROL SYSTEM LAB",
+  "cos": [
+   {
+    "co": "317.1",
+    "statement": ". Classify different tools in MATLAB along with the basic matrix operations used in MATLAb.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "317.2",
+    "statement": ". Evaluate the poles and zeros on s-plane along with transfer function of a given system.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "317.3",
+    "statement": ". Construct state space model of a linear continuous system.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "317.4",
+    "statement": ". Evaluate the various specifications of time domain response of a given system",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "317.5",
+    "statement": ". Appraise the steady state error of a given transfer function.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "317.6",
+    "statement": ". Examine the relative stability of a given transfer function using various methods such as root locus, Bode plot and Nyquist plot.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.6,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.6
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BEC-653B",
+  "course_title": "CAD FOR ELECTRONICS LAB",
+  "cos": [
+   {
+    "co": "318.1",
+    "statement": ". Design and analyze the performance of different type of inverters.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "318.2",
+    "statement": ". Design and analyze the performance of the basic logic gates using CMOS inverter circuit",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "318.3",
+    "statement": ". Design and analyze the performance of the memory based digital circuits using CMOS inverter circuit.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "318.4",
+    "statement": ". Analyze the performance of the different configuration of MOS amplifier circuits.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.75,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.75
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 3rd",
+  "course_code": "BNC-602",
+  "course_title": "Indian Tradition Culture and Society",
+  "cos": [
+   {
+    "co": "319.1",
+    "statement": "Identify, explore and enhance the ability to understand the basic features of Society State and Polity in India.",
+    "levels": {
+     "PO6": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 1,
+     "PO12": 1
+    }
+   },
+   {
+    "co": "319.2",
+    "statement": "To understand and follow Indian Literature, Culture, Traditions and Practices.",
+    "levels": {
+     "PO6": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO11": 2,
+     "PO12": 1
+    }
+   },
+   {
+    "co": "319.3",
+    "statement": "To understand and explain the basis of Indian Religion, Philosophy and Practices.",
+    "levels": {
+     "PO6": 1,
+     "PO7": 3,
+     "PO8": 1,
+     "PO10": 2,
+     "PO12": 1
+    }
+   },
+   {
+    "co": "319.4",
+    "statement": "To understand the basics of Science, Management and Indian Knowledge System.",
+    "levels": {
+     "PO6": 3,
+     "PO7": 2,
+     "PO8": 1,
+     "PO9": 3,
+     "PO10": 2,
+     "PO11": 1,
+     "PO12": 3
+    }
+   },
+   {
+    "co": "319.5",
+    "statement": "To connect up with the knowledge of scientific perspective of Indian Cultural Heritage and Performing Arts.",
+    "levels": {
+     "PO6": 3,
+     "PO7": 2,
+     "PO8": 3,
+     "PO9": 2,
+     "PO11": 1,
+     "PO12": 3
+    }
+   }
+  ],
+  "avg": {
+   "PO1": null,
+   "PO2": null,
+   "PO3": null,
+   "PO4": null,
+   "PO5": null,
+   "PO6": 2,
+   "PO7": 2.3333333333333335,
+   "PO8": 1.5,
+   "PO9": 2,
+   "PO10": 2,
+   "PO11": 1.3333333333333333,
+   "PO12": 2,
+   "PSO1": null,
+   "PSO2": null
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 4th",
+  "course_code": "KHU-702",
+  "course_title": "Project Management and Entrepreneurship",
+  "cos": [
+   {
+    "co": "401.1",
+    "statement": "Students can recognize the definitions and concepts of Entrepreneur and Entrepreneurship.",
+    "levels": {
+     "PO6": 1,
+     "PO7": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 1,
+     "PO11": 1
+    }
+   },
+   {
+    "co": "401.2",
+    "statement": "Students will be able to describe about the entrepreneurial idea and innovation.",
+    "levels": {
+     "PO6": 1,
+     "PO7": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 1,
+     "PO11": 1
+    }
+   },
+   {
+    "co": "401.3",
+    "statement": "Students will be able to explain about the Project management.",
+    "levels": {
+     "PO6": 1,
+     "PO7": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 1,
+     "PO11": 1
+    }
+   },
+   {
+    "co": "401.4",
+    "statement": "Students will be able to describe knowledge about project financing.",
+    "levels": {
+     "PO6": 1,
+     "PO7": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 1,
+     "PO11": 1
+    }
+   },
+   {
+    "co": "401.5",
+    "statement": "Students will be able to describe about social entrepreneurship.",
+    "levels": {
+     "PO6": 1,
+     "PO7": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 1,
+     "PO11": 1
+    }
+   }
+  ],
+  "avg": {
+   "PO1": null,
+   "PO2": null,
+   "PO3": null,
+   "PO4": null,
+   "PO5": null,
+   "PO6": 1,
+   "PO7": 1,
+   "PO8": 1,
+   "PO9": 1,
+   "PO10": 1,
+   "PO11": 1,
+   "PO12": null,
+   "PSO1": null,
+   "PSO2": null
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 4th",
+  "course_code": "KEC-074",
+  "course_title": "Microwave & RADAR Engineering",
+  "cos": [
+   {
+    "co": "402.1",
+    "statement": "Analyze various parameters and characteristics of the transmission line and waveguide and also use of wave guide component as per applications.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 2,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "402.2",
+    "statement": "Describe, analyze and design simple microwave circuits and devices e g couplers, Attenuators, Phase Shifter and Isolators. Student will also understand the microwave propagation in ferrites.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "402.3",
+    "statement": "Analyze the difference between the conventional tubes and the microwave tubes for the transmission of the EM waves.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "402.4",
+    "statement": "Describe about the handling and measurement of microwave equipment.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "402.5",
+    "statement": "Differentiate different Radars, find applications and use of its supporting systems",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 2.6,
+   "PO2": 2.6,
+   "PO3": 2,
+   "PO4": 2.6,
+   "PO5": 2.6,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2.4,
+   "PSO2": 2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 4th",
+  "course_code": "KEC-076",
+  "course_title": "Wireless & Mobile Communication",
+  "cos": [
+   {
+    "co": "C403.1",
+    "statement": "Express the basic knowledge of mobile radio & cellular communication fundamentals and their application to propagation mechanisms, path loss models and multi-path phenomenon.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C403.2",
+    "statement": "Analyze the performance of various voice coding and diversity techniques.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C403.3",
+    "statement": "Apply the knowledge of wireless transmission basics to understand the concepts of equalization and multiple access techniques.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C403.4",
+    "statement": "Examine the performance of cellular systems being employed such as GSM, CDMA and LTE using various theoretical and mathematical aspects.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C403.5",
+    "statement": "Express basic knowledge of Mobile Adhoc networks and the existing & upcoming data communication networks in wireless and mobile communication domain.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 2,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 2.6,
+   "PO2": 2.6,
+   "PO3": 1.8,
+   "PO4": 2.6,
+   "PO5": 2.8,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2.6,
+   "PSO2": 1.8
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 4th",
+  "course_code": "",
+  "course_title": "Microwave & Radar Engineering Lab Lab KEC-751D",
+  "cos": [
+   {
+    "co": "C405.1",
+    "statement": "Describe working on microwave testing bench.",
+    "levels": {
+     "PO1": 1,
+     "PO2": 1,
+     "PO3": 1,
+     "PO4": 1,
+     "PO5": 1,
+     "PO12": 3,
+     "PSO1": 1,
+     "PSO2": 1
+    }
+   },
+   {
+    "co": "C405.2",
+    "statement": "Practically demonstrate the Characteristics of Reflex klystron using Microwave bench setup.",
+    "levels": {
+     "PO1": 2,
+     "PO2": 2,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C405.3",
+    "statement": "Demonstrate the performance of the Gunn diode using Microwave bench setup.",
+    "levels": {
+     "PO1": 2,
+     "PO2": 2,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C405.4",
+    "statement": "Perform measurement of Frequency, attenuation, VSWR, Impedance of microwave passive device using Klystron Bench Setup.",
+    "levels": {
+     "PO1": 2,
+     "PO2": 2,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C405.5",
+    "statement": "Interpret the basics of Smith chart for solution of transmission line problems and impedance matching.",
+    "levels": {
+     "PO1": 2,
+     "PO2": 2,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 1.8,
+   "PO2": 1.8,
+   "PO3": 2.6,
+   "PO4": 2.6,
+   "PO5": 2.6,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": null,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 2.6,
+   "PSO2": 1.8
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 4th",
+  "course_code": "",
+  "course_title": "Internship Assessment KEC-752",
+  "cos": [
+   {
+    "co": "C406.1",
+    "statement": "Describe the functional details of the work carried during the training.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO10": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C406.2",
+    "statement": "Familiarize with the industry environment, ethics and work culture.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO10": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C406.3",
+    "statement": "Students will be capable of documenting and presenting the detailed process involved in the designing of the project, starting from the idea behind the project to the future aspects of the project.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO10": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   },
+   {
+    "co": "C406.4",
+    "statement": "Students will be capable of working in a team and apply critical thinking for solving real life problems concerning society.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO10": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": null,
+   "PO10": 3,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 4th",
+  "course_code": "",
+  "course_title": "Project KEC-753",
+  "cos": [
+   {
+    "co": "C407.1",
+    "statement": "Design PCB and mount the components over it and solder them.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C407.2",
+    "statement": "Analyze and design various hardware & software modules using the concepts of interfacing.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C407.3",
+    "statement": "Analyze and evaluate software & hardware testing and finally coming up with the demonstration of the designed functional model.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C407.4",
+    "statement": "Documenting and presenting the detailed process involved in the designing of the project, starting from the idea behind the project to the future aspects of the project.",
+    "levels": {
+     "PO10": 3
+    }
+   },
+   {
+    "co": "C408.5",
+    "statement": "Working in a team and apply critical thinking for solving real life problems concerning society.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO9": 3,
+     "PO10": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.75,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": 3,
+   "PO10": 3,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.75
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 4th",
+  "course_code": "",
+  "course_title": "Rural Development KHU-801",
+  "cos": [
+   {
+    "co": "C409.1",
+    "statement": "State the definitions, concepts and components of rural development.",
+    "levels": {
+     "PO6": 1,
+     "PO7": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 1
+    }
+   },
+   {
+    "co": "C409.2",
+    "statement": "Describe the importance, structure, significance and resources of Indian rural economy.",
+    "levels": {
+     "PO6": 1,
+     "PO7": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 1
+    }
+   },
+   {
+    "co": "C409.3",
+    "statement": "Explain the area development progrms and its impact.",
+    "levels": {
+     "PO6": 1,
+     "PO7": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 1
+    }
+   },
+   {
+    "co": "C409.4",
+    "statement": "Demonstrate knowledge about rural entrepreneurship.",
+    "levels": {
+     "PO6": 2,
+     "PO7": 2,
+     "PO8": 2,
+     "PO9": 2,
+     "PO10": 2
+    }
+   },
+   {
+    "co": "C409.5",
+    "statement": "Describe different methods of human resource planning.",
+    "levels": {
+     "PO6": 1,
+     "PO7": 1,
+     "PO8": 1,
+     "PO9": 1,
+     "PO10": 1
+    }
+   }
+  ],
+  "avg": {
+   "PO1": null,
+   "PO2": null,
+   "PO3": null,
+   "PO4": null,
+   "PO5": null,
+   "PO6": 1.2,
+   "PO7": 1.2,
+   "PO8": 1.2,
+   "PO9": 1.2,
+   "PO10": 1.2,
+   "PO11": null,
+   "PO12": null,
+   "PSO1": null,
+   "PSO2": null
+  }
+ },
+ {
+  "sheet": "CO-PO Mapping 4th",
+  "course_code": "",
+  "course_title": "Project II KEC-851",
+  "cos": [
+   {
+    "co": "C412.1",
+    "statement": "Design PCB and mount the components over it and solder them.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C412.2",
+    "statement": "Analyze and design various hardware & software modules using the concepts of interfacing.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C412.3",
+    "statement": "Analyze and evaluate software & hardware testing and finally coming up with the demonstration of the designed functional model.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 3,
+     "PO4": 3,
+     "PO5": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 3
+    }
+   },
+   {
+    "co": "C412.4",
+    "statement": "Documenting and presenting the detailed process involved in the designing of the project, starting from the idea behind the project to the future aspects of the project.",
+    "levels": {
+     "PO10": 3
+    }
+   },
+   {
+    "co": "C412.5",
+    "statement": "Working in a team and apply critical thinking for solving real life problems concerning society.",
+    "levels": {
+     "PO1": 3,
+     "PO2": 3,
+     "PO3": 2,
+     "PO4": 3,
+     "PO5": 3,
+     "PO9": 3,
+     "PO10": 3,
+     "PO12": 3,
+     "PSO1": 3,
+     "PSO2": 2
+    }
+   }
+  ],
+  "avg": {
+   "PO1": 3,
+   "PO2": 3,
+   "PO3": 2.75,
+   "PO4": 3,
+   "PO5": 3,
+   "PO6": null,
+   "PO7": null,
+   "PO8": null,
+   "PO9": 3,
+   "PO10": 3,
+   "PO11": null,
+   "PO12": 3,
+   "PSO1": 3,
+   "PSO2": 2.75
+  }
+ }
+]

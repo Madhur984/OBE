@@ -1,0 +1,32 @@
+fastapi>=0.128.0
+uvicorn>=0.40.0
+pydantic>=2.12.0
+python-multipart>=0.0.9
+
+# document parsing and generation — syllabus CO/KL tables, question papers,
+# marks workbooks, and the SAR annexures a college actually submits.
+# Every number is still computed without these; only rendering and reading
+# of Office files degrades, and the API says so rather than failing silently.
+python-docx>=1.1.0
+pypdf>=5.0.0
+openpyxl>=3.1.0
+
+# optional: AI arbitration for questions the rule-based tagger cannot settle.
+# Without this (or without ANTHROPIC_API_KEY) everything still works; ambiguous
+# questions are simply flagged for review instead of being arbitrated.
+anthropic>=1.0.0
+
+# Persistence for the single-user engine is SQLite via the standard library —
+# no driver needed, and the mapping tool runs with nothing below installed.
+#
+# These two are what accounts, course assignment and submitted mappings need
+# (app/store/neon.py). Without a DATABASE_URL that layer stays dormant and
+# every route in it answers 503, so an offline install can skip them; they are
+# listed rather than commented out because a department running the shared
+# sheet needs them and should not have to find that out from a traceback.
+psycopg[binary]>=3.2
+psycopg_pool>=3.2
+
+# dev / test
+pytest>=9.0.0
+httpx>=0.27.0

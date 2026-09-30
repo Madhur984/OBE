@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AutoOBE — CO Attainment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap">
+<style>
+  :root{
+    --bg:#EEF0EC; --surface:#fff; --surface-2:#E5E8E2; --ink:#1B2229; --ink-soft:#525C55;
+    --ink-faint:#7C8579; --hair:#CBD1C6; --accent:#2C4A7C; --accent-soft:#DCE4F0;
+    --accent-ink:#16294A; --ok:#2F6F4F; --ok-bg:#E1EDE4; --warn:#9A5F1E; --warn-bg:#F3E5D2;
+    --err:#9C3B4A; --err-bg:#F3DEE1; --auto:#4A4A8F; --auto-bg:#E4E3F2;
+    --shadow:0 1px 2px rgba(27,34,41,.06),0 6px 20px rgba(27,34,41,.05);
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#12161A; --surface:#1A1F24; --surface-2:#20262C; --ink:#E7E6DF; --ink-soft:#AEB6AC;
+    --ink-faint:#7C8579; --hair:#333B36; --accent:#84AAE0; --accent-soft:#233047;
+    --accent-ink:#CFE0FF; --ok:#7FCB9E; --ok-bg:#1D3327; --warn:#E3AE68; --warn-bg:#3A2C18;
+    --err:#E39AA5; --err-bg:#3B2126; --auto:#B2AEE8; --auto-bg:#292750;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 24px rgba(0,0,0,.35);
+  }}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  header{background:var(--surface);border-bottom:1px solid var(--hair);padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:30}
+  .brand{font-family:"IBM Plex Serif",Georgia,serif;font-weight:600;font-size:17px;color:var(--accent)}
+  .brand small{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);display:block;font-weight:400}
+  .hspace{flex:1}
+  .hctl{min-width:150px}
+  main{max-width:1280px;margin:0 auto;padding:20px}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+  @media(max-width:980px){.grid{grid-template-columns:minmax(0,1fr)}}
+  .grid>div{min-width:0}
+  .card{background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:15px 17px;box-shadow:var(--shadow);margin-bottom:16px}
+  .card h2{font-family:"IBM Plex Serif",serif;font-size:14.5px;margin:0 0 3px;color:var(--accent-ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .card .hint{font-size:12.5px;color:var(--ink-faint);margin:0 0 11px}
+  label{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 4px;font-weight:600}
+  input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--hair);border-radius:6px;padding:6px 8px;width:100%}
+  textarea{resize:vertical;font-size:13.5px}
+  input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .row{display:flex;gap:9px;flex-wrap:wrap}
+  .row>*{flex:1;min-width:96px}
+  button{font:inherit;font-weight:500;cursor:pointer;border-radius:6px;border:1px solid var(--hair);background:var(--surface-2);color:var(--ink);padding:6px 12px}
+  button:hover{border-color:var(--accent)}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  button.primary:hover{filter:brightness(1.12)}
+  button.mini{padding:3px 8px;font-size:12px}
+  button:disabled{opacity:.5;cursor:default}
+  table{border-collapse:collapse;width:100%;font-size:12.5px}
+  th,td{border:1px solid var(--hair);padding:5px 7px;text-align:left}
+  th{background:var(--surface-2);font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;font-family:"IBM Plex Mono",monospace}
+  .scroll{overflow:auto;max-height:330px;border:1px solid var(--hair);border-radius:8px}
+  .tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:4px;white-space:nowrap}
+  .t-ok{background:var(--ok-bg);color:var(--ok)} .t-warn{background:var(--warn-bg);color:var(--warn)}
+  .t-err{background:var(--err-bg);color:var(--err)} .t-auto{background:var(--auto-bg);color:var(--auto)}
+  .t-info{background:var(--accent-soft);color:var(--accent-ink)}
+  .co-block,.pso-block{border:1px solid var(--hair);border-radius:8px;padding:10px;margin-bottom:9px;background:var(--bg)}
+  .co-head{display:flex;gap:7px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
+  .findings{margin:6px 0 0;padding:0;list-style:none;font-size:12px}
+  .findings li{display:flex;gap:6px;padding:2px 0;color:var(--ink-soft)}
+  .diff{margin-top:7px;border-left:3px solid var(--auto);background:var(--auto-bg);padding:7px 9px;border-radius:0 6px 6px 0;font-size:12.5px;display:none}
+  .diff.show{display:block}
+  .diff .was{color:var(--ink-faint);text-decoration:line-through;margin-bottom:3px}
+  .diff .now{color:var(--ink);font-weight:500}
+  .diff .why{font-size:11.5px;color:var(--ink-soft);margin-top:4px}
+  .diff .acts{margin-top:6px;display:flex;gap:6px}
+  .mapgrid{overflow-x:auto}
+  .mapgrid table{font-size:11.5px;min-width:600px}
+  .mapgrid select{padding:2px 3px;font-size:11px;border-radius:4px;min-width:66px}
+  .mapgrid select.auto{border-color:var(--auto);background:var(--auto-bg)}
+  .mapgrid select.edited{border-color:var(--accent);font-weight:600}
+  .lvl{display:inline-block;min-width:19px;text-align:center;font-family:"IBM Plex Mono",monospace;font-weight:600;padding:1px 5px;border-radius:4px;font-size:11.5px}
+  .lvl-0{color:var(--ink-faint)} .lvl-1{background:var(--warn-bg);color:var(--warn)}
+  .lvl-2{background:var(--accent-soft);color:var(--accent-ink)} .lvl-3{background:var(--ok-bg);color:var(--ok)}
+  .banner{padding:8px 11px;border-radius:7px;font-size:12.5px;margin-bottom:11px;display:none}
+  .banner.show{display:block}
+  .banner.err{background:var(--err-bg);color:var(--err)}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px;margin-bottom:11px}
+  .metric{background:var(--bg);border:1px solid var(--hair);border-radius:8px;padding:8px 10px}
+  .metric .k{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint)}
+  .metric .v{font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--accent-ink);line-height:1.25}
+  .metric .s{font-size:11px;color:var(--ink-soft)}
+  pre{background:var(--bg);border:1px solid var(--hair);border-radius:7px;padding:9px;overflow-x:auto;font-family:"IBM Plex Mono",monospace;font-size:11px;margin:0}
+  details summary{cursor:pointer;font-size:12.5px;color:var(--accent);padding:3px 0}
+  .viol{border-left:3px solid var(--warn);padding:6px 9px;margin-bottom:6px;background:var(--bg);border-radius:0 6px 6px 0;font-size:12.5px}
+  .viol.error{border-left-color:var(--err)}
+  .viol .cells{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-faint);margin-top:3px}
+  .cqi{border:1px solid var(--hair);border-radius:8px;padding:10px 12px;margin-bottom:8px;background:var(--bg)}
+  .cqi .h{display:flex;gap:8px;align-items:center;margin-bottom:5px;flex-wrap:wrap}
+  .cqi .code{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--accent)}
+  .cqi textarea{margin-top:6px;font-size:12.5px}
+  .foot{text-align:center;color:var(--ink-faint);font-size:11.5px;padding:18px}
+  .autobar{background:var(--auto-bg);color:var(--auto);border-radius:8px;padding:9px 12px;font-size:12.5px;margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .autobar b{font-weight:600}
+  .drop{border:1.5px dashed var(--hair);border-radius:8px;padding:11px;text-align:center;font-size:12.5px;color:var(--ink-faint);cursor:pointer}
+  .drop.over{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+  .steps{display:flex;gap:6px;flex-wrap:wrap;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-faint);margin-top:5px}
+  .steps span.done{color:var(--ok)}
+  .tabs{display:flex;gap:3px;margin-bottom:15px;border-bottom:1px solid var(--hair);flex-wrap:wrap}
+  .tabs button{background:none;border:none;border-bottom:2px solid transparent;border-radius:0;padding:7px 13px;color:var(--ink-soft);font-size:13.5px}
+  .tabs button:hover{border-color:transparent;color:var(--ink)}
+  .tabs button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+  .view{display:none} .view.on{display:block}
+  .spark{display:flex;align-items:flex-end;gap:2px;height:26px}
+  .spark i{flex:1;background:var(--accent-soft);border-radius:1px 1px 0 0;min-height:2px;display:block}
+  .spark i.last{background:var(--accent)}
+  .trow{display:grid;grid-template-columns:64px 1fr 74px 56px 62px;gap:12px;align-items:center;padding:6px 8px;border-bottom:1px solid var(--hair);font-size:12.5px}
+  .trow:last-child{border-bottom:none}
+  .trow .code{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--accent)}
+  .dir-improving{color:var(--ok)} .dir-declining{color:var(--err)} .dir-flat{color:var(--ink-faint)}
+  .lik{display:grid;grid-template-columns:1fr repeat(5,30px);gap:3px;align-items:center;font-size:12px;padding:3px 0}
+  .lik b{font-weight:500;color:var(--ink-soft)}
+  .lik input{width:100%;text-align:center;padding:2px;font-size:11.5px}
+  .chain{font-family:"IBM Plex Mono",monospace;font-size:11px;padding:6px 9px;border-radius:6px}
+  .chain.ok{background:var(--ok-bg);color:var(--ok)} .chain.bad{background:var(--err-bg);color:var(--err)}
+  .ev{font-family:"IBM Plex Mono",monospace;font-size:11px;display:grid;grid-template-columns:34px 128px 1fr 118px;gap:8px;padding:3px 6px;border-bottom:1px solid var(--hair)}
+  .ev:nth-child(odd){background:var(--bg)}
+  .pill{display:inline-block;padding:2px 8px;border-radius:11px;font-size:11px;font-weight:600;background:var(--surface-2);color:var(--ink-soft)}
+  .pill.draft{background:var(--surface-2)} .pill.submitted{background:var(--accent-soft);color:var(--accent-ink)}
+  .pill.approved{background:var(--ok-bg);color:var(--ok)} .pill.locked{background:var(--auto-bg);color:var(--auto)}
+  .pill.returned{background:var(--warn-bg);color:var(--warn)}
+  .qual{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:8px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">AutoOBE<small>automatic first · every step overridable</small></div>
+  <div class="hspace"></div>
+  <div class="hctl" style="min-width:210px">
+    <label for="course">Course (auto-loads outcomes)</label>
+    <select id="course"></select>
+  </div>
+  <div class="hctl" style="min-width:230px">
+    <label for="framework">Framework</label>
+    <select id="framework"></select>
+  </div>
+  <div><label>&nbsp;</label><button class="primary" id="runall">Re-run everything</button></div>
+</header>
+
+<main>
+  <div class="banner err" id="err"></div>
+  <div class="autobar" id="autobar">
+    <b>Automated:</b> <span id="autosummary">loading…</span>
+    <span class="hspace"></span>
+    <span class="steps" id="steps"></span>
+  </div>
+
+  <div class="tabs">
+    <button class="on" data-view="course">Course</button>
+    <button data-view="program">Program &amp; trends</button>
+    <button data-view="evidence">Evidence &amp; sign-off</button>
+  </div>
+
+  <div class="view on" id="view-course">
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h2>1 · Course outcomes <span class="tag t-auto">auto-detected &amp; auto-corrected</span></h2>
+        <p class="hint">Drop a syllabus and the CO/KL table is read out of it. Outcomes are then rewritten into measurable form automatically — every proposal shows its diff, so you can accept, edit, or keep the original.</p>
+        <div class="drop" id="syldrop" style="margin-bottom:9px">Drop a syllabus (.pdf / .docx / .txt), or click to choose</div>
+        <input type="file" id="sylfile" accept=".pdf,.docx,.txt" style="display:none">
+        <div id="sylinfo" style="font-size:12px;color:var(--ink-faint);margin-bottom:9px"></div>
+        <div id="sylpick" style="margin-bottom:9px;display:none">
+          <label for="sylcourse">Course found in this document</label>
+          <select id="sylcourse"></select>
+        </div>
+        <div class="row" style="margin-bottom:10px">
+          <div><label for="ccode">Course code</label><input id="ccode"></div>
+          <div style="flex:2"><label for="cname">Course name</label><input id="cname"></div>
+        </div>
+        <div id="cos"></div>
+        <div class="row" style="margin-top:8px">
+          <button class="mini" id="addco" style="flex:0">+ Add outcome</button>
+          <button class="mini" id="rewriteall" style="flex:0">Re-check &amp; rewrite all</button>
+          <button class="mini" id="acceptall" style="flex:0">Accept all proposals</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>2 · CO → PO mapping <span class="tag t-auto">auto-proposed</span></h2>
+        <p class="hint">Competency is inferred from the outcome text and the verbatim PO statements, then Rule 1 → Rule 2 derives the level. Purple cells are proposals; change any one and it turns blue as your override.</p>
+        <div class="mapgrid"><table id="maptable"></table></div>
+        <details style="margin-top:9px"><summary>Why each cell was proposed</summary>
+          <div class="scroll" style="margin-top:8px"><table id="evidence"></table></div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h2>2b · Program Specific Outcomes <span class="tag t-auto">auto-mapped</span></h2>
+        <p class="hint">PSOs are written by the department, so they cannot be seeded like POs — but once written, their columns fill in the same way. Every SAR articulation table carries them, and leaving them empty is an automatic finding.</p>
+        <div id="psolist"></div>
+        <div class="row" style="margin-top:8px">
+          <button class="mini" id="addpso" style="flex:0">+ Add PSO</button>
+          <button class="mini" id="checkpso" style="flex:0">Re-check &amp; re-map</button>
+        </div>
+        <div id="psofindings" style="margin-top:9px"></div>
+        <div class="mapgrid" style="margin-top:9px"><table id="psotable"></table></div>
+      </div>
+
+      <div class="card">
+        <h2>3 · Structural checks <span class="tag t-auto">automatic</span></h2>
+        <p class="hint">Constraints run as code before anything is exported — a prompt can be ignored, an assertion cannot.</p>
+        <div id="violations"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h2>3b · Question paper <span class="tag t-auto" id="tagbadge">reads each question</span></h2>
+        <p class="hint">Paste the paper. Each question is read and matched to the outcome it assesses — clear cases are settled instantly; only genuinely ambiguous ones are sent to the model.</p>
+        <div class="drop" id="paperdrop" style="margin-bottom:9px">Drop the question paper (.docx / .txt), or click to choose</div>
+        <input type="file" id="paperfile" accept=".docx,.txt" style="display:none">
+        <div id="paperinfo" style="font-size:12px;color:var(--ink-faint);margin-bottom:9px"></div>
+        <textarea id="paper" rows="6" spellcheck="false" placeholder="1. Explain the three-schema architecture of a DBMS.&#10;2. Write SQL queries to find the highest salary.&#10;3. Determine whether the schedule is conflict serializable."></textarea>
+        <div class="row" style="margin-top:8px">
+          <button class="mini" id="tagq" style="flex:0">Tag questions → COs</button>
+          <button class="mini" id="applytags" style="flex:0">Apply tags to question setup</button>
+          <span style="flex:1"></span>
+          <span id="llmstate" style="font-size:11.5px;color:var(--ink-faint);align-self:center"></span>
+        </div>
+        <div id="tagresults" style="margin-top:9px"></div>
+      </div>
+
+      <div class="card">
+        <h2>4 · Marks <span class="tag t-auto">layout auto-detected</span></h2>
+        <p class="hint">Drop a CSV, or paste from Excel. Roll numbers and question columns are detected — no template to fill in.</p>
+        <div class="drop" id="drop">Drop a marks sheet (.xlsx / .csv / .tsv), or click to choose</div>
+        <input type="file" id="file" accept=".xlsx,.xls,.csv,.tsv,.txt" style="display:none">
+        <textarea id="marks" rows="7" spellcheck="false" style="margin-top:9px"></textarea>
+        <div id="ingestinfo" style="margin-top:7px;font-size:12px;color:var(--ink-faint)"></div>
+        <label style="margin-top:10px">Question setup</label>
+        <div class="mapgrid"><table id="qsetup"></table></div>
+        <div class="row" style="margin-top:7px">
+          <button class="mini" id="addq" style="flex:0">+ Question</button>
+          <button class="mini" id="delq" style="flex:0">− Last</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>5 · Assessment policy</h2>
+        <p class="hint">Both target definitions in SAR 3.7.2 are supported. Switching modes changes the numbers materially — that is expected, not a bug.</p>
+        <div class="row" style="margin-bottom:9px">
+          <div><label for="tmode">Target mode</label>
+            <select id="tmode">
+              <option value="fixed_threshold">Fixed threshold</option>
+              <option value="class_average">Class average</option>
+            </select></div>
+          <div><label for="tpct">Target %</label><input id="tpct" type="number" value="60"></div>
+          <div><label for="cotarget">CO target level</label><input id="cotarget" type="number" value="2" step="0.1"></div>
+        </div>
+        <div class="row" style="margin-bottom:9px">
+          <div><label for="t1">L1 ≥</label><input id="t1" type="number" value="60"></div>
+          <div><label for="t2">L2 ≥</label><input id="t2" type="number" value="70"></div>
+          <div><label for="t3">L3 ≥</label><input id="t3" type="number" value="80"></div>
+        </div>
+        <div class="row">
+          <div><label for="seeMet">SEE ≥ target</label><input id="seeMet" type="number" value="9"></div>
+          <div><label for="seeApp">SEE appeared</label><input id="seeApp" type="number" value="12" placeholder="blank = skip"></div>
+          <div><label for="wcie">w_CIE</label><input id="wcie" type="number" value="0.30" step="0.05"></div>
+          <div><label for="wsee">w_SEE</label><input id="wsee" type="number" value="0.70" step="0.05"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>5b · Indirect assessment <span class="tag t-auto">survey auto-written</span></h2>
+        <p class="hint">NBA wants direct <em>and</em> indirect attainment. The instrument is generated from the outcomes — nobody writes a survey. Responses below are a worked example; replace them with real ones.</p>
+        <div class="row">
+          <div><label for="scalemax">Scale</label>
+            <select id="scalemax"><option value="5" selected>5-point</option><option value="4">4-point</option><option value="3">3-point</option></select>
+          </div>
+          <div><label for="pop">Class size</label><input id="pop" type="number" value="120"></div>
+          <div><label for="wdir">w_direct</label><input id="wdir" type="number" value="0.8" step="0.05"></div>
+          <div><label for="windir">w_indirect</label><input id="windir" type="number" value="0.2" step="0.05"></div>
+        </div>
+        <div id="survey" style="margin-top:10px"></div>
+        <div class="row" style="margin-top:8px">
+          <button class="mini" id="scoresurvey" style="flex:0">Score &amp; blend</button>
+        </div>
+        <div id="surveyout" style="margin-top:9px"></div>
+      </div>
+
+      <div class="card" id="cqicard" style="display:none">
+        <h2>6 · Continuous improvement <span class="tag t-auto">drafted</span></h2>
+        <p class="hint">Where a CO or PO missed target, a Criterion 8 record is drafted from the evidence. Edit before it goes anywhere near a SAR.</p>
+        <div id="cqi"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="results" style="display:none">
+    <div class="card" id="biascard" style="display:none">
+      <h2>Choice questions <span class="tag t-warn">affects the numbers</span></h2>
+      <p class="hint">"Attempt any two of five" is not the same as absence. A student who skipped a question was measured and chose not to answer, so the denominator is a policy decision — and both answers are shown here rather than one being assumed.</p>
+      <div class="row" style="margin-bottom:9px">
+        <div style="max-width:280px"><label for="policy">Attempt policy</label>
+          <select id="policy">
+            <option value="attempted_only" selected>Attempters only</option>
+            <option value="cohort">Everyone who sat the paper</option>
+          </select>
+        </div>
+      </div>
+      <div id="bias"></div>
+    </div>
+    <div class="card">
+      <h2>CO attainment</h2>
+      <p class="hint" id="modenote"></p>
+      <div class="metrics" id="cometrics"></div>
+      <details><summary>Per-question breakdown</summary>
+        <div class="scroll" style="margin-top:8px"><table id="qbreak"></table></div>
+      </details>
+    </div>
+    <div class="card">
+      <h2 id="camTitle"></h2>
+      <p class="hint" id="camSub"></p>
+      <div class="scroll"><table id="cam"></table></div>
+      <div class="row" style="margin-top:9px">
+        <button class="mini" id="copyMd" style="flex:0">Copy Markdown</button>
+        <button class="mini" id="copyCsv" style="flex:0">Copy CSV</button>
+        <button class="mini" id="dlCsv" style="flex:0">Download CSV</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2 id="t381Title"></h2>
+      <p class="hint">A dash means no outcome addresses that PO — distinct from an attainment of 0.00. Orphan POs are an automatic NBA finding, so they stay visible.</p>
+      <div class="scroll"><table id="t381"></table></div>
+      <div class="row" style="margin-top:11px">
+        <button class="mini" id="dlDocx" style="flex:0">Download Word (.docx)</button>
+        <button class="mini" id="dlXlsx" style="flex:0">Download Excel (.xlsx)</button>
+        <span style="font-size:11.5px;color:var(--ink-faint);align-self:center">Tables in NBA's own layout — paste straight into the SAR.</span>
+      </div>
+    </div>
+  </div>
+  </div><!-- /view-course -->
+
+  <div class="view" id="view-program">
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h2>Attainment over time <span class="tag t-auto">Criterion 8</span></h2>
+          <p class="hint">A table of this year's numbers does not satisfy Criterion 8. It asks whether you noticed a weakness, acted, and can show the result.</p>
+          <div class="row" style="margin-bottom:9px">
+            <div><label for="potarget">PO target level</label><input id="potarget" type="number" value="2.0" step="0.1"></div>
+            <div style="flex:2"><label>&nbsp;</label><button class="mini" id="loadtrends">Recompute trends</button></div>
+          </div>
+          <div id="trendsource" style="font-size:12px;color:var(--ink-soft);margin-bottom:10px"></div>
+          <div id="trendsum" class="metrics"></div>
+          <div id="trendrows" style="border:1px solid var(--hair);border-radius:8px;overflow:hidden"></div>
+        </div>
+        <div class="card">
+          <h2>Findings &amp; closure evidence</h2>
+          <p class="hint">A CQI loop that records only its successes is the pattern peer teams are trained to look for, so actions that did nothing — or backfired — are reported just as plainly.</p>
+          <div id="trendfindings"></div>
+          <div id="closure" style="margin-top:10px"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h2>Migrate a legacy 12-PO matrix <span class="tag t-auto">both options shown</span></h2>
+          <p class="hint">Eleven of the twelve columns are a rename. Old PO6 and PO7 both fold into new PO6 — two columns collapsing into one — which is why this is not a search-and-replace.</p>
+          <div class="row" style="margin-bottom:9px">
+            <button class="mini" id="migrate" style="flex:0">Migrate this course's matrix</button>
+          </div>
+          <div id="migout"></div>
+        </div>
+        <div class="card">
+          <h2>Question tagger accuracy <span class="tag t-auto">measured</span></h2>
+          <p class="hint">Measured on a labelled corpus with a held-out split, so the number is not the tagger grading its own homework. The metric that matters is the silent error rate: questions tagged confidently and tagged wrong.</p>
+          <div class="qual" id="taggerq"></div>
+          <div id="taggerdetail" style="margin-top:9px;font-size:12px;color:var(--ink-soft)"></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /view-program -->
+
+  <div class="view" id="view-evidence">
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h2>Sign-off</h2>
+          <p class="hint">An NBA submission is signed by people, and the peer team asks who signed it. Locking is terminal: unlocking is a separate coordinator action with a stated reason, so a figure cannot move as a side effect of an ordinary edit.</p>
+          <div class="row" style="margin-bottom:10px">
+            <div><label for="actor">Acting as</label><input id="actor" value="faculty@college.edu"></div>
+            <div><label for="role">Role</label>
+              <select id="role">
+                <option value="faculty" selected>Faculty</option>
+                <option value="hod">HOD</option>
+                <option value="coordinator">NBA coordinator</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-bottom:10px">Current state: <span class="pill draft" id="apstate">draft</span></div>
+          <div class="row" id="apactions"></div>
+          <div style="margin-top:9px"><label for="apnote">Note (required to unlock)</label><input id="apnote" placeholder="e.g. Q3 marks came from the wrong section"></div>
+          <div class="row" style="margin-top:11px">
+            <button class="mini" id="dlEvidence" style="flex:0">Download evidence bundle (.docx)</button>
+            <span style="font-size:11.5px;color:var(--ink-faint);align-self:center">Every input behind this course's figures, as stored.</span>
+          </div>
+          <div id="aphistory" style="margin-top:11px"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h2>Audit trail <span class="tag t-auto">hash-chained</span></h2>
+          <p class="hint">Each event carries the hash of the one before it, so an altered or deleted row breaks the chain and is named. This does not make the log unforgeable — anyone who can write the database can rewrite the whole chain — but it makes the realistic failure, a row quietly adjusted before a visit, detectable.</p>
+          <div class="chain ok" id="chain">checking…</div>
+          <div class="scroll" style="margin-top:9px;max-height:400px" id="events"></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /view-evidence -->
+
+  <p class="foot">Every number came from the Python engine. The browser renders; it does not calculate.</p>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+let FRAMEWORKS={}, COURSES=[], current=null, coSeq=0;
+let comp={}, autoComp={}, evidence={}, questions=[], lastTables=null, booted=false;
+let psoLevels={}, psoSeq=0, lastDirect={}, lastIndirect={}, lastInstrument=null;
+
+const api = async (path, body) => {
+  const r = await fetch(path, body ? {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)} : undefined);
+  const j = await r.json();
+  if(!r.ok) throw new Error(j.detail || "Request failed");
+  return j;
+};
+const showErr = m => { const b=$("err"); b.textContent=m; b.classList.add("show"); };
+const clearErr = () => $("err").classList.remove("show");
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const debounce=(fn,ms)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}};
+
+function setSteps(list){ $("steps").innerHTML = list.map(s=>`<span class="${s[1]?"done":""}">${s[1]?"✓":"·"} ${s[0]}</span>`).join(""); }
+
+// ---------- course outcomes ----------
+function coRows(){ return [...document.querySelectorAll(".co-block")]; }
+function coData(){
+  return coRows().map(el=>({
+    code: el.querySelector(".cocode").value.trim() || el.dataset.code,
+    statement: el.querySelector(".costmt").value.trim(),
+    blooms: el.querySelector(".cok").value.split(/[,\s]+/).filter(Boolean).map(Number).filter(n=>n>=1&&n<=6),
+  })).filter(c=>c.statement);
+}
+function addCO(code, stmt="", k=""){
+  coSeq++;
+  const c = code || ("CO"+coSeq);
+  const el = document.createElement("div");
+  el.className="co-block"; el.dataset.code=c;
+  el.innerHTML=`
+    <div class="co-head">
+      <input class="cocode" value="${esc(c)}" style="width:58px;font-family:'IBM Plex Mono',monospace;font-weight:600;padding:3px 5px">
+      <input class="cok" value="${esc(k)}" placeholder="K-levels" style="width:96px;padding:3px 5px">
+      <span style="flex:1"></span>
+      <span class="quality"></span>
+      <button class="mini del">×</button>
+    </div>
+    <textarea class="costmt" rows="2" placeholder="Outcome statement…">${esc(stmt)}</textarea>
+    <ul class="findings"></ul>
+    <div class="diff"></div>`;
+  $("cos").appendChild(el);
+  const recheck = debounce(()=>{ checkCO(el); }, 400);
+  el.querySelector(".costmt").addEventListener("input", recheck);
+  el.querySelector(".cok").addEventListener("input", recheck);
+  el.querySelector(".cocode").addEventListener("input", ()=>{ renderMap(); renderQSetup(); });
+  el.querySelector(".del").addEventListener("click", ()=>{ el.remove(); renderMap(); renderQSetup(); });
+  return el;
+}
+
+async function checkCO(el){
+  const stmt = el.querySelector(".costmt").value.trim();
+  const q=el.querySelector(".quality"), ul=el.querySelector(".findings");
+  if(!stmt){ q.innerHTML=""; ul.innerHTML=""; return; }
+  const blooms = el.querySelector(".cok").value.split(/[,\s]+/).filter(Boolean).map(Number).filter(n=>n>=1&&n<=6);
+  try{
+    const r = await api("/api/co-quality",{co_code:el.dataset.code,statement:stmt,blooms_levels:blooms});
+    q.innerHTML = r.is_usable?'<span class="tag t-ok">usable</span>':'<span class="tag t-err">needs work</span>';
+    ul.innerHTML = r.findings.filter(f=>f.severity!=="info").map(f=>
+      `<li><span class="tag t-${f.severity==="error"?"err":"warn"}">${f.check}</span><span>${esc(f.message)}</span></li>`).join("");
+  }catch(e){}
+}
+
+async function rewriteAll(){
+  const cos = coData();
+  if(!cos.length) return;
+  const payload={}; cos.forEach(c=>payload[c.code]={statement:c.statement,blooms_levels:c.blooms});
+  let res;
+  try{ res = await api("/api/rewrite-cos",{cos:payload}); }catch(e){ return; }
+  coRows().forEach(el=>{
+    const code = el.querySelector(".cocode").value.trim() || el.dataset.code;
+    const r = res.rewrites[code];
+    const d = el.querySelector(".diff");
+    if(!r || !r.changed){ d.classList.remove("show"); d.innerHTML=""; return; }
+    d.classList.add("show");
+    d.innerHTML=`
+      <div class="was">${esc(r.original)}</div>
+      <div class="now">${esc(r.proposed)}</div>
+      <div class="why">${r.rules_applied.map(esc).join(" · ")}</div>
+      <div class="acts">
+        <button class="mini acc">Accept</button>
+        <button class="mini rej">Keep original</button>
+      </div>`;
+    d.querySelector(".acc").addEventListener("click",()=>{
+      el.querySelector(".costmt").value = r.proposed;
+      if(r.blooms_levels?.length) el.querySelector(".cok").value = r.blooms_levels.join(",");
+      d.classList.remove("show"); checkCO(el);
+    });
+    d.querySelector(".rej").addEventListener("click",()=>d.classList.remove("show"));
+  });
+  return res.summary;
+}
+
+function acceptAllRewrites(){
+  document.querySelectorAll(".diff.show .acc").forEach(b=>b.click());
+}
+
+// ---------- mapping ----------
+async function proposeMapping(){
+  const cos = coData();
+  if(!cos.length || !current) return;
+  const payload={}; cos.forEach(c=>payload[c.code]={statement:c.statement,blooms_levels:c.blooms});
+  try{
+    const r = await api("/api/propose-mapping",{framework_code:current.code,cos:payload});
+    autoComp = JSON.parse(JSON.stringify(r.competency));
+    comp = JSON.parse(JSON.stringify(r.competency));
+    evidence = r.evidence;
+    renderMap(); renderEvidence();
+    return r.summary;
+  }catch(e){ showErr(e.message); }
+}
+
+// Competency is 0 / 1 / 2 -- the same scale as the guidelines and as the
+// matrices faculty already fill in on paper.
+const COMP_LABEL = {0:"0 · no match", 1:"1 · partial", 2:"2 · strong"};
+const compOf = (table, co, po) => Number(table[co]?.[po] ?? 0);
+
+function renderMap(){
+  if(!current) return;
+  const cos=coData(), pos=current.po_codes;
+  let h = "<thead><tr><th>CO</th>"+pos.map(p=>`<th title="${esc(current.po_titles[p]||"")} — PL ${current.po_action_levels?.[p] ?? "?"}">${p}</th>`).join("")+"</tr></thead><tbody>";
+  cos.forEach(co=>{
+    h += `<tr><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">${esc(co.code)}</td>`+
+      pos.map(p=>{
+        const v = compOf(comp, co.code, p);
+        const a = compOf(autoComp, co.code, p);
+        const cls = v===0 ? "" : (v===a ? "auto" : "edited");
+        return `<td><select data-co="${esc(co.code)}" data-po="${p}" class="cs ${cls}">`+
+          [0,1,2].map(n=>`<option value="${n}"${v===n?" selected":""}>${n===0?"0":COMP_LABEL[n].slice(0,1)}</option>`).join("")+
+          `</select></td>`;
+      }).join("")+"</tr>";
+  });
+  $("maptable").innerHTML = h+"</tbody>";
+  $("maptable").querySelectorAll(".cs").forEach(s=>s.addEventListener("change",e=>{
+    const {co,po}=e.target.dataset;
+    const v = Number(e.target.value);
+    (comp[co] ||= {});
+    if(v===0) delete comp[co][po]; else comp[co][po]=v;
+    const a = compOf(autoComp, co, po);
+    e.target.className = "cs " + (v===0 ? "" : (v===a?"auto":"edited"));
+  }));
+}
+
+function renderEvidence(){
+  let h="<thead><tr><th>CO</th><th>PO</th><th>Proposed</th><th class='num'>Score</th><th>Matched terms</th></tr></thead><tbody>";
+  for(const [co,list] of Object.entries(evidence)){
+    (list||[]).forEach(e=>{
+      const c = Number(e.competency);
+      h+=`<tr><td>${esc(co)}</td><td>${e.po_code}</td><td><span class="tag t-${c===2?"ok":"warn"}">${COMP_LABEL[c]||c}</span></td>
+      <td class="num">${e.score}</td><td style="font-size:11.5px;color:var(--ink-soft)">${esc((e.matched_terms||[]).join(", "))}</td></tr>`;
+    });
+  }
+  $("evidence").innerHTML=h+"</tbody>";
+}
+
+// ---------- questions & marks ----------
+function renderQSetup(){
+  const cos=coData();
+  let h="<thead><tr><th>#</th><th>Question</th><th>Outcome</th><th class='num'>Max</th></tr></thead><tbody>";
+  questions.forEach((q,i)=>{
+    h+=`<tr><td class="num">${i+1}</td>
+      <td><input value="${esc(q.no)}" data-i="${i}" class="qno" style="padding:2px 5px"></td>
+      <td><select data-i="${i}" class="qco" style="padding:2px 5px">`+
+      cos.map(c=>`<option value="${esc(c.code)}"${q.co===c.code?" selected":""}>${esc(c.code)}</option>`).join("")+
+      `</select></td><td><input type="number" value="${q.max}" data-i="${i}" class="qmax" style="padding:2px 5px;text-align:right"></td></tr>`;
+  });
+  $("qsetup").innerHTML=h+"</tbody>";
+  $("qsetup").querySelectorAll(".qno").forEach(e=>e.addEventListener("input",ev=>questions[ev.target.dataset.i].no=ev.target.value));
+  $("qsetup").querySelectorAll(".qco").forEach(e=>e.addEventListener("change",ev=>questions[ev.target.dataset.i].co=ev.target.value));
+  $("qsetup").querySelectorAll(".qmax").forEach(e=>e.addEventListener("input",ev=>questions[ev.target.dataset.i].max=parseFloat(ev.target.value)||0));
+}
+
+async function ingest(){
+  const text=$("marks").value.trim();
+  if(!text) return null;
+  try{
+    const r = await api("/api/ingest-marks",{text});
+    const cos = coData();
+    // Keep any question rows the user already tuned; add newly detected ones.
+    const existing = new Map(questions.map(q=>[q.no,q]));
+    questions = r.questions.map((q,i)=>existing.get(q.label) || {
+      no:q.label, co:(cos[Math.min(i,cos.length-1)]||{}).code, max:10,
+    });
+    renderQSetup();
+    const bits=[`<b>${r.student_count}</b> students · <b>${r.questions.length}</b> question columns detected`];
+    if(r.warnings.length) bits.push(`<span class="tag t-warn">check</span> ${r.warnings.map(esc).join(" ")}`);
+    if(r.skipped_rows.length) bits.push(`skipped: ${r.skipped_rows.slice(0,3).map(esc).join(", ")}`);
+    if(r.outliers.length) bits.push(`<span class="tag t-warn">outlier</span> ${esc(r.outliers[0])}`);
+    if(r.cell_problems.length) bits.push(`<span class="tag t-err">unreadable</span> ${esc(r.cell_problems[0])}`);
+    $("ingestinfo").innerHTML = bits.join("<br>");
+    return r;
+  }catch(e){ $("ingestinfo").innerHTML=`<span class="tag t-err">error</span> ${esc(e.message)}`; return null; }
+}
+
+function buildQuestionPayload(){
+  const rows=$("marks").value.trim().split(/\r?\n/).filter(l=>l.trim());
+  if(!rows.length) return [];
+  const parsed=rows.map(l=>l.split(/\t|,/).map(c=>c.trim())).filter(r=>r[0]);
+  const isHeader = !/^[a-z0-9][a-z0-9-]{2,}$/i.test(parsed[0][0]) || /roll|name|id/i.test(parsed[0][0]);
+  const data = isHeader ? parsed.slice(1) : parsed;
+  return questions.map((q,qi)=>{
+    const sm={}, skipped=[];
+    data.forEach(r=>{
+      const raw=r[qi+1];
+      if(raw===undefined || raw==="") {
+        // A blank on an optional question is a choice not to attempt it; on a
+        // compulsory one it is an absence. The two are arithmetically
+        // different, so the paper's choice structure decides which this is.
+        if(q.group) skipped.push(r[0]);
+        return;
+      }
+      if(/^(a|ab|abs|na|-)$/i.test(raw)) return;          // absent: excluded
+      if(/^(ns|na-|skip|x)$/i.test(raw)){ skipped.push(r[0]); return; }
+      const v=parseFloat(raw); if(!isNaN(v)) sm[r[0]]=v;
+    });
+    return {question_no:q.no, co_code:q.co, max_marks:q.max, student_marks:sm,
+            not_attempted:skipped, choice_group:q.group||null};
+  }).filter(q=>Object.keys(q.student_marks).length);
+}
+
+// ---------- levels + attainment ----------
+async function computeLevels(){
+  const cos=coData(); const blooms={}; cos.forEach(c=>blooms[c.code]=c.blooms);
+  const r = await api("/api/map",{framework_code:current.code,co_blooms:blooms,competency:comp});
+  return r.levels;
+}
+
+async function runAttainment(){
+  clearErr();
+  const cos=coData();
+  if(!cos.length){ showErr("Add at least one course outcome."); return; }
+  const qs=buildQuestionPayload();
+  if(!qs.length){ showErr("No usable marks. Each row needs a roll number followed by one number per question."); return; }
+
+  let levels;
+  try{ levels = await computeLevels(); }catch(e){ showErr(e.message); return; }
+
+  const seeApp=parseInt($("seeApp").value);
+  const course = COURSES.find(c=>c.code===$("ccode").value);
+  try{
+    const d = await api("/api/attainment",{
+      framework_code:current.code, course_code:$("ccode").value||"C101",
+      course_name:$("cname").value||"Untitled", questions:qs,
+      target_mode:$("tmode").value, target_pct:parseFloat($("tpct").value)||60,
+      t1:parseFloat($("t1").value), t2:parseFloat($("t2").value), t3:parseFloat($("t3").value),
+      co_po_levels:levels,
+      see_meeting_target: isNaN(seeApp)?null:(parseInt($("seeMet").value)||0),
+      see_appeared: isNaN(seeApp)?null:seeApp,
+      w_cie:parseFloat($("wcie").value), w_see:parseFloat($("wsee").value),
+      co_target: parseFloat($("cotarget").value)||2,
+      home_pos: course? course.home_pos : [],
+      attempt_policy: $("policy").value,
+      pso_codes: psoData().map(p=>p.code),
+      co_pso_levels: psoLevels,
+    });
+    render(d);
+    lastDirect = d.course_po_attainment;
+    return d;
+  }catch(e){ showErr(e.message); }
+}
+
+const lvl = n => `<span class="lvl lvl-${n}">${n}</span>`;
+
+function render(d){
+  $("results").style.display="";
+  $("modenote").textContent = d.target_mode==="class_average"
+    ? "Target: students scoring above the class average for each question (SAR 3.7.2)."
+    : "Target: students reaching the set threshold of each question's maximum (SAR 3.7.2).";
+
+  $("cometrics").innerHTML = d.co_attainment.map(c=>`
+    <div class="metric"><div class="k">${esc(c.co_code)}</div><div class="v">${c.direct.toFixed(2)}</div>
+    <div class="s">CIE ${c.cie_success_pct}% → L${c.cie_level}${c.see_level!==null?` · SEE L${c.see_level}`:""}</div></div>`).join("");
+
+  let qb="<thead><tr><th>CO</th><th>Q</th><th class='num'>Max</th><th class='num'>Target</th><th class='num'>Counted</th><th class='num'>Met</th><th class='num'>Skipped</th><th class='num'>Passed %</th></tr></thead><tbody>";
+  d.co_attainment.forEach(c=>c.questions.forEach(q=>{
+    qb+=`<tr><td>${esc(c.co_code)}</td><td>${esc(q.question_no)}</td><td class="num">${q.max_marks}</td>
+    <td class="num">${q.target_marks}</td><td class="num">${q.students_present}</td><td class="num">${q.students_meeting_target}</td>
+    <td class="num">${q.students_not_attempted||"—"}</td><td class="num">${q.passed_pct}</td></tr>`;}));
+  $("qbreak").innerHTML=qb+"</tbody>";
+
+  // Choice-question bias: shown only when the paper actually has choice.
+  const bias=d.choice_bias||[];
+  $("biascard").style.display = bias.length ? "" : "none";
+  $("bias").innerHTML = bias.map(b=>`
+    <div class="viol ${b.severity==="error"?"error":""}">
+      <span class="tag t-${b.severity==="error"?"err":b.severity==="warning"?"warn":"info"}">${esc(b.co_code)}</span>
+      <div style="margin-top:4px">${esc(b.message)}</div>
+    </div>`).join("");
+
+  const cam=d.tables.course_articulation_matrix;
+  lastTables=d.tables;
+  $("camTitle").textContent=`SAR Table ${cam.number} · Course Articulation Matrix`;
+  $("camSub").textContent=`${d.framework.name} — ${d.framework.po_codes.length} program outcomes`;
+  $("cam").innerHTML="<thead><tr>"+cam.headers.map(h=>`<th>${esc(h)}</th>`).join("")+"</tr></thead><tbody>"+
+    cam.rows.map(r=>"<tr>"+r.map((c,i)=>i===0?`<td style="font-family:'IBM Plex Mono',monospace;font-weight:600">${esc(c)}</td>`
+      :`<td class="num">${c==="-"?'<span class="lvl lvl-0">–</span>':lvl(c)}</td>`).join("")+"</tr>").join("")+"</tbody>";
+
+  const t=d.tables.direct_attainment;
+  $("t381Title").textContent=`SAR Table ${t.number} · Direct PO Attainment`;
+  $("t381").innerHTML="<thead><tr>"+t.headers.map(h=>`<th>${esc(h)}</th>`).join("")+"</tr></thead><tbody>"+
+    t.rows.map((r,ri)=>`<tr${ri===t.rows.length-1?' style="font-weight:600;background:var(--surface-2)"':''}>`+
+      r.map((c,i)=>i===0?`<td>${esc(c)}</td>`:`<td class="num">${esc(c)}</td>`).join("")+"</tr>").join("")+"</tbody>";
+
+  // structural checks
+  const v=d.validation;
+  $("violations").innerHTML = v.violations.length
+    ? v.violations.map(x=>`<div class="viol ${x.severity}">
+        <span class="tag t-${x.severity==="error"?"err":"warn"}">${x.rule.replace(/_/g," ")}</span>
+        <div style="margin-top:4px">${esc(x.message)}</div>
+        ${x.cells?.length?`<div class="cells">${esc(x.cells.slice(0,10).join("  "))}</div>`:""}</div>`).join("")
+    : '<div class="viol" style="border-left-color:var(--ok)"><span class="tag t-ok">all clear</span><div style="margin-top:4px">No structural problems found in this matrix.</div></div>';
+
+  // CQI
+  const recs=d.cqi.records;
+  $("cqicard").style.display = recs.length ? "" : "none";
+  $("cqi").innerHTML = recs.map((r,i)=>`
+    <div class="cqi"><div class="h"><span class="code">${esc(r.code)}</span>
+      <span class="tag t-${r.severity==="critical"?"err":r.severity==="major"?"warn":"info"}">${r.severity}</span>
+      <span style="font-size:12px;color:var(--ink-soft)">${esc(r.rationale)}</span></div>
+      ${r.weakest_questions.length?`<div style="font-size:11.5px;color:var(--ink-faint)">weakest: ${r.weakest_questions.map(w=>esc(w.question_no)+" ("+w.passed_pct.toFixed(0)+"%)").join(", ")}</div>`:""}
+      <textarea rows="3" data-i="${i}">${esc(r.drafted_action)}</textarea></div>`).join("");
+}
+
+// ---------- syllabus -> outcomes ----------
+let detectedCourses = [];
+
+function applyDetectedCourse(idx){
+  const c = detectedCourses[idx];
+  if(!c) return;
+  if(c.code) $("ccode").value = c.code;
+  if(c.title) $("cname").value = c.title;
+  $("cos").innerHTML = ""; coSeq = 0;
+  c.cos.forEach(co => addCO(co.code, co.statement, co.blooms_levels.join(",")));
+  questions = c.cos.map((co,i)=>({no:"Q"+(i+1), co:co.code, max:[10,10,15,15,20,20][i]||10}));
+  renderQSetup();
+  $("marks").value = sampleMarks(questions);
+  renderMap();
+}
+
+async function handleSyllabus(file){
+  $("sylinfo").innerHTML = "Reading…";
+  try{
+    const fd = new FormData(); fd.append("file", file);
+    const r = await fetch("/api/parse-syllabus",{method:"POST",body:fd});
+    const d = await r.json();
+    if(!r.ok) throw new Error(d.detail || "Could not read that file");
+    if(!d.courses.length){
+      $("sylinfo").innerHTML = `<span class="tag t-err">nothing found</span> ${esc((d.warnings||[]).join(" "))}`;
+      return;
+    }
+    detectedCourses = d.courses;
+    const conf = {high:"t-ok", medium:"t-warn", low:"t-err", none:"t-err"}[d.confidence] || "t-warn";
+    const bits = [`<span class="tag ${conf}">${d.confidence} confidence</span> `+
+      `${d.total_cos} outcomes across ${d.courses.length} course(s) · read via ${esc(d.source)}`];
+    if(d.warnings?.length) bits.push(esc(d.warnings.join(" ")));
+    if(d.confidence !== "high") bits.push("Check the outcomes below before relying on them.");
+    $("sylinfo").innerHTML = bits.join("<br>");
+
+    if(d.courses.length > 1){
+      $("sylpick").style.display = "";
+      $("sylcourse").innerHTML = d.courses.map((c,i)=>
+        `<option value="${i}">${esc(c.label)} — ${c.cos.length} outcomes</option>`).join("");
+    } else {
+      $("sylpick").style.display = "none";
+    }
+    applyDetectedCourse(0);
+    await runEverything();
+  }catch(e){
+    $("sylinfo").innerHTML = `<span class="tag t-err">error</span> ${esc(e.message)}`;
+  }
+}
+
+// ---------- question -> CO tagging ----------
+let lastTags = [];
+
+async function tagQuestions(){
+  const cos = coData();
+  if(!cos.length){ showErr("Add course outcomes before tagging questions."); return; }
+  const text = $("paper").value.trim();
+  if(!text){ $("tagresults").innerHTML = '<div class="viol"><span class="tag t-warn">nothing to tag</span><div style="margin-top:4px">Paste the question paper above.</div></div>'; return; }
+  const payload = {}; cos.forEach(c=>payload[c.code]={statement:c.statement,blooms_levels:c.blooms});
+  $("tagresults").innerHTML = "Reading the paper…";
+  try{
+    const d = await api("/api/tag-questions",{cos:payload, paper_text:text, use_llm:true});
+    lastTags = d.tags;
+    const s = d.summary;
+    const head = `<div style="font-size:12px;color:var(--ink-soft);margin-bottom:7px">`+
+      `<b>${s.total}</b> questions · ${s.confident} settled confidently · ${s.needs_review} to review`+
+      (s.llm_arbitrated ? ` · ${s.llm_arbitrated} arbitrated by ${esc(d.llm.model||"the model")}` : "")+
+      `</div>`;
+    $("tagresults").innerHTML = head + d.tags.map(t=>{
+      const cls = t.confidence==="high" ? "t-ok" : t.confidence==="review" ? "t-warn" : "t-err";
+      const alt = (t.scores||[]).filter(x=>x.co_code!==t.co_code).slice(0,2)
+        .map(x=>`${x.co_code} ${x.score.toFixed(2)}`).join(" · ");
+      return `<div class="cqi"><div class="h">
+          <span class="code">${esc(t.question_no)}</span>
+          <span class="tag ${cls}">${esc(t.co_code || "no match")}</span>
+          <span class="tag ${t.method==="llm-arbitrated"?"t-auto":"t-info"}">${t.method==="llm-arbitrated"?"AI":"rules"}</span>
+          <span style="font-size:11.5px;color:var(--ink-faint)">${esc(t.confidence)}</span></div>
+        <div style="font-size:12.5px">${esc(t.question_text.slice(0,140))}</div>
+        <div style="font-size:11.5px;color:var(--ink-soft);margin-top:3px">${esc(t.rationale)}</div>
+        ${alt?`<div style="font-size:11px;color:var(--ink-faint);margin-top:2px">next best: ${esc(alt)}</div>`:""}
+      </div>`;
+    }).join("");
+    return s;
+  }catch(e){ $("tagresults").innerHTML = `<div class="viol error"><span class="tag t-err">error</span><div style="margin-top:4px">${esc(e.message)}</div></div>`; }
+}
+
+function applyTags(){
+  if(!lastTags.length){ showErr("Tag the questions first."); return; }
+  const cos = coData().map(c=>c.code);
+  questions = lastTags
+    .filter(t=>t.co_code && cos.includes(t.co_code))
+    .map((t,i)=>({no:t.question_no, co:t.co_code, max:(questions[i]?.max)||10}));
+  renderQSetup();
+  if(questions.length) runAttainment();
+}
+
+// ---------- the automated pipeline ----------
+async function runEverything(){
+  clearErr();
+  const steps=[["outcomes",false],["rewrite",false],["mapping + PSOs",false],["marks",false],
+               ["questions",false],["attainment",false],["indirect",false],["trends",false]];
+  setSteps(steps);
+  steps[0][1]=true; setSteps(steps);
+
+  const rw = await rewriteAll();
+  steps[1][1]=true; setSteps(steps);
+
+  const mp = await proposeMapping();
+  await refreshPSOs();
+  steps[2][1]=true; setSteps(steps);
+
+  await ingest();
+  steps[3][1]=true; setSteps(steps);
+
+  // Tag the paper if one is present, so question -> CO is filled in too.
+  let tagSummary = null;
+  if($("paper").value.trim()){ tagSummary = await tagQuestions(); }
+
+  steps[4][1]=true; setSteps(steps);
+  const d = await runAttainment();
+  steps[5][1]=true; setSteps(steps);
+
+  // The remaining panels depend on the attainment result, so they follow it.
+  await buildSurvey();
+  await scoreSurvey();
+  steps[6][1]=true; setSteps(steps);
+  await loadTrends();
+  steps[7][1]=true; setSteps(steps);
+
+  const parts=[];
+  if(rw) parts.push(`${rw.changed} of ${rw.total} outcomes rewritten`);
+  if(mp) parts.push(`${mp.proposed_cells} mapping cells proposed`);
+  const psoCells = Object.values(psoLevels).reduce((n,r)=>n+Object.keys(r).length,0);
+  if(psoCells) parts.push(`${psoCells} PSO cells inferred`);
+  if(tagSummary) parts.push(
+    `${tagSummary.total} questions tagged` +
+    (tagSummary.needs_review ? ` (${tagSummary.needs_review} to review)` : ""));
+  if(d) parts.push(`${d.cohort_size} students`,
+                   d.validation.error_count? `${d.validation.error_count} blocking issue(s)` : "matrix passes checks",
+                   d.cqi.summary.total? `${d.cqi.summary.total} improvement action(s) drafted` : "all outcomes at target");
+  $("autosummary").innerHTML = parts.join(" · ") || "ready";
+  await saveSnapshot(d);          // the run is the record; store it
+  await loadApprovals(); await loadAudit();
+  if(!booted) await loadTaggerQuality();
+  booted = true;
+}
+
+function loadCourse(code){
+  const c = COURSES.find(x=>x.code===code);
+  if(!c) return;
+  $("ccode").value=c.code; $("cname").value=c.title;
+  $("cos").innerHTML=""; coSeq=0;
+  c.cos.forEach(co=>addCO(co.code, co.statement, co.blooms_levels.join(",")));
+  // Seed a plausible question set: one per outcome, weighted toward the later ones.
+  questions = c.cos.map((co,i)=>({no:"Q"+(i+1), co:co.code, max:[10,10,15,15,20,20][i]||10}));
+  renderQSetup();
+  $("marks").value = sampleMarks(questions);
+  $("paper").value = c.sample_paper || "";
+  renderMap();
+}
+
+function sampleMarks(qs){
+  // A deterministic, plausible cohort so the tool is never empty on arrival.
+  const rows=[]; const n=12;
+  for(let i=1;i<=n;i++){
+    const roll="21CS"+String(i).padStart(3,"0");
+    const ability=0.45+((i*37)%55)/100;
+    const cells=qs.map((q,qi)=>{
+      const drift=((i*13+qi*29)%17)/100-0.08;
+      return Math.max(0,Math.min(q.max, Math.round(q.max*(ability+drift))));
+    });
+    rows.push([roll,...cells].join("\t"));
+  }
+  return ["Roll\t"+qs.map(q=>q.no).join("\t"), ...rows].join("\n");
+}
+
+// ---------- program specific outcomes ----------
+// PSOs are department-authored, so there is nothing to seed. These two are a
+// plausible CSE pair, present so the panel demonstrates itself; they are
+// edited or replaced like anything else.
+const DEFAULT_PSOS = {
+  CSE:[["PSO1","Apply data structures, algorithms and database concepts to develop efficient software applications."],
+       ["PSO2","Design and deploy networked and cloud-based systems using current programming platforms and security practices."]],
+  ECE:[["PSO1","Apply signal processing and communication principles to design electronic systems for real-world applications."],
+       ["PSO2","Use modern EDA tools to simulate, verify and implement analog and digital circuits."]],
+  ME: [["PSO1","Apply thermal and fluid engineering principles to analyse and improve mechanical power systems."],
+       ["PSO2","Use CAD and simulation tools to design and validate mechanical components for manufacture."]],
+  CE: [["PSO1","Apply structural and geotechnical principles to design safe and economical civil infrastructure."],
+       ["PSO2","Evaluate construction practices against environmental regulation and whole-life cost."]],
+};
+
+function psoData(){
+  return [...document.querySelectorAll(".pso-block")].map(el=>({
+    code: el.querySelector(".psocode").value.trim() || el.dataset.code,
+    statement: el.querySelector(".psostmt").value.trim(),
+  })).filter(p=>p.statement);
+}
+
+function addPSO(code, stmt=""){
+  psoSeq++;
+  const c = code || ("PSO"+psoSeq);
+  const el = document.createElement("div");
+  // Deliberately NOT .co-block: coData() selects that class, and a PSO block
+  // has no .cocode field, so sharing the class for styling made every course
+  // outcome read fail.
+  el.className="pso-block"; el.dataset.code=c;
+  el.innerHTML=`
+    <div class="co-head">
+      <input class="psocode" value="${esc(c)}" style="width:66px;font-family:'IBM Plex Mono',monospace;font-weight:600;padding:3px 5px">
+      <span style="flex:1"></span><span class="psoq"></span>
+      <button class="mini del">×</button>
+    </div>
+    <textarea class="psostmt" rows="2" placeholder="What a graduate of this program specifically can do…">${esc(stmt)}</textarea>`;
+  $("psolist").appendChild(el);
+  el.querySelector(".del").addEventListener("click",()=>{ el.remove(); refreshPSOs(); });
+  el.querySelector(".psostmt").addEventListener("input", debounce(refreshPSOs, 500));
+  return el;
+}
+
+function loadPSOs(branch){
+  $("psolist").innerHTML=""; psoSeq=0;
+  (DEFAULT_PSOS[branch] || DEFAULT_PSOS.CSE).forEach(([c,s])=>addPSO(c,s));
+}
+
+async function refreshPSOs(){
+  const psos = psoData();
+  const cos = coData();
+  if(!psos.length){ $("psofindings").innerHTML=""; $("psotable").innerHTML=""; psoLevels={}; return; }
+  try{
+    const chk = await api("/api/pso/check", {psos});
+    chk.reports.forEach(r=>{
+      const el=[...document.querySelectorAll(".pso-block")].find(x=>(x.querySelector(".psocode").value.trim()||x.dataset.code)===r.code);
+      if(el) el.querySelector(".psoq").innerHTML = r.is_usable
+        ? `<span class="tag t-ok">specific</span>`
+        : `<span class="tag t-err">too generic</span>`;
+    });
+    const all=[...chk.set_findings, ...chk.reports.flatMap(r=>r.findings.map(f=>({...f, code:r.code})))]
+      .filter(f=>f.severity!=="info");
+    $("psofindings").innerHTML = all.map(f=>`
+      <div class="viol ${f.severity==="error"?"error":""}">
+        <span class="tag t-${f.severity==="error"?"err":"warn"}">${esc(f.code||"set")} · ${esc(f.check)}</span>
+        <div style="margin-top:4px">${esc(f.message)}</div></div>`).join("");
+
+    if(!cos.length){ psoLevels={}; return; }
+    const payload={}; cos.forEach(c=>payload[c.code]={statement:c.statement,blooms_levels:c.blooms});
+    const prop = await api("/api/pso/propose", {cos:payload, psos});
+    psoLevels = prop.levels;
+    renderPSOTable(cos.map(c=>c.code), psos.map(p=>p.code), prop);
+  }catch(e){ /* advisory panel: never block the pipeline */ }
+}
+
+function renderPSOTable(coCodes, psoCodes, prop){
+  let h="<thead><tr><th>CO</th>"+psoCodes.map(p=>`<th class="num">${esc(p)}</th>`).join("")+"</tr></thead><tbody>";
+  coCodes.forEach(co=>{
+    h+=`<tr><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">${esc(co)}</td>`;
+    psoCodes.forEach(p=>{
+      const v=(psoLevels[co]||{})[p]||0;
+      h+=`<td class="num">${v?`<span class="lvl lvl-${v}">${v}</span>`:'<span class="lvl lvl-0">–</span>'}</td>`;
+    });
+    h+="</tr>";
+  });
+  $("psotable").innerHTML=h+"</tbody>";
+  if(prop.unmapped_psos?.length){
+    $("psofindings").innerHTML += `<div class="viol error"><span class="tag t-err">orphan PSO</span>
+      <div style="margin-top:4px">${esc(prop.unmapped_psos.join(", "))} — no outcome in this course maps here.
+      That is expected for one course, but a PSO no course in the program addresses is an automatic finding.</div></div>`;
+  }
+}
+
+// ---------- indirect assessment ----------
+async function buildSurvey(){
+  const cos=coData();
+  if(!cos.length){ $("survey").innerHTML=""; return; }
+  const map={}; cos.forEach(c=>map[c.code]=c.statement);
+  try{
+    const inst = await api("/api/survey/build", {
+      cos:map, scale_max: parseInt($("scalemax").value), course_title: $("cname").value});
+    lastInstrument = inst;
+    const n = inst.scale_max;
+    // Prefilled with a plausible distribution so the panel is never empty --
+    // the same contract as every other screen. Replace with real counts.
+    $("survey").innerHTML =
+      `<div class="lik" style="border-bottom:1px solid var(--hair);padding-bottom:5px">
+         <b style="font-size:11px;color:var(--ink-faint)">How many students chose…</b>
+         ${inst.scale_labels.map((l,i)=>`<b style="text-align:center;font-size:10px" title="${esc(l)}">${i+1}</b>`).join("")}
+       </div>` +
+      inst.items.map((it,ix)=>`
+        <div class="lik" data-item="${esc(it.id)}">
+          <span title="${esc(it.text)}"><b>${esc(it.target_code)}</b> <span style="color:var(--ink-faint);font-size:11.5px">${esc(it.text.slice(0,58))}${it.text.length>58?"…":""}</span></span>
+          ${Array.from({length:n},(_,i)=>`<input type="number" min="0" value="${[2,4,10,18,14][(i+ix)%5]||5}">`).join("")}
+        </div>`).join("");
+  }catch(e){}
+}
+
+async function scoreSurvey(){
+  if(!lastInstrument) return;
+  // Expand per-point counts into individual responses -- the engine scores
+  // responses, and a count table is just a compact way to enter them.
+  const perItem={};
+  document.querySelectorAll("#survey .lik[data-item]").forEach(row=>{
+    const id=row.dataset.item; const flat=[];
+    [...row.querySelectorAll("input")].forEach((inp,i)=>{
+      const n=parseInt(inp.value)||0;
+      for(let k=0;k<n;k++) flat.push(i+1);
+    });
+    perItem[id]=flat;
+  });
+  const count=Math.max(0,...Object.values(perItem).map(a=>a.length));
+  const rows=[];
+  for(let i=0;i<count;i++){
+    const r={};
+    Object.entries(perItem).forEach(([id,flat])=>{ if(flat[i]!==undefined) r[id]=flat[i]; });
+    rows.push(r);
+  }
+  try{
+    const res = await api("/api/survey/score", {
+      instrument:lastInstrument, responses:rows,
+      population: parseInt($("pop").value)||null,
+      t1:parseFloat($("t1").value), t2:parseFloat($("t2").value), t3:parseFloat($("t3").value)});
+    lastIndirect = res.by_target;
+
+    const badge = res.adequacy==="adequate" ? "t-ok" : res.adequacy==="thin" ? "t-warn" : "t-err";
+    let h = `<div style="margin-bottom:8px"><span class="tag ${badge}">${esc(res.adequacy)}</span>
+      <span style="font-size:12px;color:var(--ink-soft);margin-left:6px">${res.responses} responses${res.response_rate!==null?` · ${(res.response_rate*100).toFixed(0)}% of the class`:""}</span></div>`;
+    h += `<div class="metrics">` + res.items.map(i=>`
+      <div class="metric"><div class="k">${esc(i.target_code)}</div><div class="v">${i.pct.toFixed(0)}%</div>
+      <div class="s">mean ${i.mean_rating} → L${i.level}</div></div>`).join("") + `</div>`;
+    h += res.warnings.map(w=>`<div class="viol"><span class="tag t-warn">response quality</span><div style="margin-top:4px">${esc(w)}</div></div>`).join("");
+
+    // Blend against the direct PO figures already computed.
+    if(Object.keys(lastDirect).length){
+      // Percentages, declared as such: the server converts them to the 0-3
+      // attainment scale through the same thresholds before blending.
+      const blend = await api("/api/blend-attainment", {
+        direct:lastDirect, indirect:lastIndirect, indirect_is_co_scoped:true,
+        indirect_scale:"percent",
+        t1:parseFloat($("t1").value), t2:parseFloat($("t2").value), t3:parseFloat($("t3").value),
+        co_po_levels: await computeLevels(), framework_code: current.code,
+        w_direct: parseFloat($("wdir").value), w_indirect: parseFloat($("windir").value)});
+      const rows2 = blend.blended.filter(b=>b.overall!==null);
+      h += `<h2 style="margin:14px 0 3px">Direct + indirect</h2>`;
+      h += `<div class="scroll" style="max-height:230px"><table><thead><tr><th>PO</th><th class="num">Direct</th><th class="num">Indirect</th><th class="num">Overall</th><th>Basis</th></tr></thead><tbody>`
+        + rows2.map(b=>`<tr><td style="font-family:'IBM Plex Mono',monospace;font-weight:600">${esc(b.target_code)}</td>
+          <td class="num">${b.direct===null?"–":b.direct.toFixed(2)}</td>
+          <td class="num">${b.indirect===null?"–":b.indirect.toFixed(2)}</td>
+          <td class="num"><b>${b.overall.toFixed(2)}</b></td>
+          <td style="font-size:11.5px;color:var(--ink-soft)">${esc(b.note)}</td></tr>`).join("")
+        + `</tbody></table></div>`;
+      h += `<p class="hint" style="margin-top:8px">${esc(blend.methodology_note)}</p>`;
+    }
+    $("surveyout").innerHTML = h;
+  }catch(e){ showErr(e.message); }
+}
+
+// ---------- marks and question papers from files ----------
+// An .xlsx cannot be read as text, so it goes to the server, which flattens
+// it through the same column detector a pasted sheet uses.
+async function handleMarksFile(f){
+  clearErr();
+  if(/\.xlsx?$/i.test(f.name)){
+    const fd=new FormData(); fd.append("file", f);
+    try{
+      const r=await fetch("/api/parse-marks-file",{method:"POST",body:fd});
+      const d=await r.json();
+      if(!r.ok){ showErr(d.detail); return; }
+      const labels=d.question_labels;
+      $("marks").value = ["Roll\t"+labels.join("\t"),
+        ...d.rows.map(row=>[row.__roll__, ...labels.map(l=>row[l] ?? "")].join("\t"))].join("\n");
+      $("ingestinfo").textContent =
+        `Read ${d.student_count} students from ${d.sheet||"the first sheet"}. ` + (d.warnings||[]).join(" ");
+      logEvent("marks.imported",{rows:d.student_count, source:"xlsx"});
+    }catch(e){ showErr(e.message); return; }
+  }else{
+    $("marks").value = await f.text();
+    logEvent("marks.imported",{source:"text"});
+  }
+  await ingest(); await runAttainment();
+}
+
+async function handlePaperFile(f){
+  clearErr();
+  const fd=new FormData(); fd.append("file", f);
+  try{
+    const r=await fetch("/api/parse-question-paper",{method:"POST",body:fd});
+    const d=await r.json();
+    if(!r.ok){ showErr(d.detail); return; }
+    $("paper").value = d.questions.map(q=>`${q.question_no}. ${q.text}`).join("\n");
+    // Marks and choice groups the paper stated are authoritative -- they are
+    // not re-guessed from the marks sheet.
+    questions = d.questions.map(q=>({no:q.question_no, co:q.co_code||"", max:q.max_marks||10,
+                                     group:q.choice_group, choose:q.choose_count}));
+    renderQSetup();
+    const opt=d.questions.filter(q=>q.choice_group).length;
+    $("paperinfo").innerHTML =
+      `<span class="tag t-${d.confidence==="high"?"ok":d.confidence==="none"?"err":"warn"}">${esc(d.confidence)}</span> `+
+      `${d.questions.length} questions${opt?`, ${opt} optional`:""} · paper total ${d.total_marks} marks` +
+      (d.warnings.length?`<div style="margin-top:4px;color:var(--warn)">${esc(d.warnings.join(" "))}</div>`:"");
+    logEvent("paper.imported",{questions:d.questions.length, source:d.source});
+    await tagQuestions();
+    await runAttainment();
+  }catch(e){ showErr(e.message); }
+}
+
+// ---------- exports ----------
+async function download(path, body, filename){
+  try{
+    const r = await fetch(path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    if(!r.ok){ showErr((await r.json()).detail || "Export failed"); return; }
+    const blob = await r.blob();
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download=filename; a.click();
+    URL.revokeObjectURL(a.href);
+  }catch(e){ showErr(e.message); }
+}
+
+function exportPayload(){
+  if(!lastTables) return null;
+  const t=[lastTables.course_articulation_matrix, lastTables.direct_attainment]
+    .map(x=>({number:x.number,title:x.title,headers:x.headers,rows:x.rows}));
+  return {
+    tables:t, institution:"", program:$("cname").value||"", framework:current.name,
+    academic_year:"", prepared_by:$("actor")?.value||"",
+    filename:`SAR-${$("ccode").value||"course"}`,
+    notes:[
+      `Attempt policy: ${$("policy").value==="cohort"?"every student who sat the paper":"attempters only"}.`,
+      `Thresholds: L1 ≥ ${$("t1").value}%, L2 ≥ ${$("t2").value}%, L3 ≥ ${$("t3").value}%.`,
+      `Target mode: ${$("tmode").value==="class_average"?"class average (SAR 3.7.2)":"fixed threshold (SAR 3.7.2)"}.`,
+    ],
+  };
+}
+
+// ---------- trends ----------
+// Synthesised prior years so the panel demonstrates itself, including one
+// year under the old 12-PO framework -- the case that is actually hard.
+function demoRuns(latest){
+  const back=(f,fw)=>{const o={};Object.entries(latest||{}).forEach(([k,v])=>{if(v!==null)o[k]=Math.max(0,+(v*f).toFixed(2));});return o;};
+  const v4a=back(0.82), v4b=back(0.91);
+  const legacy={}; Object.entries(v4a).forEach(([k,v])=>{
+    const n=parseInt(k.slice(2));
+    if(n<=5) legacy[k]=v; else if(n===6){legacy.PO6=v;legacy.PO7=+(v*0.9).toFixed(2);}
+    else legacy["PO"+(n+1)]=v;
+  });
+  return [
+    {academic_year:"2022-23", created_at:"2023-06-01", config:{framework_code:"GAPC_V3"}, result:{po_direct_attainment:legacy}},
+    {academic_year:"2023-24", created_at:"2024-06-01", config:{framework_code:"GAPC_V4"}, result:{po_direct_attainment:v4a}},
+    {academic_year:"2024-25", created_at:"2025-06-01", config:{framework_code:"GAPC_V4"}, result:{po_direct_attainment:v4b}},
+    {academic_year:"2025-26", created_at:"2026-06-01", config:{framework_code:"GAPC_V4"}, result:{po_direct_attainment:latest||{}}},
+  ];
+}
+
+async function loadTrends(){
+  const target=parseFloat($("potarget").value)||2.0;
+  const targets={}; (current?.po_codes||[]).forEach(p=>targets[p]=target);
+  const actions=[{target_code:(current?.po_codes||["PO1"])[2]||"PO3",
+                  action:"Introduced a design-led mini project", academic_year:"2023-24"}];
+  try{
+    // Prefer real stored history. Only one academic year exists until a
+    // college has actually used this for a second one, so the illustrative
+    // series is the fallback -- and it is labelled as such rather than
+    // passed off as the department's own record.
+    let d=null, illustrative=false;
+    if(savedProgramId){
+      try{
+        d = await api("/api/trends", {runs:[], program_id:savedProgramId, targets,
+                                      actions, framework_code:current.code});
+        if((d.summary.years||[]).length < 2) d = null;
+      }catch(e){ d = null; }
+    }
+    if(!d){
+      illustrative = true;
+      d = await api("/api/trends", {runs:demoRuns(lastDirect), targets, actions,
+                                    framework_code:current.code});
+    }
+    $("trendsource").innerHTML = illustrative
+      ? `<span class="tag t-warn">illustrative</span> Prior years are synthesised from this year's figures so the panel demonstrates itself, including one year under the 12-PO framework. Real years appear here as they are recorded.`
+      : `<span class="tag t-ok">stored</span> ${d.summary.years.length} recorded year(s), read back from the workspace.`;
+    const s=d.summary;
+    $("trendsum").innerHTML = `
+      <div class="metric"><div class="k">years</div><div class="v">${s.years.length}</div><div class="s">${esc(s.years[0]||"")}–${esc(s.years[s.years.length-1]||"")}</div></div>
+      <div class="metric"><div class="k">at target</div><div class="v">${s.meeting_target}</div><div class="s">of ${s.with_data} measured</div></div>
+      <div class="metric"><div class="k">below</div><div class="v">${s.below_target}</div><div class="s">need an action</div></div>
+      <div class="metric"><div class="k">improving</div><div class="v">${s.improving}</div><div class="s">${s.declining} declining</div></div>`;
+
+    $("trendrows").innerHTML = d.series.map(x=>{
+      const vals=x.points.map(p=>p.value).filter(v=>v!==null);
+      const mx=Math.max(1,...vals);
+      return `<div class="trow">
+        <span class="code">${esc(x.target_code)}${x.has_merged_points?' <span title="Includes years from the 12-PO framework, where two outcomes merged into this one" style="color:var(--warn)">†</span>':""}</span>
+        <span class="spark">${x.points.map((p,i)=>`<i class="${i===x.points.length-1?"last":""}" style="height:${p.value===null?2:Math.max(3,p.value/mx*26)}px" title="${esc(p.academic_year)}: ${p.value===null?"no data":p.value}"></i>`).join("")}</span>
+        <span class="dir-${x.direction}">${esc(x.direction)}</span>
+        <span class="num" style="font-family:'IBM Plex Mono',monospace">${x.latest===null?"–":x.latest.toFixed(2)}</span>
+        <span>${x.gap===null?"":`<span class="tag t-${x.meets_target?"ok":"err"}">${x.gap>=0?"+":""}${x.gap.toFixed(2)}</span>`}</span>
+      </div>`;}).join("");
+
+    $("trendfindings").innerHTML = d.findings.slice(0,8).map(f=>`
+      <div class="viol ${f.severity==="error"?"error":""}">
+        <span class="tag t-${f.severity==="error"?"err":f.severity==="warning"?"warn":"info"}">${esc(f.target_code)}</span>
+        <div style="margin-top:4px">${esc(f.message)}</div></div>`).join("");
+
+    $("closure").innerHTML = d.closure.length
+      ? `<h2 style="margin:0 0 6px">Closure evidence</h2>` + d.closure.map(c=>`
+        <div class="viol ${c.verdict==="worsened"?"error":""}">
+          <span class="tag t-${c.verdict==="closed"?"ok":c.verdict==="worsened"?"err":"warn"}">${esc(c.verdict)}</span>
+          <div style="margin-top:4px">${esc(c.message)}</div></div>`).join("")
+      : "";
+  }catch(e){ $("trendfindings").innerHTML=`<div class="viol"><div>${esc(e.message)}</div></div>`; }
+}
+
+// ---------- migration ----------
+async function runMigration(){
+  const cos=coData();
+  if(!cos.length){ return; }
+  // Build a legacy 12-PO matrix from the current v3 proposals so the demo is
+  // real rather than invented: propose under v3, then migrate it to v4.
+  const payload={}; cos.forEach(c=>payload[c.code]={statement:c.statement,blooms_levels:c.blooms});
+  try{
+    const v3 = await api("/api/propose-mapping",{framework_code:"GAPC_V3", cos:payload});
+    const levels = await api("/api/map",{
+      framework_code:"GAPC_V3",
+      co_blooms:Object.fromEntries(cos.map(c=>[c.code,c.blooms.length?c.blooms:[2]])),
+      competency:v3.competency});
+    const d = await api("/api/migrate-matrix",{levels:levels.levels, cos:payload});
+    const merged=d.decisions.filter(x=>x.sources.length>1);
+    let h=`<div class="metrics">
+      <div class="metric"><div class="k">agreement</div><div class="v">${d.agreement_rate!==undefined?(d.agreement_rate*100).toFixed(0)+"%":"—"}</div><div class="s">legacy vs. outcome text</div></div>
+      <div class="metric"><div class="k">merged cells</div><div class="v">${merged.length}</div><div class="s">PO6 + PO7 → PO6</div></div>
+      <div class="metric"><div class="k">to review</div><div class="v">${d.review_count}</div><div class="s">levels differed</div></div>
+    </div>`;
+    if(d.recommendation) h+=`<div class="viol" style="border-left-color:var(--accent)"><span class="tag t-info">recommendation</span><div style="margin-top:4px">${esc(d.recommendation)}</div></div>`;
+    h+=merged.map(m=>`<div class="viol ${m.needs_review?"":""}"><span class="tag t-${m.needs_review?"warn":"info"}">${esc(m.co_code)} → ${esc(m.new_po)}</span><div style="margin-top:4px">${esc(m.message)}</div></div>`).join("");
+    (d.warnings||[]).forEach(w=>h+=`<div class="viol"><div>${esc(w)}</div></div>`);
+    if(d.disagreements?.length){
+      h+=`<details style="margin-top:8px"><summary>${d.disagreements.length} cell(s) where the legacy matrix and the outcome text disagree</summary>`
+        + d.disagreements.slice(0,12).map(x=>`<div style="font-size:12px;color:var(--ink-soft);padding:3px 0">${esc(x.message)}</div>`).join("")
+        + `</details>`;
+    }
+    $("migout").innerHTML=h;
+  }catch(e){ $("migout").innerHTML=`<div class="viol error"><div>${esc(e.message)}</div></div>`; }
+}
+
+// ---------- tagger quality ----------
+async function loadTaggerQuality(){
+  try{
+    const all = await api("/api/tagger-quality");
+    const ho = await api("/api/tagger-quality?split=holdout");
+    const pct=v=>(v*100).toFixed(1)+"%";
+    $("taggerq").innerHTML = `
+      <div class="metric"><div class="k">silent errors</div><div class="v">${pct(all.silent_error_rate)}</div><div class="s">confidently wrong</div></div>
+      <div class="metric"><div class="k">precision</div><div class="v">${pct(all.precision_at_high)}</div><div class="s">when it is sure</div></div>
+      <div class="metric"><div class="k">coverage</div><div class="v">${pct(all.coverage)}</div><div class="s">answered without a human</div></div>
+      <div class="metric"><div class="k">accuracy</div><div class="v">${pct(all.accuracy)}</div><div class="s">${all.total} questions</div></div>`;
+    $("taggerdetail").innerHTML =
+      `Held-out split (never used for tuning): accuracy ${pct(ho.accuracy)}, silent errors ${pct(ho.silent_error_rate)} over ${ho.total} questions.
+       Per course: ` + Object.entries(all.per_course).map(([c,m])=>`${esc(c)} ${(m.accuracy*100).toFixed(0)}%`).join(" · ");
+  }catch(e){ $("taggerq").innerHTML=`<div style="font-size:12px;color:var(--ink-faint)">${esc(e.message)}</div>`; }
+}
+
+// ---------- audit and approvals ----------
+const ENTITY = () => ["course_matrix", $("ccode").value || "course"];
+
+function headers(){
+  return {"Content-Type":"application/json",
+          "X-Actor": $("actor").value || "unattributed@local",
+          "X-Role": $("role").value};
+}
+
+async function loadApprovals(){
+  const [type,id]=ENTITY();
+  try{
+    const r = await fetch(`/api/approvals/${type}/${encodeURIComponent(id)}`,{headers:headers()});
+    const d = await r.json();
+    $("apstate").className = "pill "+d.state;
+    $("apstate").textContent = d.state;
+    const acts = [...d.available_actions];
+    if(d.is_locked && ["coordinator","admin"].includes($("role").value)) acts.push("unlock");
+    $("apactions").innerHTML = acts.length
+      ? acts.map(a=>`<button class="mini act" data-a="${esc(a)}" style="flex:0">${esc(a)}</button>`).join("")
+      : `<span style="font-size:12px;color:var(--ink-faint)">Nothing this role can do from “${esc(d.state)}”.</span>`;
+    $("apactions").querySelectorAll(".act").forEach(b=>b.addEventListener("click",()=>doTransition(b.dataset.a)));
+    $("aphistory").innerHTML = d.history.length
+      ? `<table><thead><tr><th>When</th><th>State</th><th>By</th><th>Note</th></tr></thead><tbody>`
+        + d.history.map(h=>`<tr><td style="font-size:11px">${esc(h.at.slice(0,16).replace("T"," "))}</td>
+          <td><span class="pill ${esc(h.state)}">${esc(h.state)}</span></td><td style="font-size:11.5px">${esc(h.actor)}</td>
+          <td style="font-size:11.5px">${esc(h.note||"")}</td></tr>`).join("") + `</tbody></table>`
+      : `<p class="hint">No sign-off recorded yet.</p>`;
+  }catch(e){}
+}
+
+async function doTransition(action){
+  const [type,id]=ENTITY();
+  try{
+    const r = await fetch(`/api/approvals/${type}/${encodeURIComponent(id)}`,{
+      method:"POST", headers:headers(),
+      body:JSON.stringify({action, note:$("apnote").value})});
+    const d = await r.json();
+    if(!r.ok){ showErr(d.detail); } else { clearErr(); $("apnote").value=""; }
+  }catch(e){ showErr(e.message); }
+  await loadApprovals(); await loadAudit();
+}
+
+async function loadAudit(){
+  try{
+    const d = await api("/api/audit");
+    const c=$("chain");
+    c.className = "chain "+(d.chain.ok?"ok":"bad");
+    c.textContent = d.chain.ok
+      ? `✓ ${d.chain.summary}`
+      : `✗ ${d.chain.summary} — ${d.chain.problems[0]||""}`;
+    $("events").innerHTML = d.events.slice().reverse().map(e=>`
+      <div class="ev"><span>${e.seq}</span><span>${esc(e.at.slice(0,16).replace("T"," "))}</span>
+      <span>${esc(e.action)} · ${esc(e.entity_type)}</span><span style="color:var(--ink-faint)">${esc(e.actor)}</span></div>`).join("")
+      || `<div style="padding:9px;font-size:12px;color:var(--ink-faint)">No events yet.</div>`;
+  }catch(e){}
+}
+
+// ---------- persistence ----------
+let savedCourseId=null, savedProgramId=null, savedYear="2025-26";
+
+async function saveSnapshot(d){
+  if(!d) return;
+  const cosMap={}; coData().forEach(c=>cosMap[c.code]={statement:c.statement,blooms_levels:c.blooms});
+  const course = COURSES.find(c=>c.code===$("ccode").value);
+  // Cells a human changed, so the bundle can say which are the department's
+  // judgement rather than the engine's proposal.
+  const overrides=[];
+  Object.entries(comp).forEach(([co,row])=>Object.entries(row).forEach(([po,v])=>{
+    if((autoComp[co]||{})[po] !== v) overrides.push(`${co}|${po}`);
+  }));
+  try{
+    const r = await fetch("/api/workspace/snapshot",{method:"POST",headers:headers(),
+      body:JSON.stringify({
+        program_code:(course?.branch||"PROG")+"-BTECH",
+        program_name:"B.Tech "+(course?.branch||""), branch:course?.branch||"",
+        framework_code:current.code,
+        course_code:$("ccode").value||"C101", course_name:$("cname").value||"",
+        semester:course?.semester||0, credits:course?.credits||0,
+        academic_year:savedYear, cos:cosMap, psos:psoData(),
+        co_po_levels: await computeLevels(), co_pso_levels:psoLevels,
+        overrides, questions:buildQuestionPayload(),
+        config:{t1:+$("t1").value,t2:+$("t2").value,t3:+$("t3").value,
+                target_mode:$("tmode").value,target_pct:+$("tpct").value,
+                attempt_policy:$("policy").value},
+        result:{co_attainment:Object.fromEntries(d.co_attainment.map(c=>[c.co_code,{
+                  success_pct:c.cie_success_pct, level:c.cie_level,
+                  questions:c.questions}])),
+                po_direct_attainment:d.course_po_attainment,
+                pso_direct_attainment:d.course_pso_attainment},
+      })});
+    const j = await r.json();
+    if(r.ok){ savedCourseId=j.course_id; savedProgramId=j.program_id; }
+    else if(r.status===409){ /* locked: the run is not overwritten, by design */ }
+  }catch(e){}
+}
+
+async function logEvent(action, payload){
+  const [type,id]=ENTITY();
+  try{
+    await fetch("/api/audit",{method:"POST",headers:headers(),
+      body:JSON.stringify({action, entity_type:type, entity_id:id, payload:payload||{}})});
+  }catch(e){}
+}
+
+// ---------- boot ----------
+(async function(){
+  try{
+    const fw = await api("/api/frameworks");
+    fw.frameworks.forEach(f=>FRAMEWORKS[f.code]=f);
+    $("framework").innerHTML = fw.frameworks.map(f=>
+      `<option value="${f.code}"${f.code===fw.default?" selected":""}>${esc(f.name)} — ${f.po_count} POs</option>`).join("");
+    current = FRAMEWORKS[fw.default];
+
+    const cl = await api("/api/courses");
+    COURSES = cl.courses;
+    $("course").innerHTML = COURSES.map(c=>
+      `<option value="${c.code}">${esc(c.code)} — ${esc(c.title)} (${esc(c.branch)})</option>`).join("");
+
+    loadCourse(COURSES[0].code);
+    loadPSOs(COURSES[0].branch);
+    await runEverything();
+    window.scrollTo(0,0);
+  }catch(e){ showErr("Could not reach the engine: "+e.message); }
+
+  // Tabs, addressable by hash so a view can be linked to and reloaded into.
+  function showView(name){
+    const b=[...document.querySelectorAll(".tabs button")].find(x=>x.dataset.view===name);
+    if(!b) return;
+    document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
+    document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on", v.id==="view-"+name));
+    if(location.hash.slice(1)!==name) history.replaceState(null,"","#"+name);
+    if(name==="evidence"){ loadApprovals(); loadAudit(); }
+    if(name==="program"){ if(!$("trendrows").innerHTML) loadTrends(); loadTaggerQuality(); runMigration(); }
+    window.scrollTo(0,0);
+  }
+  document.querySelectorAll(".tabs button").forEach(b=>
+    b.addEventListener("click",()=>showView(b.dataset.view)));
+  window.addEventListener("hashchange",()=>showView(location.hash.slice(1)||"course"));
+  if(location.hash) showView(location.hash.slice(1));
+
+  $("course").addEventListener("change",async e=>{
+    const c=COURSES.find(x=>x.code===e.target.value);
+    loadCourse(e.target.value);
+    if(c) loadPSOs(c.branch);
+    await runEverything();
+  });
+  $("framework").addEventListener("change",async e=>{
+    current=FRAMEWORKS[e.target.value]; await proposeMapping(); await runAttainment();
+  });
+  $("runall").addEventListener("click",runEverything);
+  $("addco").addEventListener("click",()=>{ addCO(); renderMap(); renderQSetup(); });
+  $("rewriteall").addEventListener("click",async()=>{ coRows().forEach(checkCO); await rewriteAll(); });
+  $("acceptall").addEventListener("click",()=>{ acceptAllRewrites(); proposeMapping(); });
+  $("addq").addEventListener("click",()=>{ questions.push({no:"Q"+(questions.length+1),co:(coData()[0]||{}).code,max:10}); renderQSetup(); });
+  $("delq").addEventListener("click",()=>{ questions.pop(); renderQSetup(); });
+  $("marks").addEventListener("input",debounce(ingest,600));
+
+  const drop=$("drop"), file=$("file");
+  drop.addEventListener("click",()=>file.click());
+  drop.addEventListener("dragover",e=>{e.preventDefault();drop.classList.add("over")});
+  drop.addEventListener("dragleave",()=>drop.classList.remove("over"));
+  drop.addEventListener("drop",async e=>{
+    e.preventDefault(); drop.classList.remove("over");
+    const f=e.dataTransfer.files[0]; if(f) await handleMarksFile(f);
+  });
+  file.addEventListener("change",async e=>{
+    const f=e.target.files[0]; if(f) await handleMarksFile(f);
+  });
+
+  ["tmode","tpct","t1","t2","t3","seeMet","seeApp","wcie","wsee","cotarget","policy"].forEach(id=>
+    $(id).addEventListener("change",()=>{ if(booted) runAttainment(); }));
+
+  // PSOs
+  $("addpso").addEventListener("click",()=>{ addPSO(); refreshPSOs(); });
+  $("checkpso").addEventListener("click",async()=>{ await refreshPSOs(); if(booted) await runAttainment(); });
+
+  // indirect assessment
+  $("scoresurvey").addEventListener("click",scoreSurvey);
+  $("scalemax").addEventListener("change",async()=>{ await buildSurvey(); await scoreSurvey(); });
+  ["wdir","windir","pop"].forEach(id=>$(id).addEventListener("change",scoreSurvey));
+
+  // exports
+  $("dlDocx").addEventListener("click",()=>{
+    const p=exportPayload(); if(!p) return;
+    download("/api/export/docx", p, p.filename+".docx");
+    logEvent("export.docx",{tables:p.tables.length});
+  });
+  $("dlXlsx").addEventListener("click",()=>{
+    const p=exportPayload(); if(!p) return;
+    download("/api/export/xlsx", p, p.filename+".xlsx");
+    logEvent("export.xlsx",{tables:p.tables.length});
+  });
+
+  // program view
+  $("loadtrends").addEventListener("click",loadTrends);
+  $("potarget").addEventListener("change",loadTrends);
+  $("migrate").addEventListener("click",runMigration);
+
+  // sign-off
+  $("dlEvidence").addEventListener("click",()=>{
+    if(!savedCourseId){ showErr("Run the pipeline once so there is a stored run to evidence."); return; }
+    window.location = `/api/evidence/${savedCourseId}/docx?academic_year=${encodeURIComponent(savedYear)}`;
+  });
+  $("role").addEventListener("change",loadApprovals);
+  $("actor").addEventListener("change",loadApprovals);
+
+  // question paper upload
+  const pd=$("paperdrop"), pf=$("paperfile");
+  pd.addEventListener("click",()=>pf.click());
+  pd.addEventListener("dragover",e=>{e.preventDefault();pd.classList.add("over")});
+  pd.addEventListener("dragleave",()=>pd.classList.remove("over"));
+  pd.addEventListener("drop",e=>{e.preventDefault();pd.classList.remove("over");
+    const f=e.dataTransfer.files[0]; if(f) handlePaperFile(f);});
+  pf.addEventListener("change",e=>{const f=e.target.files[0]; if(f) handlePaperFile(f);});
+
+  // syllabus upload
+  const sd=$("syldrop"), sf=$("sylfile");
+  sd.addEventListener("click",()=>sf.click());
+  sd.addEventListener("dragover",e=>{e.preventDefault();sd.classList.add("over")});
+  sd.addEventListener("dragleave",()=>sd.classList.remove("over"));
+  sd.addEventListener("drop",e=>{e.preventDefault();sd.classList.remove("over");
+    const f=e.dataTransfer.files[0]; if(f) handleSyllabus(f);});
+  sf.addEventListener("change",e=>{const f=e.target.files[0]; if(f) handleSyllabus(f);});
+  $("sylcourse").addEventListener("change",async e=>{
+    applyDetectedCourse(parseInt(e.target.value)); await runEverything();
+  });
+
+  // question tagging
+  $("tagq").addEventListener("click",tagQuestions);
+  $("applytags").addEventListener("click",applyTags);
+  try{
+    const st = await api("/api/llm-status");
+    $("llmstate").textContent = st.available
+      ? `AI arbitration ready (${st.model})`
+      : "Rules only — set ANTHROPIC_API_KEY for AI arbitration";
+    $("tagbadge").textContent = st.available ? "rules + AI arbitration" : "reads each question";
+  }catch(e){}
+
+  $("copyMd").addEventListener("click",()=>lastTables&&navigator.clipboard.writeText(lastTables.course_articulation_matrix.markdown));
+  $("copyCsv").addEventListener("click",()=>lastTables&&navigator.clipboard.writeText(lastTables.course_articulation_matrix.csv));
+  $("dlCsv").addEventListener("click",()=>{
+    if(!lastTables) return;
+    const blob=new Blob([lastTables.course_articulation_matrix.csv],{type:"text/csv"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download=`${$("ccode").value||"course"}_articulation_matrix.csv`;
+    a.click(); URL.revokeObjectURL(a.href);
+  });
+})();
+</script>
+</body>
+</html>

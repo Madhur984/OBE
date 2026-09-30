@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign in — AutoOBE</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<div class="center">
+  <div class="signin">
+    <div style="margin-bottom:14px">
+      <div class="brand" style="font-size:22px;font-weight:700;letter-spacing:-.02em">AutoOBE</div>
+      <small class="faint" style="letter-spacing:.09em;text-transform:uppercase">CO → PO mapping</small>
+    </div>
+
+    <div class="card">
+      <div id="signin">
+        <h1>Sign in</h1>
+        <p class="faint" id="lead">Your department administrator issues the account.</p>
+        <form id="loginform">
+          <label for="u">Username</label>
+          <input id="u" name="username" autocomplete="username" autofocus required>
+          <label for="p">Password</label>
+          <input id="p" name="password" type="password" autocomplete="current-password" required>
+          <div class="row" style="margin-top:13px">
+            <button class="primary" type="submit" id="go">Sign in</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Waking and unlinked are different problems and get different
+           panels. The first fixes itself; the second needs a person. -->
+      <div id="waking" class="hide">
+        <h1>Waking the database…</h1>
+        <p class="faint">
+          It sleeps when nobody is using it and takes a few seconds to come
+          back. This page is retrying on its own.
+        </p>
+        <p class="faint" id="wakewhy"></p>
+      </div>
+
+      <div id="down" class="hide">
+        <h1>The database is not connected</h1>
+        <p class="faint" id="downwhy"></p>
+        <p class="faint">
+          The mapping tool itself still works without it —
+          <a href="/">open it here</a> — but accounts, assignments and the
+          shared sheet need a database.
+        </p>
+      </div>
+
+      <div class="msg err" id="err"></div>
+    </div>
+
+    <p class="faint" style="text-align:center">
+      Signed in, teachers map their own subjects and submit them; the
+      administrator holds the whole sheet.
+    </p>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const show = (el, msg, kind) => {
+  el.textContent = msg; el.className = "msg " + kind + " show";
+};
+
+async function api(path, body) {
+  const r = await fetch(path, {
+    method: "POST", headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+  });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(d.detail || r.statusText);
+  return d;
+}
+
+// Where a signed-in person belongs. A ?next= set by an expired session wins,
+// so somebody who was timed out halfway through mapping a subject lands back
+// on that subject rather than at the top of their dashboard. Only same-site
+// paths are honoured -- an open redirect here would be a phishing hop.
+function home(user) {
+  const next = new URLSearchParams(location.search).get("next") || "";
+  if (next.startsWith("/") && !next.startsWith("//")) return next;
+  return user.role === "admin" ? "/admin" : "/teacher";
+}
+
+const panel = which => ["signin", "waking", "down"].forEach(
+  id => $("#" + id).classList.toggle("hide", id !== which));
+
+/** Ask what state the install is in, waiting out a sleeping database.
+ *
+ *  Neon scales its compute to zero. The first request after an idle spell can
+ *  take several seconds, and treating that as "not connected" was what made a
+ *  perfectly healthy install look broken. So a `waking` answer is retried --
+ *  eight times over about half a minute, which is far longer than a cold
+ *  start takes -- and only then given up on.
+ */
+async function checkStatus(attempt = 0) {
+  let s;
+  try {
+    s = await (await fetch("/api/auth/status")).json();
+  } catch {
+    s = { state: "waking", detail: "The server did not answer." };
+  }
+  if (s.state === "waking" && attempt < 8) {
+    panel("waking");
+    $("#wakewhy").textContent = attempt > 2 ? (s.detail || "") : "";
+    setTimeout(() => checkStatus(attempt + 1), 1500 + attempt * 600);
+    return null;
+  }
+  if (s.state === "unlinked" || (s.state === "waking" && attempt >= 8)) {
+    panel("down");
+    $("#downwhy").textContent = s.detail || "";
+    return null;
+  }
+  panel("signin");
+  $("#u").focus();
+  return s;
+}
+
+(async () => {
+  // Already signed in? Then this page has nothing to ask.
+  const meRes = await fetch("/api/auth/me");
+  if (meRes.ok) {
+    const { user } = await meRes.json();
+    location.replace(home(user));
+    return;
+  }
+  const s = await checkStatus();
+  if (!s) return;
+  if (s.needs_bootstrap) {
+    // No administrator exists yet. There is deliberately no form here for
+    // making one -- the department asked for a sign-in page and nothing else,
+    // and an open "create the first admin" page is a window anyone who reaches
+    // the server first can climb through. It is a command on the machine:
+    //     python tools/create_admin.py <username> "<full name>"
+    $("#lead").innerHTML = "No account has been set up on this installation yet. "
+      + "Whoever runs the server creates the administrator with "
+      + "<code>tools/create_admin.py</code>.";
+  }
+})();
+
+$("#loginform").onsubmit = async e => {
+  e.preventDefault();
+  $("#go").disabled = true;
+  try {
+    const { user } = await api("/api/auth/login",
+      { username: $("#u").value.trim(), password: $("#p").value });
+    location.replace(home(user));
+  } catch (ex) {
+    show($("#err"), ex.message, "err");
+    $("#p").value = ""; $("#p").focus();
+  } finally { $("#go").disabled = false; }
+};
+
+</script>
+</body>
+</html>

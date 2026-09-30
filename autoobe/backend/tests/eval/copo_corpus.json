@@ -1,0 +1,350 @@
+{
+  "_readme": [
+    "Labelled CO -> PO competency corpus for GAPC v4.0 (11 POs).",
+    "",
+    "GOLD LABELS ARE JUDGEMENTS, and it matters where they come from. Each",
+    "cell is labelled by reading the outcome against the *verbatim* NBA PO",
+    "statement, not against what a college happened to publish. Published",
+    "articulation matrices were deliberately NOT used as ground truth: the",
+    "well-documented failure of real matrices is over-mapping — a CO claiming",
+    "eight POs — and training against them would teach the engine to do the",
+    "same thing this product exists to prevent.",
+    "",
+    "SCALE. 2 = strong: the outcome's core action is what the PO describes.",
+    "1 = partial: the PO is genuinely exercised but incidentally, or at a",
+    "lower depth than the PO asks. 0 = no match, and is the default for every",
+    "cell not listed — most of the matrix is 0, which is the point.",
+    "",
+    "CONSERVATISM. Where a mapping is arguable it is labelled 1, not 2. A",
+    "missed mapping costs a human one click; a spurious level 3 gets bulk-",
+    "approved into a SAR and is the failure this engine is calibrated against.",
+    "",
+    "SPLIT. dev is inspected while tuning; holdout is scored and never read.",
+    "The AKTU courses are verbatim from the B.Tech ECE (Advanced Communication",
+    "Technology) 2026-27 scheme, rewritten only where the published statement",
+    "fails the quality test — the mapping engine sees the corrected text."
+  ],
+  "framework": "GAPC_V4",
+  "courses": [
+    {
+      "code": "BEC701",
+      "title": "VLSI Design",
+      "split": "dev",
+      "source": "AKTU 2026-27, ECE (Advanced Communication Technology)",
+      "cos": {
+        "CO1": {
+          "statement": "Describe the concept of VLSI design and CMOS circuits and delay study.",
+          "blooms": [2],
+          "gold": {"PO1": 2}
+        },
+        "CO2": {
+          "statement": "Analyze mathematical methods and circuit analysis models in analysis of CMOS digital electronics circuits.",
+          "blooms": [4],
+          "gold": {"PO1": 2, "PO2": 2}
+        },
+        "CO3": {
+          "statement": "Design and analyze various combinational and sequential circuits based on CMOS technology.",
+          "blooms": [4, 6],
+          "gold": {"PO2": 1, "PO3": 2}
+        },
+        "CO4": {
+          "statement": "Examine power logic circuits and different semiconductor memories used in present day technology.",
+          "blooms": [4],
+          "gold": {"PO1": 1, "PO2": 2}
+        },
+        "CO5": {
+          "statement": "Interpret faults in digital circuits, fault models and various testing methodologies.",
+          "blooms": [4],
+          "gold": {"PO2": 2, "PO4": 1}
+        }
+      }
+    },
+    {
+      "code": "BEC751",
+      "title": "VLSI Design Lab",
+      "split": "dev",
+      "source": "AKTU 2026-27, ECE (Advanced Communication Technology)",
+      "cos": {
+        "CO1": {
+          "statement": "Design logic gates using CMOS technology.",
+          "blooms": [6],
+          "gold": {"PO3": 2}
+        },
+        "CO2": {
+          "statement": "Implement combinational and sequential circuits using CMOS logic.",
+          "blooms": [3],
+          "gold": {"PO3": 2, "PO5": 1}
+        },
+        "CO3": {
+          "statement": "Analyze amplifier circuits using simulation tools.",
+          "blooms": [4],
+          "gold": {"PO2": 2, "PO5": 2}
+        },
+        "CO4": {
+          "statement": "Design sequential circuits such as flip flops.",
+          "blooms": [6],
+          "gold": {"PO3": 2}
+        },
+        "CO5": {
+          "statement": "Perform layout design for physical analysis of MOS transistors using modern EDA tools.",
+          "blooms": [3],
+          "gold": {"PO3": 1, "PO5": 2}
+        }
+      }
+    },
+    {
+      "code": "BEC071",
+      "title": "Wireless and Mobile Communication",
+      "split": "dev",
+      "source": "AKTU 2026-27, ECE (Advanced Communication Technology)",
+      "cos": {
+        "CO1": {
+          "statement": "Describe mobile radio and cellular communication fundamentals and their application to propagation mechanisms, path loss models and multi-path phenomenon.",
+          "blooms": [2],
+          "gold": {"PO1": 2}
+        },
+        "CO2": {
+          "statement": "Analyze the performance of various voice coding and diversity techniques.",
+          "blooms": [4],
+          "gold": {"PO1": 1, "PO2": 2}
+        },
+        "CO3": {
+          "statement": "Apply the knowledge of wireless transmission basics to explain the concepts of equalization and multiple access techniques.",
+          "blooms": [3],
+          "gold": {"PO1": 2, "PO2": 1}
+        },
+        "CO4": {
+          "statement": "Examine the performance of cellular systems such as GSM, CDMA and LTE using theoretical and mathematical aspects.",
+          "blooms": [4],
+          "gold": {"PO1": 1, "PO2": 2}
+        },
+        "CO5": {
+          "statement": "Describe mobile adhoc networks and the existing and upcoming data communication networks in the wireless and mobile communication domain.",
+          "blooms": [2],
+          "gold": {"PO1": 2, "PO11": 1}
+        }
+      }
+    },
+    {
+      "code": "BEC073",
+      "title": "Microwave and Radar Engineering",
+      "split": "holdout",
+      "source": "AKTU 2026-27, ECE (Advanced Communication Technology)",
+      "cos": {
+        "CO1": {
+          "statement": "Analyze various parameters and characteristics of the transmission line and waveguide and select waveguide components as per applications.",
+          "blooms": [4],
+          "gold": {"PO1": 1, "PO2": 2}
+        },
+        "CO2": {
+          "statement": "Design simple microwave circuits and devices such as couplers, attenuators, phase shifters and isolators.",
+          "blooms": [6],
+          "gold": {"PO2": 1, "PO3": 2}
+        },
+        "CO3": {
+          "statement": "Analyze the difference between conventional tubes and microwave tubes for the transmission of electromagnetic waves.",
+          "blooms": [4],
+          "gold": {"PO1": 1, "PO2": 2}
+        },
+        "CO4": {
+          "statement": "Measure microwave parameters using standard laboratory instruments and equipment.",
+          "blooms": [3],
+          "gold": {"PO4": 2, "PO5": 2}
+        },
+        "CO5": {
+          "statement": "Differentiate different radars and identify applications and uses of their supporting systems.",
+          "blooms": [4],
+          "gold": {"PO1": 1, "PO2": 2}
+        }
+      }
+    },
+    {
+      "code": "BEC074",
+      "title": "Drone Systems: Design, Control and Navigation",
+      "split": "holdout",
+      "source": "AKTU 2026-27, ECE (Advanced Communication Technology)",
+      "cos": {
+        "CO1": {
+          "statement": "Explain the constraints and opportunities in UAV miniaturization and aerial networking.",
+          "blooms": [2],
+          "gold": {"PO1": 2}
+        },
+        "CO2": {
+          "statement": "Represent drone systems using state-space models and apply control theory to analyze their stability.",
+          "blooms": [3, 4],
+          "gold": {"PO1": 2, "PO2": 2}
+        },
+        "CO3": {
+          "statement": "Analyze the aerodynamic behaviour and propulsion trade-offs in UAV design and navigation.",
+          "blooms": [4],
+          "gold": {"PO2": 2, "PO3": 1}
+        },
+        "CO4": {
+          "statement": "Identify UAV control systems using modern control techniques for both autonomous and semi-autonomous operations.",
+          "blooms": [1],
+          "gold": {"PO1": 1, "PO2": 1}
+        },
+        "CO5": {
+          "statement": "Identify the rules and safety practices for drone operation in India and globally, including licensing, geofencing and traffic management.",
+          "blooms": [1],
+          "gold": {"PO6": 2, "PO7": 1}
+        }
+      }
+    },
+    {
+      "code": "BEC075",
+      "title": "5G Technology for Wireless Communication",
+      "split": "holdout",
+      "source": "AKTU 2026-27, ECE (Advanced Communication Technology)",
+      "cos": {
+        "CO1": {
+          "statement": "Explain the evolution of wireless communication systems and the requirements of 5G technology.",
+          "blooms": [2],
+          "gold": {"PO1": 2, "PO11": 1}
+        },
+        "CO2": {
+          "statement": "Explain the architecture and key components of 5G networks, including core and radio access networks.",
+          "blooms": [2],
+          "gold": {"PO1": 2}
+        },
+        "CO3": {
+          "statement": "Analyze the features of 5G new radio, including protocol stack, frame structure and resource allocation.",
+          "blooms": [4],
+          "gold": {"PO1": 1, "PO2": 2}
+        },
+        "CO4": {
+          "statement": "Evaluate the performance of key enabling technologies such as massive MIMO, beamforming and mmWave communication.",
+          "blooms": [5],
+          "gold": {"PO2": 2, "PO4": 1}
+        },
+        "CO5": {
+          "statement": "Examine the applications, performance metrics and deployment challenges associated with modern 5G wireless communication systems.",
+          "blooms": [4],
+          "gold": {"PO2": 2, "PO6": 1}
+        }
+      }
+    },
+    {
+      "code": "KCS501",
+      "title": "Database Management Systems",
+      "split": "dev",
+      "source": "seed catalogue",
+      "cos": {
+        "CO1": {
+          "statement": "Explain the architecture of a database management system and the relational data model.",
+          "blooms": [2],
+          "gold": {"PO1": 2}
+        },
+        "CO2": {
+          "statement": "Apply entity-relationship modelling to design a normalized relational schema for a given application.",
+          "blooms": [3],
+          "gold": {"PO2": 1, "PO3": 2}
+        },
+        "CO3": {
+          "statement": "Construct SQL queries to retrieve and manipulate data from a relational database.",
+          "blooms": [3],
+          "gold": {"PO3": 1, "PO5": 2}
+        },
+        "CO4": {
+          "statement": "Analyze transaction schedules for serializability and recoverability.",
+          "blooms": [4],
+          "gold": {"PO2": 2}
+        },
+        "CO5": {
+          "statement": "Evaluate concurrency control and recovery techniques for a given workload.",
+          "blooms": [5],
+          "gold": {"PO2": 2, "PO4": 1}
+        }
+      }
+    },
+    {
+      "code": "KCS753",
+      "title": "Major Project",
+      "split": "dev",
+      "source": "seed catalogue — the professional-skill POs, which content courses never exercise",
+      "cos": {
+        "CO1": {
+          "statement": "Identify a complex engineering problem and survey the current research literature relevant to it.",
+          "blooms": [4],
+          "gold": {"PO2": 2, "PO4": 1, "PO11": 2}
+        },
+        "CO2": {
+          "statement": "Design and develop a solution using appropriate modern engineering tools.",
+          "blooms": [6],
+          "gold": {"PO3": 2, "PO5": 2}
+        },
+        "CO3": {
+          "statement": "Evaluate the solution against societal, environmental, safety and whole-life cost considerations.",
+          "blooms": [5],
+          "gold": {"PO6": 2, "PO10": 1}
+        },
+        "CO4": {
+          "statement": "Demonstrate effective teamwork and manage the project schedule and cost within stated constraints.",
+          "blooms": [3],
+          "gold": {"PO8": 2, "PO10": 2}
+        },
+        "CO5": {
+          "statement": "Communicate the work through an effective technical report and presentation.",
+          "blooms": [3],
+          "gold": {"PO9": 2}
+        }
+      }
+    },
+    {
+      "code": "KOE068",
+      "title": "Environmental Engineering",
+      "split": "holdout",
+      "source": "seed catalogue — exercises PO6 and PO7, which most courses do not",
+      "cos": {
+        "CO1": {
+          "statement": "Explain the structure of ecosystems and the impact of engineering activity on biodiversity.",
+          "blooms": [2],
+          "gold": {"PO1": 1, "PO6": 2}
+        },
+        "CO2": {
+          "statement": "Analyze sources and effects of water and air pollution on public health and the environment.",
+          "blooms": [4],
+          "gold": {"PO2": 2, "PO6": 2}
+        },
+        "CO3": {
+          "statement": "Evaluate solid waste management practices against sustainability and whole-life cost criteria.",
+          "blooms": [5],
+          "gold": {"PO6": 2, "PO10": 1}
+        },
+        "CO4": {
+          "statement": "Apply environmental legislation and ethical principles to engineering practice.",
+          "blooms": [3],
+          "gold": {"PO6": 1, "PO7": 2}
+        }
+      }
+    },
+    {
+      "code": "KME402",
+      "title": "Engineering Thermodynamics",
+      "split": "holdout",
+      "source": "seed catalogue — a pure-fundamentals course, so most POs must stay 0",
+      "cos": {
+        "CO1": {
+          "statement": "Explain the fundamental concepts and laws of thermodynamics.",
+          "blooms": [2],
+          "gold": {"PO1": 2}
+        },
+        "CO2": {
+          "statement": "Apply the first law of thermodynamics to closed and open systems.",
+          "blooms": [3],
+          "gold": {"PO1": 2, "PO2": 1}
+        },
+        "CO3": {
+          "statement": "Analyze thermodynamic processes using the second law and entropy principles.",
+          "blooms": [4],
+          "gold": {"PO1": 1, "PO2": 2}
+        },
+        "CO4": {
+          "statement": "Evaluate the performance of power and refrigeration cycles.",
+          "blooms": [5],
+          "gold": {"PO2": 2}
+        }
+      }
+    }
+  ]
+}

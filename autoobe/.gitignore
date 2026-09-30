@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+.coverage
+htmlcov/
+.env
+
+# Local workspace database. Contains student marks — personal data under the
+# DPDP Act 2023 — so it must never reach a repository.
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm

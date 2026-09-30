@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CO attainment — AutoOBE</title>
+<link rel="stylesheet" href="/static/app.css">
+<style>
+  .drop{border:1.5px dashed var(--hair);border-radius:10px;padding:22px;text-align:center;
+        cursor:pointer;background:var(--surface-2)}
+  .drop:hover,.drop:focus{border-color:var(--accent)}
+  .drop strong{display:block;margin-bottom:3px}
+  .sum td,.sum th{text-align:right}
+  .sum td:first-child,.sum th:first-child{text-align:left}
+  .sum tfoot td{font-weight:700;border-top:2px solid var(--hair)}
+  .att{font-weight:700}
+  .att.l3{color:var(--ok)} .att.l2{color:var(--ink)} .att.l1{color:var(--warn)}
+  .att.l0{color:var(--err)}
+  .big{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--hair);margin:4px 0 12px}
+  .tabs button{border:0;border-bottom:2px solid transparent;border-radius:0;background:none;
+               padding:7px 11px;color:var(--ink-soft);font-size:13.5px}
+  .tabs button.on{border-bottom-color:var(--accent);color:var(--ink);font-weight:600}
+  .pane{display:none} .pane.on{display:block}
+  .marks{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="brand">AutoOBE<small>Internal CO attainment</small></div>
+  <div class="spacer"></div>
+  <div class="who" id="who"></div>
+  <button class="mini" id="out">Sign out</button>
+</header>
+
+<main>
+  <div class="card" style="border-color:var(--accent)">
+    <div class="row" style="justify-content:space-between;align-items:flex-start;gap:14px">
+      <div>
+        <h1 style="margin:0 0 2px" id="subject"></h1>
+        <p class="muted" id="state" style="margin:0;font-size:13px"></p>
+      </div>
+      <div class="row" style="gap:8px">
+        <a href="/teacher"><button class="mini" type="button">My subjects</button></a>
+        <button class="primary" type="button" id="submit" disabled>Submit to the department</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>The marks</h2>
+    <p class="faint" style="margin:0">
+      One row per student, one column per CO, with the maximum marks for each
+      CO. Write <b>AB</b> or <b>DB</b> where a student did not sit the exam —
+      they come out of that CO's denominator rather than counting as a zero.
+    </p>
+
+    <div class="tabs" id="tabs">
+      <button data-pane="p_file" class="on">Upload the marks sheet</button>
+      <button data-pane="p_paste">Paste from Excel</button>
+    </div>
+
+    <div class="pane on" id="p_file">
+      <div class="drop" id="drop" tabindex="0" role="button">
+        <strong>Choose your marks workbook, or drop it here</strong>
+        <span class="faint">.xlsx — the department's own CO Attainment sheet works as it is</span>
+        <input type="file" id="file" accept=".xlsx,.xlsm" class="hide">
+      </div>
+      <div id="pick" class="hide" style="margin-top:11px">
+        <label for="block">Which block is your subject?</label>
+        <select id="block"></select>
+      </div>
+    </div>
+
+    <div class="pane" id="p_paste">
+      <p class="faint" style="margin:0">
+        Copy the columns straight out of Excel — a header row of
+        <b>Name, CO1, CO2 …</b>, then the maximum marks, then the students.
+      </p>
+      <label for="paste">Marks</label>
+      <textarea id="paste" rows="9" class="marks" placeholder="Name	CO1	CO2	CO3
+	26.5	23.5	14
+DEV KUMAR	24	18	13
+AADITYA KUMAR	7	6	5
+AAKASH SAXENA	AB	AB	5"></textarea>
+      <div class="row" style="margin-top:9px">
+        <button class="mini primary" id="pastego">Read these marks</button>
+        <span class="faint" id="pastenote"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card hide" id="targets">
+    <h2>Targets</h2>
+    <p class="faint" style="margin:0">
+      Both are yours to set. <b>T1</b> is a mark — the share of the maximum a
+      student must reach to have attained that outcome. <b>T2</b> is a share of
+      students — how many must cross T1 for the course to score the full 3.
+    </p>
+    <div class="row" style="gap:14px;margin-top:8px">
+      <div style="flex:1;min-width:150px">
+        <label for="t1">T1 — % of max marks</label>
+        <input id="t1" type="number" min="1" max="100" step="0.5" value="45">
+      </div>
+      <div style="flex:1;min-width:150px">
+        <label for="t2">T2 — % of students</label>
+        <input id="t2" type="number" min="1" max="100" step="0.5" value="60">
+      </div>
+      <div style="flex:2;min-width:220px">
+        <label>&nbsp;</label>
+        <div class="faint">attainment = min(3, crossing % ÷ T2 × 3)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card hide" id="result">
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div>
+        <h2>Internal CO attainment</h2>
+        <p class="faint" style="margin:0" id="resmeta"></p>
+      </div>
+      <div style="text-align:right">
+        <div class="big" id="internal">–</div>
+        <div class="faint">internal CO attainment</div>
+      </div>
+    </div>
+    <div class="mwrap" style="margin-top:10px">
+      <table class="sum">
+        <thead><tr>
+          <th>CO</th><th>Max marks</th><th>Appeared</th><th>T1 (marks)</th>
+          <th>Crossing T1</th><th>%</th><th>Attainment</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+        <tfoot><tr>
+          <td colspan="6">Internal CO Attainment — the mean across these COs</td>
+          <td id="foot">–</td>
+        </tr></tfoot>
+      </table>
+    </div>
+    <ul class="faint" id="warn" style="margin:10px 0 0"></ul>
+  </div>
+
+  <div class="msg err" id="err"></div>
+  <div class="msg ok" id="ok"></div>
+</main>
+
+<script src="/static/shared.js"></script>
+<script>
+const S = { courseId: 0, course: null, blocks: [], block: null, computed: null,
+            submitted: false };
+
+const draftKey = id => `autoobe.attainment.${id}`;
+
+function saveDraft() {
+  if (!S.courseId || !S.block) return;
+  try {
+    localStorage.setItem(draftKey(S.courseId), JSON.stringify({
+      at: new Date().toISOString(), block: S.block,
+      t1: $("#t1").value, t2: $("#t2").value }));
+  } catch { /* private window */ }
+}
+
+function readDraft() {
+  try { return JSON.parse(localStorage.getItem(draftKey(S.courseId)) || "null"); }
+  catch { return null; }
+}
+
+function paintState() {
+  const bits = [];
+  bits.push(S.submitted
+    ? '<span class="tag ok">submitted</span> the department can see this'
+    : '<span class="tag warn">not submitted</span> the department cannot see this yet');
+  const d = readDraft();
+  if (d && !S.submitted) bits.push(
+    `marks kept in this browser since ${new Date(d.at).toLocaleTimeString()}`);
+  bits.push("nothing is stored until you press Submit");
+  $("#state").innerHTML = bits.join(" · ");
+  $("#submit").disabled = !S.computed;
+}
+
+/* ------------------------------------------------------------ computing */
+
+async function recompute() {
+  if (!S.block) return;
+  try {
+    const d = await api("/api/my/attainment/preview", {
+      method: "POST",
+      body: JSON.stringify({
+        course_id: S.courseId,
+        t1_pct: Number($("#t1").value) || 45,
+        t2_pct: Number($("#t2").value) || 60,
+        max_marks: S.block.max_marks, marks: S.block.marks,
+        names: S.block.names || [],
+      }),
+    });
+    S.computed = d.attainment;
+    paintResult();
+    saveDraft();
+  } catch (ex) { flash("err", ex.message); }
+}
+
+function paintResult() {
+  const a = S.computed;
+  if (!a) return;
+  $("#targets").classList.remove("hide");
+  $("#result").classList.remove("hide");
+  $("#resmeta").textContent =
+    `${a.students} students read · T1 ${a.t1_pct}% of max marks · `
+    + `T2 ${a.t2_pct}% of students`;
+  const band = v => v >= 2.5 ? "l3" : v >= 1.5 ? "l2" : v > 0 ? "l1" : "l0";
+  $("#rows").innerHTML = a.cos.map(c => `
+    <tr>
+      <td class="mono">${esc(c.co_code)}</td>
+      <td>${c.max_marks}</td>
+      <td>${c.appeared}</td>
+      <td>${c.target_marks.toFixed(2)}</td>
+      <td>${c.crossing}</td>
+      <td>${c.crossing_pct.toFixed(2)}%</td>
+      <td class="att ${band(c.attainment)}">${c.attainment.toFixed(2)}</td>
+    </tr>`).join("");
+  const v = a.internal;
+  $("#internal").textContent = v === null ? "–" : v.toFixed(2);
+  $("#internal").className = "big att " + band(v || 0);
+  $("#foot").textContent = v === null ? "–" : v.toFixed(2);
+  $("#warn").innerHTML = (a.ignored || []).map(w => `<li>${esc(w)}</li>`).join("");
+  paintState();
+}
+
+/* --------------------------------------------------------------- inputs */
+
+$("#tabs").onclick = e => {
+  const b = e.target.closest("button"); if (!b) return;
+  $("#tabs").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+  document.querySelectorAll(".pane").forEach(p => p.classList.toggle("on", p.id === b.dataset.pane));
+};
+
+$("#drop").onclick = () => $("#file").click();
+$("#drop").onkeydown = e => { if (e.key === "Enter" || e.key === " ") $("#file").click(); };
+["dragover", "dragenter"].forEach(t => $("#drop").addEventListener(t, e => {
+  e.preventDefault(); $("#drop").style.borderColor = "var(--accent)"; }));
+["dragleave", "drop"].forEach(t => $("#drop").addEventListener(t, e => {
+  e.preventDefault(); $("#drop").style.borderColor = ""; }));
+$("#drop").addEventListener("drop", e => {
+  if (e.dataTransfer.files[0]) readWorkbook(e.dataTransfer.files[0]);
+});
+$("#file").onchange = e => { if (e.target.files[0]) readWorkbook(e.target.files[0]); };
+
+async function readWorkbook(f) {
+  const fd = new FormData();
+  fd.append("file", f);
+  try {
+    const r = await fetch("/api/my/attainment/parse", { method: "POST", body: fd });
+    if (r.status === 401) { location.replace("/login"); return; }
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.detail || r.statusText);
+    S.blocks = [];
+    d.sheets.forEach(s => s.blocks.forEach(b =>
+      S.blocks.push({ ...b, label: `${s.sheet} — ${b.course_code || "unnamed block"} `
+        + `(${Object.keys(b.max_marks).length} COs, ${b.students} students)` })));
+    $("#pick").classList.remove("hide");
+    $("#block").innerHTML = S.blocks.map((b, i) =>
+      `<option value="${i}">${esc(b.label)}</option>`).join("");
+    // Default to the block whose code looks like this subject.
+    const key = t => String(t || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const mine = S.blocks.findIndex(b => {
+      const a = key(b.course_code), c = key(S.course?.code);
+      return a && c && (a.includes(c) || c.includes(a));
+    });
+    $("#block").value = String(mine >= 0 ? mine : 0);
+    chooseBlock();
+    flash("ok", mine >= 0
+      ? `Found ${S.blocks.length} subject block(s); yours is selected.`
+      : `Found ${S.blocks.length} subject block(s) — check the right one is selected.`);
+  } catch (ex) { flash("err", ex.message); }
+}
+
+function chooseBlock() {
+  S.block = S.blocks[Number($("#block").value) || 0] || null;
+  recompute();
+}
+$("#block").onchange = chooseBlock;
+
+$("#pastego").onclick = () => {
+  const text = $("#paste").value.trim();
+  if (!text) { flash("err", "Nothing pasted."); return; }
+  const rows = text.split(/\r?\n/).map(l => l.split(/\t|,(?=(?:[^"]*"[^"]*")*[^"]*$)/));
+  // Reuse the server's reader so pasted and uploaded marks are read by one
+  // piece of code, not two that drift apart.
+  fetch("/api/my/attainment/parse-text", { method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ rows }) })
+    .then(async r => {
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.detail || r.statusText);
+      S.blocks = d.blocks.map(b => ({ ...b,
+        label: `${b.course_code || "pasted marks"} `
+             + `(${Object.keys(b.max_marks).length} COs, ${b.students} students)` }));
+      $("#block").innerHTML = S.blocks.map((b, i) =>
+        `<option value="${i}">${esc(b.label)}</option>`).join("");
+      $("#pastenote").textContent = `${S.blocks[0].students} students, `
+        + `${Object.keys(S.blocks[0].max_marks).length} COs read`;
+      chooseBlock();
+    })
+    .catch(ex => flash("err", ex.message));
+};
+
+["#t1", "#t2"].forEach(sel => $(sel).oninput = () => {
+  clearTimeout(window._t); window._t = setTimeout(recompute, 250);
+});
+
+/* -------------------------------------------------------------- submit */
+
+$("#submit").onclick = async () => {
+  const b = $("#submit"), was = b.textContent;
+  b.disabled = true; b.textContent = "Submitting…";
+  try {
+    await api("/api/my/attainment/submit", {
+      method: "POST",
+      body: JSON.stringify({
+        course_id: S.courseId,
+        t1_pct: Number($("#t1").value) || 45,
+        t2_pct: Number($("#t2").value) || 60,
+        max_marks: S.block.max_marks, marks: S.block.marks,
+        names: S.block.names || [],
+      }),
+    });
+    try { localStorage.removeItem(draftKey(S.courseId)); } catch { /* fine */ }
+    S.submitted = true;
+    paintState();
+    flash("ok", "Submitted. It is on the department's dashboard now.");
+  } catch (ex) { flash("err", ex.message); }
+  finally { b.disabled = false; b.textContent = was; }
+};
+
+$("#out").onclick = signOut;
+
+(async () => {
+  const user = await requireUser();
+  if (!user) return;
+  $("#who").innerHTML = `<b>${esc(user.full_name || user.username)}</b> · ${esc(user.role)}`;
+
+  S.courseId = Number(new URLSearchParams(location.search).get("course_id") || 0);
+  if (!S.courseId) { location.replace("/teacher"); return; }
+
+  const { courses } = await api("/api/my/courses");
+  S.course = courses.find(c => c.id === S.courseId);
+  if (!S.course) { flash("err", "That subject is not assigned to you."); return; }
+  $("#subject").textContent = `${S.course.code} — ${S.course.title}`;
+  // Painted before the next call so the bar is never blank while the
+  // database is waking up -- Neon scales to zero and the first query of the
+  // day takes a moment.
+  paintState();
+
+  const got = await api(`/api/my/attainment/${S.courseId}`);
+  if (got.attainment) {
+    S.submitted = true;
+    const p = got.attainment.payload || {};
+    $("#t1").value = got.attainment.t1_pct;
+    $("#t2").value = got.attainment.t2_pct;
+    if (p.max_marks && p.marks) {
+      S.block = { course_id: S.courseId, course_code: S.course.code,
+                  max_marks: p.max_marks, marks: p.marks,
+                  names: p.names || [], students: p.students || 0 };
+      await recompute();
+    }
+    flash("ok", "Your submitted attainment was loaded. Change it and submit again to replace it.");
+  } else {
+    const d = readDraft();
+    if (d && d.block) {
+      S.block = d.block;
+      $("#t1").value = d.t1; $("#t2").value = d.t2;
+      await recompute();
+      flash("ok", "Your marks for this subject were restored from this browser.");
+    }
+  }
+  paintState();
+})();
+</script>
+</body>
+</html>

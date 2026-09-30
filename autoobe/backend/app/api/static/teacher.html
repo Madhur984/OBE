@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My subjects — AutoOBE</title>
+<link rel="stylesheet" href="/static/app.css">
+<style>
+  .steps{counter-reset:s;list-style:none;margin:8px 0 0;padding:0;display:grid;
+         grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+  .steps li{counter-increment:s;background:var(--surface-2);border-radius:8px;
+            padding:10px 12px 10px 34px;position:relative;font-size:13px;color:var(--ink-soft)}
+  .steps li::before{content:counter(s);position:absolute;left:11px;top:10px;
+    width:17px;height:17px;border-radius:50%;background:var(--accent);color:#fff;
+    font-size:11px;font-weight:700;display:grid;place-items:center}
+  .steps b{color:var(--ink)}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="brand">AutoOBE<small>My subjects</small></div>
+  <div class="spacer"></div>
+  <div class="who" id="who"></div>
+  <button class="mini" id="pw">Change password</button>
+  <button class="mini" id="out">Sign out</button>
+</header>
+
+<main>
+  <div class="card">
+    <h1>The subjects assigned to you</h1>
+    <p class="faint" style="margin:0">
+      Your work stays in this browser until you press <b>Submit</b>. Nothing
+      reaches the department's sheet before then — and nothing is lost if you
+      come back to it later on this computer.
+    </p>
+    <ol class="steps">
+      <li>Open a subject and <b>drop its syllabus PDF</b>, or paste the CO table.</li>
+      <li>Press <b>Propose</b> — the matrix is filled in for you to review.</li>
+      <li>Click any cell to change it and see <b>why</b> it has that level.</li>
+      <li>Press <b>Submit to the department</b> when you are satisfied.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:baseline">
+      <h2 style="margin:0">Assigned to me</h2>
+      <span class="faint" id="progress"></span>
+    </div>
+    <div class="mwrap tall" style="margin-top:8px">
+      <table id="tbl">
+        <thead><tr>
+          <th>Code</th><th>Subject</th><th>Year</th><th>CO → PO mapping</th>
+          <th>CO attainment</th><th></th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="empty hide" id="empty">
+      No subject has been assigned to you yet. Ask your department
+      administrator to assign one.
+    </div>
+  </div>
+
+  <div class="msg err" id="err"></div>
+  <div class="msg ok" id="ok"></div>
+</main>
+
+<script src="/static/shared.js"></script>
+<script>
+// The same key the mapping page writes work-in-progress under. Reading it
+// here is what lets this table say "draft on this computer" for a subject the
+// department has never heard of.
+const draftKey = id => `autoobe.draft.${id}`;
+
+function readDraft(id) {
+  try { return JSON.parse(localStorage.getItem(draftKey(id)) || "null"); }
+  catch { return null; }            // private window, or storage blocked
+}
+
+// Two separate jobs per subject, and a teacher needs both at a glance: the
+// CO → PO mapping, and the internal CO attainment computed from their marks.
+function readAttainDraft(id) {
+  try { return JSON.parse(localStorage.getItem(`autoobe.attainment.${id}`) || "null"); }
+  catch { return null; }
+}
+
+function attainCell(c) {
+  if (c.attainment_internal !== null && c.attainment_internal !== undefined) {
+    return `<span class="tag ok">${Number(c.attainment_internal).toFixed(2)}</span>
+            <div class="faint">submitted</div>`;
+  }
+  return readAttainDraft(c.id)
+    ? `<span class="tag warn">marks on this computer</span>
+       <div class="faint">not submitted</div>`
+    : `<span class="tag">not started</span>`;
+}
+
+function statusCell(c) {
+  if (c.submitted) {
+    return `<span class="tag ok">submitted</span>
+            <div class="faint">${esc(when(c.updated_at || c.submitted_at))}</div>`;
+  }
+  const d = readDraft(c.id);
+  if (d) {
+    const n = (d.cos || []).length;
+    return `<span class="tag warn">draft on this computer</span>
+            <div class="faint">${n} outcome${n === 1 ? "" : "s"} · not submitted,
+            so the department cannot see it</div>`;
+  }
+  return `<span class="tag">not started</span>`;
+}
+
+(async () => {
+  const user = await requireUser();
+  if (!user) return;
+  $("#who").innerHTML = `<b>${esc(user.full_name || user.username)}</b> · ${esc(user.role)}`;
+
+  let courses;
+  try { ({ courses } = await api("/api/my/courses")); }
+  catch (ex) { flash("err", ex.message); return; }
+
+  if (!courses.length) {
+    $("#tbl").classList.add("hide");
+    $("#empty").classList.remove("hide");
+    return;
+  }
+
+  const done = courses.filter(c => c.submitted).length;
+  $("#progress").innerHTML = done === courses.length
+    ? `<span class="tag ok">all ${courses.length} submitted</span>`
+    : `${done} of ${courses.length} submitted`;
+
+  $("#rows").innerHTML = courses.map(c => `
+    <tr>
+      <td class="mono">${esc(c.code)}</td>
+      <td>${esc(c.title)}</td>
+      <td class="faint">${esc(c.academic_year || "")}</td>
+      <td>${statusCell(c)}</td>
+      <td>${attainCell(c)}</td>
+      <td style="text-align:right;white-space:nowrap">
+        <a href="/?course_id=${c.id}">
+          <button class="mini primary">${c.submitted ? "Mapping" : "Map it"}</button>
+        </a>
+        <a href="/attainment?course_id=${c.id}"><button class="mini">Attainment</button></a>
+      </td>
+    </tr>`).join("");
+})();
+
+$("#pw").onclick = changePassword;
+$("#out").onclick = signOut;
+</script>
+</body>
+</html>

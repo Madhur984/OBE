@@ -1,0 +1,106 @@
+/* Shared by the three signed-in pages: sign-in, the teacher's subjects, and
+   the administrator's dashboard.
+
+   The tokens are copied from index.html rather than imported, because that
+   page is a single self-contained file on purpose -- it has to keep working
+   when someone opens it with no server. These pages never do, so they can
+   share a stylesheet, and the token names match so the two halves of the
+   product look like one thing. */
+:root{
+  --bg:#EEF0EC; --surface:#fff; --surface-2:#E5E8E2; --ink:#1B2229; --ink-soft:#525C55;
+  --ink-faint:#7C8579; --hair:#CBD1C6; --accent:#2C4A7C; --accent-soft:#DCE4F0;
+  --accent-ink:#16294A; --ok:#2F6F4F; --ok-bg:#E1EDE4; --warn:#9A5F1E; --warn-bg:#F3E5D2;
+  --err:#9C3B4A; --err-bg:#F3DEE1;
+  --shadow:0 1px 2px rgba(27,34,41,.06),0 6px 20px rgba(27,34,41,.05);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12161A; --surface:#1A1F24; --surface-2:#20262C; --ink:#E7E6DF; --ink-soft:#AEB6AC;
+  --ink-faint:#7C8579; --hair:#333B36; --accent:#84AAE0; --accent-soft:#233047;
+  --accent-ink:#CFE0FF; --ok:#7FCB9E; --ok-bg:#1D3327; --warn:#E3AE68; --warn-bg:#3A2C18;
+  --err:#E39AA5; --err-bg:#3B2126;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 24px rgba(0,0,0,.35);
+}}
+:root[data-theme="dark"]{
+  --bg:#12161A; --surface:#1A1F24; --surface-2:#20262C; --ink:#E7E6DF; --ink-soft:#AEB6AC;
+  --ink-faint:#7C8579; --hair:#333B36; --accent:#84AAE0; --accent-soft:#233047;
+  --accent-ink:#CFE0FF; --ok:#7FCB9E; --ok-bg:#1D3327; --warn:#E3AE68; --warn-bg:#3A2C18;
+  --err:#E39AA5; --err-bg:#3B2126;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 24px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.55 "IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+h1,h2,h3{margin:0 0 6px;font-weight:640;letter-spacing:-.01em}
+h1{font-size:20px} h2{font-size:16px} h3{font-size:14px}
+.muted{color:var(--ink-soft)}
+.faint{color:var(--ink-faint);font-size:12.5px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12.5px}
+
+header.bar{display:flex;align-items:center;gap:14px;padding:10px 20px;
+  background:var(--surface);border-bottom:1px solid var(--hair);position:sticky;top:0;z-index:20}
+header.bar .brand{font-weight:700;letter-spacing:-.02em}
+header.bar .brand small{display:block;font-weight:500;font-size:10.5px;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint)}
+.spacer{flex:1}
+.who{font-size:13px;color:var(--ink-soft)}
+.who b{color:var(--ink)}
+
+main{max-width:1220px;margin:0 auto;padding:18px 20px 60px}
+.card{background:var(--surface);border:1px solid var(--hair);border-radius:10px;
+  padding:16px 18px;box-shadow:var(--shadow);margin-bottom:16px}
+.grid{display:grid;gap:16px}
+.grid.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.grid.stats{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+@media (max-width:900px){.grid.two{grid-template-columns:1fr}}
+
+.stat{background:var(--surface-2);border-radius:8px;padding:12px 14px}
+.stat b{display:block;font-size:26px;line-height:1.15;letter-spacing:-.02em}
+.stat span{font-size:12px;color:var(--ink-soft)}
+
+label{display:block;font-size:12.5px;color:var(--ink-soft);margin:9px 0 3px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);
+  border:1px solid var(--hair);border-radius:6px;padding:7px 9px;width:100%}
+input:focus,select:focus,textarea:focus,button:focus-visible{
+  outline:2px solid var(--accent);outline-offset:1px}
+button{font:inherit;cursor:pointer;border:1px solid var(--hair);background:var(--surface);
+  color:var(--ink);border-radius:6px;padding:7px 13px}
+button:hover:not(:disabled){border-color:var(--accent)}
+button:disabled{opacity:.55;cursor:not-allowed}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+button.danger{color:var(--err);border-color:var(--err)}
+button.mini{padding:4px 9px;font-size:12.5px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--hair);vertical-align:top}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);
+  font-weight:600;white-space:nowrap}
+tbody tr:hover{background:var(--surface-2)}
+.mwrap{overflow-x:auto}
+/* A department's sheet is forty-odd subjects. Left uncapped, one table pushes
+   everything below it off the screen, so the long ones scroll inside the card
+   and the page keeps its shape. */
+.mwrap.tall{max-height:420px;overflow-y:auto}
+.mwrap.tall thead th{position:sticky;top:0;background:var(--surface);z-index:1}
+/* Row actions must not be the thing that overflows: a cut-off Remove button
+   looks like a rendering fault rather than a narrow column. */
+td .row,td button{white-space:nowrap}
+th:last-child,td:last-child{width:1%}
+
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;
+  background:var(--surface-2);color:var(--ink-soft);white-space:nowrap}
+.tag.ok{background:var(--ok-bg);color:var(--ok)}
+.tag.warn{background:var(--warn-bg);color:var(--warn)}
+.tag.err{background:var(--err-bg);color:var(--err)}
+
+.msg{margin:10px 0 0;padding:9px 11px;border-radius:7px;font-size:13.5px;display:none}
+.msg.show{display:block}
+.msg.err{background:var(--err-bg);color:var(--err)}
+.msg.ok{background:var(--ok-bg);color:var(--ok)}
+
+.hide{display:none!important}
+.center{min-height:100vh;display:grid;place-items:center;padding:24px}
+.signin{width:100%;max-width:390px}
+.empty{padding:26px 4px;text-align:center;color:var(--ink-soft);font-size:13.5px}

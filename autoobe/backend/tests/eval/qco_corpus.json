@@ -1,0 +1,366 @@
+{
+  "_readme": [
+    "Labelled question -> CO corpus for the tagger evaluation harness.",
+    "",
+    "Gold labels are the CO a question actually assesses, judged from the CO",
+    "statements in the same fixture -- not from what the tagger happens to say.",
+    "Where a question genuinely straddles two outcomes it is marked",
+    "difficulty 'ambiguous' and the gold label is the dominant one; those are",
+    "the questions the tagger is expected to flag rather than assert.",
+    "",
+    "'hard' marks a question whose vocabulary does not overlap its outcome:",
+    "acronyms, synonyms, or a topic named in the syllabus but not in the CO.",
+    "These are the realistic failure cases and the reason the corpus exists.",
+    "",
+    "Questions are written in the style of AKTU end-semester papers: a command",
+    "verb, the subject, and often a given case.",
+    "",
+    "SPLIT. Each course is 'dev' or 'holdout'. Tuning is done by looking only",
+    "at dev failures; holdout is scored but never inspected while changing the",
+    "scorer. Without this the eval measures how well the tagger was fitted to",
+    "its own test set, which is worth nothing. The headline number to quote is",
+    "the holdout one."
+  ],
+  "courses": [
+    {
+      "code": "KCS501",
+      "split": "dev",
+      "title": "Database Management Systems",
+      "cos": {
+        "CO1": {
+          "statement": "Explain the architecture of a database management system and the relational data model.",
+          "blooms": [2]
+        },
+        "CO2": {
+          "statement": "Apply entity-relationship modelling to design a normalized relational schema for a given application.",
+          "blooms": [3]
+        },
+        "CO3": {
+          "statement": "Construct SQL queries to retrieve and manipulate data from a relational database.",
+          "blooms": [3, 6]
+        },
+        "CO4": {
+          "statement": "Analyze transaction schedules for serializability and recoverability.",
+          "blooms": [4]
+        },
+        "CO5": {
+          "statement": "Evaluate concurrency control and recovery techniques for a given workload.",
+          "blooms": [5]
+        }
+      },
+      "questions": [
+        {"question_no": "Q1a", "co": "CO1", "difficulty": "normal",
+         "text": "Explain the three-schema architecture of a DBMS with a neat diagram."},
+        {"question_no": "Q1b", "co": "CO1", "difficulty": "normal",
+         "text": "Describe the relational data model and define the terms relation, tuple and attribute."},
+        {"question_no": "Q1c", "co": "CO1", "difficulty": "hard",
+         "text": "Differentiate between physical and logical data independence."},
+        {"question_no": "Q1d", "co": "CO1", "difficulty": "hard",
+         "text": "What are the responsibilities of a database administrator?"},
+        {"question_no": "Q2a", "co": "CO2", "difficulty": "normal",
+         "text": "Draw an ER diagram for a library management system and convert it to a relational schema."},
+        {"question_no": "Q2b", "co": "CO2", "difficulty": "normal",
+         "text": "Apply entity-relationship modelling to design a schema for a hospital, showing cardinality of each relationship."},
+        {"question_no": "Q2c", "co": "CO2", "difficulty": "hard",
+         "text": "Normalize the given relation up to BCNF, stating the functional dependencies at each step."},
+        {"question_no": "Q2d", "co": "CO2", "difficulty": "hard",
+         "text": "Explain generalization, specialization and aggregation with suitable examples."},
+        {"question_no": "Q3a", "co": "CO3", "difficulty": "normal",
+         "text": "Write SQL queries to find the second highest salary from an employee table."},
+        {"question_no": "Q3b", "co": "CO3", "difficulty": "normal",
+         "text": "Construct SQL statements using GROUP BY and HAVING to list departments with more than ten employees."},
+        {"question_no": "Q3c", "co": "CO3", "difficulty": "hard",
+         "text": "Write nested and correlated sub-queries to retrieve employees earning more than their department average."},
+        {"question_no": "Q3d", "co": "CO3", "difficulty": "hard",
+         "text": "Explain the difference between inner join, left outer join and full outer join with an example of each."},
+        {"question_no": "Q4a", "co": "CO4", "difficulty": "normal",
+         "text": "Determine whether the given schedule S is conflict serializable using a precedence graph."},
+        {"question_no": "Q4b", "co": "CO4", "difficulty": "normal",
+         "text": "Analyze the given schedule for recoverability and cascadelessness."},
+        {"question_no": "Q4c", "co": "CO4", "difficulty": "hard",
+         "text": "State the ACID properties of a transaction and explain how atomicity is enforced."},
+        {"question_no": "Q4d", "co": "CO4", "difficulty": "hard",
+         "text": "Is every view serializable schedule also conflict serializable? Justify with an example."},
+        {"question_no": "Q5a", "co": "CO5", "difficulty": "normal",
+         "text": "Compare two-phase locking with timestamp ordering for concurrency control."},
+        {"question_no": "Q5b", "co": "CO5", "difficulty": "normal",
+         "text": "Evaluate the suitability of optimistic concurrency control for a read-heavy workload."},
+        {"question_no": "Q5c", "co": "CO5", "difficulty": "hard",
+         "text": "Explain log-based recovery with deferred and immediate database modification."},
+        {"question_no": "Q5d", "co": "CO5", "difficulty": "ambiguous",
+         "text": "Discuss how deadlocks are handled in a database system."}
+      ]
+    },
+    {
+      "code": "KCS502",
+      "split": "dev",
+      "title": "Operating Systems",
+      "cos": {
+        "CO1": {
+          "statement": "Explain the functions and structure of an operating system.",
+          "blooms": [2]
+        },
+        "CO2": {
+          "statement": "Apply CPU scheduling algorithms to compute waiting and turnaround times for a given process set.",
+          "blooms": [3]
+        },
+        "CO3": {
+          "statement": "Analyze deadlock conditions and apply avoidance and detection algorithms.",
+          "blooms": [3, 4]
+        },
+        "CO4": {
+          "statement": "Compare memory management and paging techniques in terms of fragmentation and performance.",
+          "blooms": [4]
+        },
+        "CO5": {
+          "statement": "Analyze file system and disk scheduling strategies for a stated workload.",
+          "blooms": [4]
+        }
+      },
+      "questions": [
+        {"question_no": "Q1a", "co": "CO1", "difficulty": "normal",
+         "text": "Explain the functions and structure of an operating system."},
+        {"question_no": "Q1b", "co": "CO1", "difficulty": "normal",
+         "text": "Describe the layered structure of an operating system and state its advantages."},
+        {"question_no": "Q1c", "co": "CO1", "difficulty": "hard",
+         "text": "What is a system call? Explain the steps involved in servicing one."},
+        {"question_no": "Q1d", "co": "CO1", "difficulty": "hard",
+         "text": "Differentiate between a monolithic kernel and a microkernel."},
+        {"question_no": "Q2a", "co": "CO2", "difficulty": "normal",
+         "text": "Compute the average waiting time using SJF scheduling for the given process set."},
+        {"question_no": "Q2b", "co": "CO2", "difficulty": "normal",
+         "text": "Apply round robin scheduling with a time quantum of 4 ms and calculate turnaround time for each process."},
+        {"question_no": "Q2c", "co": "CO2", "difficulty": "hard",
+         "text": "Draw the Gantt chart for the given processes under priority scheduling and compute the average response time."},
+        {"question_no": "Q2d", "co": "CO2", "difficulty": "hard",
+         "text": "What is starvation and how does ageing address it?"},
+        {"question_no": "Q3a", "co": "CO3", "difficulty": "normal",
+         "text": "Apply the banker's algorithm to determine whether the system is in a safe state."},
+        {"question_no": "Q3b", "co": "CO3", "difficulty": "normal",
+         "text": "State the four necessary conditions for deadlock and explain how each may be prevented."},
+        {"question_no": "Q3c", "co": "CO3", "difficulty": "hard",
+         "text": "Construct a resource allocation graph for the given system and determine whether a circular wait exists."},
+        {"question_no": "Q3d", "co": "CO3", "difficulty": "hard",
+         "text": "Explain the difference between deadlock avoidance and deadlock detection with recovery."},
+        {"question_no": "Q4a", "co": "CO4", "difficulty": "normal",
+         "text": "Compare paging with segmentation in terms of fragmentation."},
+        {"question_no": "Q4b", "co": "CO4", "difficulty": "normal",
+         "text": "Analyze internal and external fragmentation for first-fit and best-fit allocation on the given partition list."},
+        {"question_no": "Q4c", "co": "CO4", "difficulty": "hard",
+         "text": "Compute the number of page faults for the given reference string under LRU and FIFO replacement."},
+        {"question_no": "Q4d", "co": "CO4", "difficulty": "hard",
+         "text": "Explain the working of a translation lookaside buffer and its effect on effective access time."},
+        {"question_no": "Q5a", "co": "CO5", "difficulty": "normal",
+         "text": "Analyze SCAN and C-SCAN disk scheduling for the given request queue."},
+        {"question_no": "Q5b", "co": "CO5", "difficulty": "normal",
+         "text": "Compute the total head movement for the given request queue under SSTF disk scheduling."},
+        {"question_no": "Q5c", "co": "CO5", "difficulty": "hard",
+         "text": "Compare contiguous, linked and indexed file allocation methods."},
+        {"question_no": "Q5d", "co": "CO5", "difficulty": "hard",
+         "text": "Explain the structure of an inode and how it supports large files."}
+      ]
+    },
+    {
+      "code": "KCS503",
+      "split": "holdout",
+      "title": "Design and Analysis of Algorithms",
+      "cos": {
+        "CO1": {
+          "statement": "Analyze the asymptotic time and space complexity of algorithms.",
+          "blooms": [4]
+        },
+        "CO2": {
+          "statement": "Apply divide-and-conquer and greedy strategies to solve computational problems.",
+          "blooms": [3]
+        },
+        "CO3": {
+          "statement": "Design dynamic programming solutions for optimization problems.",
+          "blooms": [6]
+        },
+        "CO4": {
+          "statement": "Compare algorithm design paradigms for a given problem in terms of efficiency.",
+          "blooms": [4]
+        },
+        "CO5": {
+          "statement": "Explain the classes P, NP and NP-complete and identify problems within them.",
+          "blooms": [2, 3]
+        }
+      },
+      "questions": [
+        {"question_no": "Q1a", "co": "CO1", "difficulty": "normal",
+         "text": "Analyze the time complexity of the given recursive algorithm using the master theorem."},
+        {"question_no": "Q1b", "co": "CO1", "difficulty": "normal",
+         "text": "Define big-O, big-omega and theta notation and analyze the asymptotic growth of the given function."},
+        {"question_no": "Q1c", "co": "CO1", "difficulty": "hard",
+         "text": "Solve the recurrence T(n) = 2T(n/2) + n log n by the substitution method."},
+        {"question_no": "Q2a", "co": "CO2", "difficulty": "normal",
+         "text": "Apply the divide-and-conquer strategy to sort the given array using merge sort."},
+        {"question_no": "Q2b", "co": "CO2", "difficulty": "normal",
+         "text": "Apply a greedy strategy to solve the fractional knapsack problem for the given items."},
+        {"question_no": "Q2c", "co": "CO2", "difficulty": "hard",
+         "text": "Construct a Huffman code for the given character frequencies and compute the average code length."},
+        {"question_no": "Q2d", "co": "CO2", "difficulty": "hard",
+         "text": "Find the minimum spanning tree of the given graph using Kruskal's method."},
+        {"question_no": "Q3a", "co": "CO3", "difficulty": "normal",
+         "text": "Design a dynamic programming solution for the 0/1 knapsack problem."},
+        {"question_no": "Q3b", "co": "CO3", "difficulty": "normal",
+         "text": "Design a dynamic programming algorithm for the longest common subsequence of two strings."},
+        {"question_no": "Q3c", "co": "CO3", "difficulty": "hard",
+         "text": "Develop a matrix chain multiplication solution for the given dimensions and state the optimal parenthesization."},
+        {"question_no": "Q4a", "co": "CO4", "difficulty": "normal",
+         "text": "Compare greedy and dynamic programming approaches for the given optimization problem."},
+        {"question_no": "Q4b", "co": "CO4", "difficulty": "normal",
+         "text": "Compare the efficiency of backtracking and branch-and-bound for the given search problem."},
+        {"question_no": "Q4c", "co": "CO4", "difficulty": "ambiguous",
+         "text": "Which paradigm would you select to solve the single source shortest path problem, and why?"},
+        {"question_no": "Q5a", "co": "CO5", "difficulty": "normal",
+         "text": "Explain the classes P, NP and NP-complete with examples."},
+        {"question_no": "Q5b", "co": "CO5", "difficulty": "normal",
+         "text": "Identify whether the vertex cover problem belongs to NP-complete and justify your answer."},
+        {"question_no": "Q5c", "co": "CO5", "difficulty": "hard",
+         "text": "Explain polynomial time reduction and show that the clique problem reduces to the independent set problem."}
+      ]
+    },
+    {
+      "code": "KEC601",
+      "split": "holdout",
+      "title": "Digital Communication",
+      "cos": {
+        "CO1": {
+          "statement": "Explain the fundamental principles of digital communication systems.",
+          "blooms": [2]
+        },
+        "CO2": {
+          "statement": "Apply sampling and quantization techniques to convert analog signals to digital form.",
+          "blooms": [3]
+        },
+        "CO3": {
+          "statement": "Analyze the performance of digital modulation techniques in terms of bandwidth and error probability.",
+          "blooms": [4]
+        },
+        "CO4": {
+          "statement": "Design a digital communication system to satisfy specified performance requirements.",
+          "blooms": [6]
+        },
+        "CO5": {
+          "statement": "Evaluate error control coding schemes for a given channel condition.",
+          "blooms": [5]
+        }
+      },
+      "questions": [
+        {"question_no": "Q1a", "co": "CO1", "difficulty": "normal",
+         "text": "Explain the block diagram of a digital communication system."},
+        {"question_no": "Q1b", "co": "CO1", "difficulty": "hard",
+         "text": "State the advantages of digital transmission over analog transmission."},
+        {"question_no": "Q2a", "co": "CO2", "difficulty": "normal",
+         "text": "Apply the sampling theorem to determine the Nyquist rate for the given signal."},
+        {"question_no": "Q2b", "co": "CO2", "difficulty": "normal",
+         "text": "Explain PCM and compute the quantization noise power for a uniform quantizer with 8 bits."},
+        {"question_no": "Q2c", "co": "CO2", "difficulty": "hard",
+         "text": "What is aliasing and how is it avoided in practical systems?"},
+        {"question_no": "Q3a", "co": "CO3", "difficulty": "normal",
+         "text": "Analyze the bit error rate performance of BPSK over an AWGN channel."},
+        {"question_no": "Q3b", "co": "CO3", "difficulty": "normal",
+         "text": "Compare the bandwidth efficiency of QPSK and 16-QAM modulation."},
+        {"question_no": "Q3c", "co": "CO3", "difficulty": "hard",
+         "text": "Derive the probability of error for coherent FSK detection."},
+        {"question_no": "Q4a", "co": "CO4", "difficulty": "normal",
+         "text": "Design a digital communication link meeting a specified BER and bandwidth budget."},
+        {"question_no": "Q4b", "co": "CO4", "difficulty": "hard",
+         "text": "Develop a link budget for a satellite downlink operating at 12 GHz with a 3 dB margin."},
+        {"question_no": "Q5a", "co": "CO5", "difficulty": "normal",
+         "text": "Evaluate the coding gain of a convolutional code for the given channel."},
+        {"question_no": "Q5b", "co": "CO5", "difficulty": "normal",
+         "text": "Evaluate the error detecting and correcting capability of the given Hamming code."},
+        {"question_no": "Q5c", "co": "CO5", "difficulty": "hard",
+         "text": "Explain Viterbi decoding and trace the surviving path for the given received sequence."}
+      ]
+    },
+    {
+      "code": "KME402",
+      "split": "holdout",
+      "title": "Engineering Thermodynamics",
+      "cos": {
+        "CO1": {
+          "statement": "Explain the fundamental concepts and laws of thermodynamics.",
+          "blooms": [2]
+        },
+        "CO2": {
+          "statement": "Apply the first law of thermodynamics to closed and open systems.",
+          "blooms": [3]
+        },
+        "CO3": {
+          "statement": "Analyze thermodynamic processes using the second law and entropy principles.",
+          "blooms": [4]
+        },
+        "CO4": {
+          "statement": "Evaluate the performance of power and refrigeration cycles.",
+          "blooms": [5]
+        }
+      },
+      "questions": [
+        {"question_no": "Q1a", "co": "CO1", "difficulty": "normal",
+         "text": "Explain the zeroth and first laws of thermodynamics with examples."},
+        {"question_no": "Q1b", "co": "CO1", "difficulty": "hard",
+         "text": "Define a thermodynamic system, boundary and surroundings, and distinguish intensive from extensive properties."},
+        {"question_no": "Q2a", "co": "CO2", "difficulty": "normal",
+         "text": "Apply the first law to a closed system undergoing a polytropic process."},
+        {"question_no": "Q2b", "co": "CO2", "difficulty": "hard",
+         "text": "Derive the steady flow energy equation and apply it to a nozzle."},
+        {"question_no": "Q3a", "co": "CO3", "difficulty": "normal",
+         "text": "Analyze an irreversible process using entropy change of the universe."},
+        {"question_no": "Q3b", "co": "CO3", "difficulty": "normal",
+         "text": "State the Kelvin-Planck and Clausius statements of the second law and show their equivalence."},
+        {"question_no": "Q3c", "co": "CO3", "difficulty": "hard",
+         "text": "Explain the concept of availability and compute the irreversibility for the given process."},
+        {"question_no": "Q4a", "co": "CO4", "difficulty": "normal",
+         "text": "Evaluate the thermal efficiency of the given Rankine cycle."},
+        {"question_no": "Q4b", "co": "CO4", "difficulty": "normal",
+         "text": "Evaluate the coefficient of performance of a vapour compression refrigeration cycle for the given conditions."},
+        {"question_no": "Q4c", "co": "CO4", "difficulty": "hard",
+         "text": "Compare the Otto and Diesel cycles at the same compression ratio and comment on their efficiency."}
+      ]
+    },
+    {
+      "code": "KOE068",
+      "split": "holdout",
+      "title": "Environmental Engineering",
+      "cos": {
+        "CO1": {
+          "statement": "Explain the structure of ecosystems and the impact of engineering activity on biodiversity.",
+          "blooms": [2]
+        },
+        "CO2": {
+          "statement": "Analyze sources and effects of water and air pollution on public health and the environment.",
+          "blooms": [4]
+        },
+        "CO3": {
+          "statement": "Evaluate solid waste management practices against sustainability and whole-life cost criteria.",
+          "blooms": [5]
+        },
+        "CO4": {
+          "statement": "Apply environmental legislation and ethical principles to engineering practice.",
+          "blooms": [3]
+        }
+      },
+      "questions": [
+        {"question_no": "Q1a", "co": "CO1", "difficulty": "normal",
+         "text": "Explain the structure and function of an ecosystem with a suitable example."},
+        {"question_no": "Q1b", "co": "CO1", "difficulty": "hard",
+         "text": "Describe the causes of biodiversity loss and the concept of a hotspot."},
+        {"question_no": "Q2a", "co": "CO2", "difficulty": "normal",
+         "text": "Analyze the sources and health effects of particulate air pollution in an urban area."},
+        {"question_no": "Q2b", "co": "CO2", "difficulty": "hard",
+         "text": "Compute the BOD of the given wastewater sample and comment on its suitability for discharge."},
+        {"question_no": "Q3a", "co": "CO3", "difficulty": "normal",
+         "text": "Evaluate landfilling and incineration for municipal solid waste against whole-life cost and sustainability."},
+        {"question_no": "Q3b", "co": "CO3", "difficulty": "hard",
+         "text": "Assess the role of segregation at source in improving recovery rates."},
+        {"question_no": "Q4a", "co": "CO4", "difficulty": "normal",
+         "text": "Apply the provisions of the Environment Protection Act to the given industrial discharge scenario."},
+        {"question_no": "Q4b", "co": "CO4", "difficulty": "hard",
+         "text": "Discuss the ethical responsibility of an engineer who discovers that an employer is exceeding emission limits."}
+      ]
+    }
+  ]
+}

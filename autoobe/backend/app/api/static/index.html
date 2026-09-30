@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AutoOBE — CO → PO Mapping</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:wght@600&display=swap">
+<style>
+  :root{
+    --bg:#EEF0EC; --surface:#fff; --surface-2:#E5E8E2; --ink:#1B2229; --ink-soft:#525C55;
+    --ink-faint:#7C8579; --hair:#CBD1C6; --accent:#2C4A7C; --accent-soft:#DCE4F0;
+    --accent-ink:#16294A; --ok:#2F6F4F; --ok-bg:#E1EDE4; --warn:#9A5F1E; --warn-bg:#F3E5D2;
+    --err:#9C3B4A; --err-bg:#F3DEE1; --auto:#4A4A8F; --auto-bg:#E4E3F2;
+    --shadow:0 1px 2px rgba(27,34,41,.06),0 6px 20px rgba(27,34,41,.05);
+  }
+  /* Dark comes from the OS unless the reader has chosen Light... */
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#12161A; --surface:#1A1F24; --surface-2:#20262C; --ink:#E7E6DF; --ink-soft:#AEB6AC;
+    --ink-faint:#7C8579; --hair:#333B36; --accent:#84AAE0; --accent-soft:#233047;
+    --accent-ink:#CFE0FF; --ok:#7FCB9E; --ok-bg:#1D3327; --warn:#E3AE68; --warn-bg:#3A2C18;
+    --err:#E39AA5; --err-bg:#3B2126; --auto:#B2AEE8; --auto-bg:#292750;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 24px rgba(0,0,0,.35);
+  }}
+  /* ...and an explicit Dark wins even on a light OS. Both blocks are needed:
+     the media query alone cannot express "dark on a light machine". */
+  :root[data-theme="dark"]{
+    --bg:#12161A; --surface:#1A1F24; --surface-2:#20262C; --ink:#E7E6DF; --ink-soft:#AEB6AC;
+    --ink-faint:#7C8579; --hair:#333B36; --accent:#84AAE0; --accent-soft:#233047;
+    --accent-ink:#CFE0FF; --ok:#7FCB9E; --ok-bg:#1D3327; --warn:#E3AE68; --warn-bg:#3A2C18;
+    --err:#E39AA5; --err-bg:#3B2126; --auto:#B2AEE8; --auto-bg:#292750;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 24px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  header{background:var(--surface);border-bottom:1px solid var(--hair);padding:11px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:40}
+  .brand{font-family:"IBM Plex Serif",Georgia,serif;font-weight:600;font-size:17px;color:var(--accent)}
+  .brand small{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);display:block;font-weight:400}
+  .hspace{flex:1}
+  .hctl{min-width:190px}
+  /* No width cap: on a wide monitor a centred column leaves a third of the
+     screen empty, and this is a working tool rather than an article. Long
+     prose is kept readable by capping the paragraphs instead (.hint). */
+  main{max-width:none;margin:0;padding:16px 20px 36px}
+  .card{background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:15px 17px;box-shadow:var(--shadow);margin-bottom:14px}
+  .card h2{font-family:"IBM Plex Serif",serif;font-size:14.5px;margin:0 0 3px;color:var(--accent-ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .card .hint{font-size:12.5px;color:var(--ink-faint);margin:0 0 12px;max-width:92ch}
+  /* Theme control: three states, because "follow the machine" is a real
+     preference and not the same as either fixed choice. */
+  .seg{display:inline-flex;border:1px solid var(--hair);border-radius:7px;overflow:hidden;background:var(--surface-2)}
+  .seg button{border:0;border-radius:0;background:transparent;padding:4px 10px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.04em;color:var(--ink-soft)}
+  .seg button+button{border-left:1px solid var(--hair)}
+  .seg button:hover{background:var(--accent-soft);color:var(--accent-ink)}
+  .seg button.on{background:var(--accent);color:#fff;font-weight:600}
+  .step{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:#fff;background:var(--accent);border-radius:4px;padding:2px 6px;font-weight:600}
+  label{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 4px;font-weight:600}
+  input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--hair);border-radius:6px;padding:6px 8px;width:100%}
+  textarea{resize:vertical;font-size:13.5px}
+  input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .row{display:flex;gap:9px;flex-wrap:wrap;align-items:flex-end}
+  button{font:inherit;font-weight:500;cursor:pointer;border-radius:6px;border:1px solid var(--hair);background:var(--surface-2);color:var(--ink);padding:6px 12px}
+  button:hover{border-color:var(--accent)}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  button.primary:hover{filter:brightness(1.12)}
+  button.mini{padding:3px 8px;font-size:12px}
+  button:disabled{opacity:.45;cursor:default}
+  .tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:4px;white-space:nowrap}
+  .t-ok{background:var(--ok-bg);color:var(--ok)} .t-warn{background:var(--warn-bg);color:var(--warn)}
+  .t-err{background:var(--err-bg);color:var(--err)} .t-auto{background:var(--auto-bg);color:var(--auto)}
+  .t-info{background:var(--accent-soft);color:var(--accent-ink)}
+  .muted{color:var(--ink-faint);font-size:12.5px}
+  .hide{display:none !important}
+
+  /* ---- source ---- */
+  /* The drop zone and the parser's warnings sit side by side: stacked, the
+     warnings left a band of empty card to the right of a very wide target. */
+  .srcgrid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;align-items:start}
+  @media(max-width:900px){.srcgrid{grid-template-columns:minmax(0,1fr)}}
+  .drop{border:2px dashed var(--hair);border-radius:10px;padding:22px;text-align:center;background:var(--bg);cursor:pointer;transition:border-color .12s,background .12s}
+  .drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+  .drop strong{display:block;font-size:14px;margin-bottom:3px}
+  .notes{margin:11px 0 0;padding:0;list-style:none;font-size:12.5px}
+  .notes li{display:flex;gap:7px;padding:3px 0;color:var(--ink-soft);align-items:flex-start}
+  .minih{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 7px;font-weight:600}
+  .steps{margin:0;padding:0;list-style:none;counter-reset:s}
+  .steps li{counter-increment:s;position:relative;padding:0 0 8px 26px;font-size:12.5px;line-height:1.45;color:var(--ink-soft)}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:17px;height:17px;border-radius:5px;background:var(--surface-2);border:1px solid var(--hair);color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center}
+  .steps li b{color:var(--ink);font-weight:600}
+
+  /* ---- courses ---- */
+  .courses{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:9px}
+  .course{text-align:left;padding:9px 11px;border:1px solid var(--hair);border-radius:8px;background:var(--bg);cursor:pointer;display:block;width:100%}
+  .course:hover{border-color:var(--accent)}
+  .course.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+  .course .cc{display:block;font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;color:var(--accent-ink)}
+  .course .ct{display:block;font-size:12.5px;line-height:1.35;margin:2px 0 5px;min-height:2.7em}
+  .course .cm{display:block;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-faint)}
+
+  /* ---- CO editor ---- */
+  /* Five outcomes stacked one per row on a wide screen is four-fifths empty
+     space. They flow into as many columns as fit, each still wide enough for
+     a full outcome statement to read as a sentence. */
+  #cos{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:10px;align-items:start}
+  .co{border:1px solid var(--hair);border-radius:8px;padding:10px 11px;background:var(--bg)}
+  .co-head{display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
+  .co-code{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12.5px;color:var(--accent-ink)}
+  .ks{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+  .k{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;padding:3px 7px;border-radius:5px;border:1px solid var(--hair);background:var(--surface);color:var(--ink-faint);cursor:pointer;min-width:30px}
+  .k:hover{border-color:var(--accent)}
+  .k.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .k-lab{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-right:2px;font-weight:600}
+  .cl{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-soft);white-space:nowrap}
+  .cl b{color:var(--accent-ink);font-size:12px}
+  /* ---- vague verb repair ---- */
+  .fixbar{margin-top:8px;border-left:3px solid var(--warn);background:var(--warn-bg);border-radius:0 6px 6px 0;padding:7px 9px}
+  .fixbar .lead{font-size:12px;color:var(--warn);margin-bottom:6px}
+  .fixbar .lead b{font-family:"IBM Plex Mono",monospace}
+  .vchips{display:flex;gap:5px;flex-wrap:wrap}
+  .vchip{display:inline-flex;align-items:baseline;gap:5px;border:1px solid var(--hair);background:var(--surface);border-radius:6px;padding:3px 8px;font-size:12px;cursor:pointer}
+  .vchip:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .vchip .k{all:unset;font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--ink-faint)}
+  .vchip.moves{border-style:dashed}
+  .vchip.moves .k{color:var(--err)}
+  .vchip.top{border-color:var(--auto);box-shadow:inset 0 0 0 1px var(--auto)}
+  .fixbar .rec{margin-top:7px;font-size:12px;color:var(--ink);line-height:1.5}
+  .fixbar .rec i{color:var(--ink-soft);font-style:normal}
+  .fixbar .rec .prev{margin-top:4px;padding:5px 7px;border:1px solid var(--hair);
+    border-radius:5px;background:var(--surface);font-size:12px;color:var(--ink)}
+  .fixbar .why{font-size:11.5px;color:var(--ink-soft);margin-top:6px}
+  .psobar{margin:0 0 10px;padding:10px 11px;border:1px solid var(--hair);
+    border-radius:7px;background:var(--surface);display:grid;gap:8px}
+  .psobar .lead{font-size:11.5px;color:var(--ink-soft);line-height:1.55}
+  .psobar label{display:grid;gap:4px;font-size:12px;font-weight:600}
+  .psobar textarea{width:100%;font:inherit;font-weight:400;font-size:12.5px;padding:6px 8px;
+    border:1px solid var(--hair);border-radius:5px;background:var(--bg);color:var(--ink);resize:vertical}
+  .psobar textarea:focus{outline:none;border-color:var(--accent)}
+
+  /* ---- matrix ---- */
+  .mwrap{overflow:auto;border:1px solid var(--hair);border-radius:8px;max-height:70vh}
+  table.mx{border-collapse:separate;border-spacing:0;font-size:12px;width:100%}
+  table.mx th,table.mx td{border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:0;text-align:center}
+  table.mx thead th{background:var(--surface-2);position:sticky;top:0;z-index:3;padding:6px 4px;vertical-align:bottom;min-width:74px}
+  table.mx .po-c{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--accent-ink);display:block}
+  table.mx .po-t{display:block;font-size:9.5px;line-height:1.2;color:var(--ink-soft);font-weight:400;margin:2px 0 3px;max-width:88px}
+  table.mx .pl{font-family:"IBM Plex Mono",monospace;font-size:9px;background:var(--surface);border:1px solid var(--hair);border-radius:3px;padding:0 4px;color:var(--ink-faint)}
+  table.mx tbody th{background:var(--surface);position:sticky;left:0;z-index:2;text-align:left;padding:6px 9px;min-width:150px;max-width:230px;border-right:2px solid var(--hair)}
+  table.mx thead th.corner{left:0;z-index:4;text-align:left;padding:6px 9px}
+  .rc{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;color:var(--accent-ink)}
+  .rs{font-size:10.5px;color:var(--ink-faint);font-weight:400;line-height:1.3;display:block;margin-top:1px}
+  .cell{width:100%;height:100%;min-height:46px;border:0;background:transparent;cursor:pointer;padding:5px 3px;display:flex;flex-direction:column;align-items:center;gap:3px;font:inherit}
+  .cell:hover{background:var(--accent-soft)}
+  .cell.sel{box-shadow:inset 0 0 0 2px var(--accent)}
+  .lvl{font-family:"IBM Plex Mono",monospace;font-size:16px;font-weight:600;line-height:1}
+  .lvl.z{color:var(--hair);font-weight:400}
+  .lvl.l1{color:var(--ink-soft)} .lvl.l2{color:var(--accent)} .lvl.l3{color:var(--ok)}
+  .cmp{font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.04em;text-transform:uppercase;padding:1px 4px;border-radius:3px;background:var(--surface-2);color:var(--ink-faint)}
+  .cmp.p{background:var(--auto-bg);color:var(--auto)}
+  .cmp.o{background:var(--accent-soft);color:var(--accent-ink)}
+  td.blocked{background:var(--err-bg)}
+
+  /* ---- detail drawer ---- */
+  .drawer{position:fixed;top:0;right:0;width:390px;max-width:92vw;height:100vh;background:var(--surface);border-left:1px solid var(--hair);box-shadow:-8px 0 28px rgba(0,0,0,.13);z-index:50;transform:translateX(100%);transition:transform .16s ease;overflow-y:auto;padding:16px 18px 40px}
+  .drawer.open{transform:none}
+  .drawer h3{font-family:"IBM Plex Serif",serif;font-size:14px;margin:0 0 2px;color:var(--accent-ink)}
+  .drawer .x{position:absolute;top:12px;right:14px}
+  .dsec{margin-top:15px;border-top:1px solid var(--hair);padding-top:11px}
+  .dsec h4{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 5px;font-weight:600}
+  .dsec p{margin:0 0 6px;font-size:13px;line-height:1.5}
+  .rule{background:var(--bg);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:8px 10px;font-size:12.5px;margin-bottom:7px}
+  .rule b{font-family:"IBM Plex Mono",monospace}
+  .terms{display:flex;gap:4px;flex-wrap:wrap}
+  .term{font-family:"IBM Plex Mono",monospace;font-size:10.5px;background:var(--auto-bg);color:var(--auto);padding:2px 6px;border-radius:4px}
+  .setc{display:flex;gap:5px;margin-top:5px}
+  .setc button{flex:1;font-family:"IBM Plex Mono",monospace;font-size:11.5px}
+  .setc button.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+
+  /* ---- summary / bloom ref ---- */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:9px;margin-bottom:11px}
+  .stat{background:var(--bg);border:1px solid var(--hair);border-radius:8px;padding:8px 10px}
+  .stat .v{font-family:"IBM Plex Mono",monospace;font-size:19px;font-weight:600;color:var(--accent-ink);line-height:1.1}
+  .stat .l{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint);margin-top:2px}
+  table.ref{border-collapse:collapse;width:100%;font-size:12.5px}
+  table.ref th,table.ref td{border:1px solid var(--hair);padding:5px 8px;text-align:left}
+  table.ref th{background:var(--surface-2);font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft)}
+  /* The numeric columns are all two or three characters wide. Left to
+     themselves they share the slack equally and the table reads as a row of
+     lonely digits in oceans of white; the outcome name absorbs it instead. */
+  table.avgtbl{table-layout:fixed}
+  table.avgtbl th:nth-child(2){width:auto}
+  table.avgtbl th:nth-child(1){width:64px}
+  table.avgtbl th:nth-child(3){width:52px}
+  table.avgtbl th:nth-child(4),table.avgtbl th:nth-child(6){width:96px}
+  table.avgtbl th:nth-child(5){width:150px}
+  table.avgtbl th:nth-child(7),table.avgtbl th:nth-child(9){width:118px}
+  table.avgtbl th:nth-child(8){width:84px}
+  table.avgtbl td:nth-child(n+3){font-variant-numeric:tabular-nums;font-family:"IBM Plex Mono",monospace}
+  /* The reference cards are short and self-contained: let them tile rather
+     than stretch two of them across a 1600px window. */
+  .cols2{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:14px;align-items:start}
+  /* A card's heading and its explanation take the left; whatever the card
+     acts on takes the right. Stacked, a 90-character paragraph leaves a band
+     of empty card beside it and strands the buttons at the bottom. */
+  .cardtop{display:flex;gap:22px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:11px}
+  .cardtop .txt{flex:1 1 460px;min-width:0}
+  .cardtop .txt .hint{margin-bottom:0}
+  .cardtop .acts{display:flex;gap:7px;flex-wrap:wrap;align-items:center;padding-top:2px}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:8px;font-size:13px;z-index:60;transition:transform .18s;box-shadow:var(--shadow)}
+  .toast.show{transform:translateX(-50%)}
+</style>
+<script>
+  // Runs before the first paint: reading the saved choice later would show a
+  // frame of the wrong theme on every load. Storage can throw outright in a
+  // private window, so a failure just falls through to "follow the system".
+  try {
+    var t = localStorage.getItem("autoobe-theme");
+    if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+  } catch (e) {}
+</script>
+</head>
+<body>
+
+<header>
+  <div class="brand">AutoOBE<small>CO → PO mapping</small></div>
+  <div class="hctl">
+    <label for="fw">Framework</label>
+    <select id="fw"></select>
+  </div>
+  <div class="hspace"></div>
+  <div id="hstatus" class="muted"></div>
+  <div class="seg" id="themeseg" role="group" aria-label="Colour theme">
+    <button type="button" data-theme-set="auto" title="Follow the system setting">Auto</button>
+    <button type="button" data-theme-set="light" title="Always light">Light</button>
+    <button type="button" data-theme-set="dark" title="Always dark">Dark</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- The assignment bar. Present only when this page was opened from a
+       teacher's dashboard with ?course_id=, which is what tells it that the
+       work belongs to a subject somebody is accountable for. Without it the
+       page is exactly what it has always been: an offline workbench that
+       stores nothing anywhere. -->
+  <div class="card hide" id="assignbar" style="border-color:var(--accent)">
+    <div class="row" style="justify-content:space-between;align-items:flex-start;gap:14px">
+      <div>
+        <h3 style="margin:0 0 2px" id="asgtitle"></h3>
+        <p class="muted" id="asgnote" style="margin:0;font-size:13px"></p>
+      </div>
+      <div class="row" style="gap:8px">
+        <a href="/teacher"><button class="mini" type="button">My subjects</button></a>
+        <button class="mini" type="button" id="asgclear"
+          title="Clear the draft held in this browser for this subject">Discard draft</button>
+        <button class="primary" type="button" id="asgsubmit">Submit to the department</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 1 · SYLLABUS ============ -->
+  <section class="card">
+    <h2><span class="step">1</span> Syllabus</h2>
+    <p class="hint">Drop the AKTU semester PDF. Every course in it is read separately —
+      code, title, L‑T‑P and its five course outcomes — with Bloom's levels taken from
+      the K column where the syllabus declares one, and inferred from the opening verb
+      where it does not.</p>
+
+    <div class="srcgrid">
+      <div>
+        <div class="drop" id="drop" tabindex="0" role="button">
+          <strong>Choose a syllabus, or drop one here</strong>
+          <span class="muted">.pdf · .docx · .txt — nothing leaves this machine</span>
+          <input type="file" id="file" accept=".pdf,.docx,.txt" class="hide">
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <button class="mini" id="pastebtn">Paste the CO table instead</button>
+          <span class="hspace"></span>
+          <span id="srcname" class="muted"></span>
+        </div>
+
+        <!-- Said here rather than left to be inferred. The bundled catalogue
+             is a fallback for the courses nobody has a PDF for; a department
+             that uploads its own document must be able to see, without
+             reading the code, that its document is the one being used. -->
+        <p class="muted" style="margin:9px 0 0;font-size:12.5px">
+          Your file always wins. Where a course has no syllabus in it —
+          a lab block, or a paper typed in by hand — AKTU's own published
+          syllabus stands in, and the matrix names the document and session
+          it came from so you can refuse it.
+        </p>
+
+        <div id="pastewrap" class="hide" style="margin-top:10px">
+          <label for="ptext">Syllabus text</label>
+          <textarea id="ptext" rows="6" placeholder="CO1  Explain the concept of …  K2"></textarea>
+          <button class="primary mini" id="parsetext" style="margin-top:7px">Read outcomes</button>
+        </div>
+      </div>
+      <div>
+        <!-- Before a file is dropped this column would be blank, and the
+             landing page would be one small card in an empty window. What
+             the tool is about to do is exactly what belongs here. -->
+        <div id="nextsteps">
+          <h3 class="minih">What happens next</h3>
+          <ol class="steps">
+            <li><b>Outcomes are read</b> — every course in the file separately,
+              with its code, title and L‑T‑P.</li>
+            <li><b>Bloom's levels are set</b> — taken from the K column where
+              the syllabus declares one, inferred from the verb where it does
+              not, and always labelled which.</li>
+            <li><b>The CO × PO matrix is proposed</b> — a competency of 0, 1 or
+              2 per cell, from the outcome text and the verbatim PO statements.</li>
+            <li><b>Levels are derived</b> — Rule 1, then Rule 2 for strong
+              matches. You review; nothing is authored for you.</li>
+            <li><b>The document downloads</b> — matrix, PO averages and the
+              Bloom's levels behind them, in Word, Excel, CSV or Markdown.</li>
+          </ol>
+          <p class="muted" style="margin:9px 0 0">Nothing is uploaded anywhere.
+            The file is read in this process and the arithmetic is deterministic
+            — the same syllabus gives the same matrix next year.</p>
+        </div>
+        <ul class="notes" id="notes" style="margin-top:0"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2 · COURSES ============ -->
+  <section class="card hide" id="coursecard">
+    <h2><span class="step">2</span> Course <span id="ccount" class="tag t-info"></span></h2>
+    <p class="hint">One mapping matrix per course. Pick the one you are working on.</p>
+    <div class="courses" id="courses"></div>
+  </section>
+
+  <!-- ============ 3 · OUTCOMES & BLOOM'S ============ -->
+  <section class="card hide" id="cocard">
+    <h2><span class="step">3</span> Course outcomes &amp; Bloom's levels</h2>
+    <p class="hint">CL — the CO's action level — is the <em>highest</em> K level tagged,
+      because that is the strongest claim the outcome makes. Correct anything the parser
+      got wrong before mapping; an inferred level is a guess from the verb, not a reading
+      of the syllabus.</p>
+    <div id="cos"></div>
+    <div class="row" style="margin-top:11px">
+      <button class="primary" id="propose">Propose the CO → PO matrix</button>
+      <button class="mini" id="clearall">Clear the matrix</button>
+    </div>
+  </section>
+
+  <!-- ============ 4 · MATRIX ============ -->
+  <section class="card hide" id="mxcard">
+    <div class="cardtop">
+      <div class="txt">
+        <h2><span class="step">4</span> CO → PO / PSO matrix
+          <span class="tag t-auto">purple = proposed</span>
+          <span class="tag t-info">blue = your override</span>
+        </h2>
+        <p class="hint">The big number is the <b>mapping level</b> (0–3) that reaches
+          the SAR. The small chip under it is the <b>competency</b> (0–2) it came from.
+          Click any cell to see the rule that produced it, and to change the competency.</p>
+      </div>
+      <div class="acts">
+        <button class="mini" id="copy">Copy as TSV</button>
+        <button class="mini" id="psoedit">PSO columns…</button>
+      </div>
+    </div>
+
+    <div class="psobar hide" id="psobar">
+      <div class="lead">Programme Specific Outcomes — <b>your department writes these</b>.
+        AutoOBE will not invent them: a PSO with no statement has no column, because a
+        column nobody can point to a statement for is not defensible in front of a peer
+        team. Its PL is read from the leading verb of what you type, exactly as a PO's is.</div>
+      <label>PSO1 <textarea id="pso1" rows="2" placeholder="e.g. Design and develop electronic systems for signal processing and communication applications."></textarea></label>
+      <label>PSO2 <textarea id="pso2" rows="2" placeholder="e.g. Apply modern hardware and software tools to build embedded and VLSI solutions to industry problems."></textarea></label>
+      <div class="row">
+        <button class="primary mini" id="psoapply">Use these columns</button>
+        <button class="mini" id="psoclose">Close</button>
+        <span class="muted" id="psostat"></span>
+      </div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+    <div class="mwrap"><table class="mx" id="mx"></table></div>
+    <p id="mxnote" class="muted" style="margin:9px 0 0"></p>
+  </section>
+
+  <!-- ============ 5 · PO AVERAGES ============ -->
+  <section class="card hide" id="avgcard">
+    <div class="cardtop">
+      <div class="txt">
+        <h2><span class="step">5</span> Programme outcome averages</h2>
+        <p class="hint">Two denominators, both shown, because they give different
+          numbers and a peer team will ask which one you used.
+          <b>Avg (mapped)</b> divides by the COs that actually map to that PO — the
+          AKTU articulation-matrix convention, and the figure that goes into the SAR.
+          <b>Avg (all COs)</b> divides by every CO in the course, counting a blank
+          as 0. Nothing is rounded silently: the rounded whole number sits beside
+          the mean it came from.</p>
+      </div>
+      <div class="acts">
+        <button class="primary mini" data-doc="docx">Word (.docx)</button>
+        <button class="mini" data-doc="xlsx">Excel (.xlsx)</button>
+        <button class="mini" data-doc="csv">CSV</button>
+        <button class="mini" data-doc="md">Markdown</button>
+        <button class="mini" id="workbook" title="Every course in this file, laid out the way your own mapping sheet is">Whole file as a mapping workbook</button>
+      </div>
+    </div>
+
+    <div class="mwrap" style="max-height:none"><table class="ref avgtbl" id="avg"></table></div>
+    <ul class="notes" id="avgnotes"></ul>
+    <p class="muted" style="margin:9px 0 0">Every download carries the matrix, these
+      averages, and the Bloom's levels they were derived from.</p>
+  </section>
+
+  <!-- ============ REFERENCE ============ -->
+  <section class="cols2" id="refcard">
+    <div class="card" style="margin-bottom:0">
+      <h2>Three scales — don't mix them</h2>
+      <p class="hint">Three different numbers appear on this page and they run
+        on different ranges. Reading one as another is the easiest way to get a
+        matrix wrong.</p>
+      <table class="ref">
+        <thead><tr><th>Number</th><th>Range</th><th>Where</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>Competency</b></td><td><b>0 – 2</b></td>
+            <td>the small chip, <span class="cmp p">c1</span></td>
+            <td>your judgement: does this CO address this PO at all, and how
+              squarely? 0 none, 1 partial, 2 strong.</td>
+          </tr>
+          <tr>
+            <td><b>Action level</b><br><span class="muted">CL and PL</span></td>
+            <td><b>1 – 3</b></td>
+            <td>beside each CO, and under each PO</td>
+            <td>how demanding the verb is. There is no 0: every outcome does
+              <em>something</em>. K1–2 → 1, K3–4 → 2, K5–6 → 3.</td>
+          </tr>
+          <tr>
+            <td><b>Mapping level</b></td><td><b>0 – 3</b></td>
+            <td>the big number in the matrix</td>
+            <td>the derived result that reaches the SAR. 0 is drawn as
+              <b>–</b>, so a blank cell is never confused with a measured zero.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="muted" style="margin:8px 0 0">You only ever set the first one.
+        The other two are derived — the action level from Bloom's, the mapping
+        level from Rule 1 then Rule 2.</p>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <h2>Bloom's → action level</h2>
+      <p class="hint">Rule 2 works on action levels, not raw K numbers.</p>
+      <table class="ref">
+        <thead><tr><th>Bloom's level</th><th>Verb sense</th><th>Action level</th></tr></thead>
+        <tbody>
+          <tr><td>K1 · Remember</td><td>define, list, state</td><td><b>1</b></td></tr>
+          <tr><td>K2 · Understand</td><td>explain, describe, express</td><td><b>1</b></td></tr>
+          <tr><td>K3 · Apply</td><td>apply, use, implement</td><td><b>2</b></td></tr>
+          <tr><td>K4 · Analyse</td><td>analyse, examine, compare</td><td><b>2</b></td></tr>
+          <tr><td>K5 · Evaluate</td><td>evaluate, justify, assess</td><td><b>3</b></td></tr>
+          <tr><td>K6 · Create</td><td>design, develop, formulate</td><td><b>3</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <h2>The two rules</h2>
+      <p class="hint">Applied in order. Nothing here is a model — it is arithmetic on the
+        competency you approve.</p>
+      <table class="ref">
+        <thead><tr><th>Rule 1 — competency</th><th>Mapping level</th></tr></thead>
+        <tbody>
+          <tr><td>0 — no match</td><td>0, shown <b>–</b></td></tr>
+          <tr><td>1 — partial</td><td><b>1</b></td></tr>
+          <tr><td>2 — strong</td><td>defer to Rule 2</td></tr>
+        </tbody>
+      </table>
+      <table class="ref" style="margin-top:9px">
+        <thead><tr><th>Rule 2 — action level (strong only)</th><th>Mapping level</th></tr></thead>
+        <tbody>
+          <tr><td>CL ≥ PL</td><td><b>3</b></td></tr>
+          <tr><td>CL &lt; PL</td><td><b>CL</b> — the CO's own level</td></tr>
+        </tbody>
+      </table>
+      <p class="muted" style="margin:8px 0 0">The second branch assigns CL, not PL. A K2
+        “Explain…” outcome against a level‑3 design PO maps at <b>1</b>, because 1 is what
+        the outcome actually demonstrates.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ CELL DRAWER ============ -->
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <button class="mini x" id="dclose">Close</button>
+  <h3 id="dtitle">—</h3>
+  <div class="muted" id="dsub"></div>
+  <div id="dbody"></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c =>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+const S = {
+  fw: "GAPC_V4", fws: {}, courses: [], ci: -1,
+  cos: [],            // [{code, statement, blooms:[int], inferred:bool}]
+  comp: {},           // {co: {po: 0|1|2}}   current, authoritative
+  proposed: {},       // {co: {po: 0|1|2}}   what the engine suggested
+  evidence: {},       // {co: [{po_code, competency, score, matched_terms, evidence}]}
+  levels: {},         // {co: {po: level}}
+  expl: {},           // {co: {po: explanation}}
+  sel: null,          // [co, po]
+  psos: {},           // {PSO1: statement}  the department's own words, or nothing
+  psoPL: {},          // {PSO1: 1|2|3}      read back from the engine
+  // The departmental conventions -- see engine/conventions.py. They are the
+  // department's standing decision about its own programme, not a per-session
+  // choice, so the page no longer offers a switch for them: without both, the
+  // matrix stops being the sheet the department asked to have reproduced.
+  // The server default is still off; a request carries them explicitly.
+  lifelong: true,
+  core: true,         // PO1-PO5 (+ PSOs) asserted for every outcome
+  coreBase: ["PO1","PO2","PO3","PO4","PO5"],
+  llpo: "",           // whichever PO carries life-long learning in this framework
+  kind: "",           // theory | lab | project | non-technical, as read from the title
+  kindLabel: "",
+  coreApplied: null,  // the columns the server actually asserted for this course
+  weighed: false,     // were those columns weighed against the text, or asserted?
+  unmapped: [],       // COs the engine matched to no PO at all
+  conv: {},           // {co: {po: true}}   cells the convention supplied
+  // Set only when the page was opened as ?course_id=N from a teacher's
+  // dashboard. Null on the plain offline page, and every assignment
+  // behaviour below is guarded on it.
+  assign: null,       // {id, code, title, submitted}
+};
+
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("show"), 2200);
+}
+async function api(path, opts){
+  const r = await fetch(path, opts);
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(body.detail || (r.status + " " + r.statusText));
+  return body;
+}
+const fwd = () => S.fws[S.fw] || {po_codes: [], po_titles: {}, po_statements: {}, po_action_levels: {}};
+// A PSO with no statement is not a column. The department writes the statement;
+// nothing here invents one, so an empty box simply means one fewer column.
+const psoCodes = () => Object.keys(S.psos).filter(c => (S.psos[c] || "").trim()).sort();
+// Every column the matrix, the averages and the workbook agree on. One
+// accessor, so the three can never drift apart.
+const cols = () => [...fwd().po_codes, ...psoCodes()];
+const colTitle = c => S.psos[c] !== undefined ? "Programme Specific Outcome" : (fwd().po_titles[c] || "");
+const colText = c => S.psos[c] !== undefined ? (S.psos[c] || "") : (fwd().po_statements[c] || "");
+const colPL = c => S.psos[c] !== undefined ? (S.psoPL[c] ?? "?") : fwd().po_action_levels[c];
+// The conventions, in one place. The matrix on screen and the downloaded
+// workbook must never disagree about which cells a convention supplied.
+const conventions = (course, cos) => ({
+  psos: S.psos,
+  lifelong_convention: S.lifelong,
+  core_convention: S.core,
+  // "It is not necessary to fill all the columns till PO5 -- if they really
+  // needed to be filled then only fill them, else let them be as they are."
+  // The statements and the course content go with the request so the server
+  // can weigh each column instead of asserting all of them: Digital System
+  // Design keeps PO5 because Unit IV names Verilog and three EDA tools, and
+  // loses PO4 because a lecture course conducts no investigations.
+  core_require_evidence: true,
+  // "For technical subjects make sure to fill PO1-PO5; if according to you
+  // they are least relatable then keep them 1, but fill them." So a core
+  // column the text cannot evidence is recorded at the floor rather than left
+  // out: an engineering course does contribute to engineering knowledge, and
+  // a blank says the opposite. PO10 on a project block is still weighed --
+  // the floor is only ever the five.
+  core_unevidenced: "partial",
+  co_statements: Object.fromEntries(
+    (cos || S.cos).map(c => [c.code, c.statement || ""])),
+  syllabus: (course || S.courses[S.ci] || {}).syllabus || "",
+  // Sent so the server can decide which columns a course of this kind
+  // contributes to. A lab, a project and a course on the Constitution of
+  // India do not share a column set, and one setting for a whole workbook is
+  // what puts engineering knowledge against rural development.
+  course_title: (course || S.courses[S.ci] || {}).title || "",
+  course_code: (course || S.courses[S.ci] || {}).code || "",
+  course_ltp: (course || S.courses[S.ci] || {}).ltp || [],
+  // The fallback when the course has no readable header at all.
+  core_codes: [...S.coreBase.filter(c => fwd().po_codes.includes(c)), ...psoCodes()],
+  // The department's assertion about the course beats a weaker lexical read
+  // of one outcome's text. Only ever upward, and every raised cell comes
+  // back in convention_cells with raised_from set.
+  core_on_conflict: "raise",
+});
+const conventionCodes = () => {
+  const out = S.core ? (S.coreApplied || conventions().core_codes).slice() : [];
+  if (S.lifelong && S.llpo) out.push(S.llpo);
+  return out;
+};
+const clOf = ks => { const m = Math.max(0, ...(ks || [])); return m ? Math.ceil(m / 2) : null; };
+
+/* ----------------------------------------------------------------- theme */
+function applyTheme(choice){
+  const root = document.documentElement;
+  if (choice === "auto") root.removeAttribute("data-theme");
+  else root.setAttribute("data-theme", choice);
+  try { localStorage.setItem("autoobe-theme", choice); } catch (e) {}
+  document.querySelectorAll("[data-theme-set]").forEach(b =>
+    b.classList.toggle("on", b.dataset.themeSet === choice));
+}
+(() => {
+  let saved = "auto";
+  try { saved = localStorage.getItem("autoobe-theme") || "auto"; } catch (e) {}
+  applyTheme(saved);
+  document.querySelectorAll("[data-theme-set]").forEach(b =>
+    b.onclick = () => applyTheme(b.dataset.themeSet));
+})();
+
+/* ------------------------------------------------------------ frameworks */
+// It is PO12 in GAPC v3 and PO11 in v4, and the two seeds do not even spell
+// the title the same way. Resolved by title so the convention follows the
+// framework instead of being pinned to an ordinal that moves.
+function setLifelongPo(){
+  const f = fwd();
+  S.llpo = (f.po_codes || []).find(c =>
+    (f.po_titles[c] || "").toLowerCase().replace(/[-\s]/g, "") === "lifelonglearning") || "";
+  // A framework with no life-long learning PO simply has nothing to assert.
+  if (!S.llpo) S.lifelong = false;
+}
+
+async function boot(){
+  try {
+    const d = await api("/api/frameworks");
+    d.frameworks.forEach(f => S.fws[f.code] = f);
+    // The page opens on whatever the server says colleges are actually filing
+    // against — 12 POs today — rather than on the engine's own default.
+    S.fw = d.ui_default || d.default || S.fw;
+    $("#fw").innerHTML = d.frameworks.map(f =>
+      `<option value="${esc(f.code)}"${f.code === S.fw ? " selected" : ""}>${esc(f.code.replace("GAPC_V", "GAPC v"))} — ${f.po_count} POs</option>`).join("");
+    setLifelongPo();
+    $("#hstatus").textContent = fwd().po_count + " programme outcomes loaded";
+  } catch (e) { $("#hstatus").innerHTML = `<span class="tag t-err">API unreachable</span>`; }
+  // Only does anything when the URL carries ?course_id=, which is how a
+  // teacher arrives from their own dashboard. The plain page is untouched.
+  try { await loadAssignment(); } catch (e) { /* stays the offline workbench */ }
+}
+$("#fw").onchange = e => {
+  S.fw = e.target.value;
+  S.comp = {}; S.proposed = {}; S.evidence = {}; S.levels = {}; S.expl = {}; S.conv = {};
+  setLifelongPo();
+  $("#hstatus").textContent = fwd().po_count + " programme outcomes loaded";
+  closeDrawer(); renderMatrix();
+  toast(`Framework changed — propose the matrix again.${
+    S.llpo ? " Life-long learning is " + S.llpo + " here." : ""}`);
+};
+
+/* ------------------------------------------------------------ 1 · parse */
+const drop = $("#drop"), fileIn = $("#file");
+drop.onclick = () => fileIn.click();
+drop.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fileIn.click(); } };
+["dragenter", "dragover"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) upload(f); });
+fileIn.onchange = e => { const f = e.target.files[0]; if (f) upload(f); };
+$("#pastebtn").onclick = () => $("#pastewrap").classList.toggle("hide");
+$("#parsetext").onclick = async () => {
+  const text = $("#ptext").value.trim();
+  if (!text) return toast("Paste the CO table first.");
+  await parsed(() => api("/api/parse-syllabus-text", {
+    method: "POST", headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({text})
+  }), "pasted text");
+};
+async function upload(f){
+  const fd = new FormData(); fd.append("file", f);
+  await parsed(() => api("/api/parse-syllabus", {method: "POST", body: fd}), f.name);
+}
+async function parsed(fn, name){
+  $("#srcname").textContent = "Reading " + name + "…";
+  try {
+    const d = await fn();
+    S.courses = d.courses || [];
+    $("#srcname").innerHTML = `<span class="tag t-ok">read</span> ${esc(name)} — ${d.total_cos} outcomes in ${S.courses.length} course${S.courses.length === 1 ? "" : "s"}`;
+    $("#notes").innerHTML = (d.warnings || []).map(w =>
+      `<li><span class="tag t-warn">check</span><span>${esc(w)}</span></li>`).join("");
+    // The column is now carrying the parser's warnings; the primer has done
+    // its job and would only push the real content down.
+    $("#nextsteps").classList.add("hide");
+    if (!S.courses.length){
+      $("#coursecard").classList.add("hide"); $("#cocard").classList.add("hide");
+      $("#mxcard").classList.add("hide"); $("#refcard").classList.add("hide");
+      return toast("No course outcomes found in that file.");
+    }
+    renderCourses();
+    pickCourse(0);
+  } catch (e) {
+    $("#srcname").innerHTML = `<span class="tag t-err">failed</span> ${esc(e.message)}`;
+  }
+}
+
+/* ------------------------------------------------------------ 2 · courses */
+function renderCourses(){
+  $("#coursecard").classList.remove("hide");
+  const unnamed = S.courses.filter(c => !c.code && !c.title).length;
+  $("#courses").innerHTML = S.courses.map((c, i) => {
+    const ltp = c.ltp ? `L‑T‑P ${c.ltp.join("‑")}` : "";
+    // A course whose unit table was found gets its content read as
+    // corroboration; a lab, which has a list of experiments instead, does not.
+    const un = (c.units || []).length;
+    const inf = c.cos.filter(o => o.bloom_inferred).length;
+    // A course whose header the parser could not read still has to be
+    // tellable apart from the next one. Four cards all reading "Untitled"
+    // are useless: fall back to its position and the opening of its first
+    // outcome, which is what actually distinguishes them on screen.
+    const named = c.code || c.title;
+    const first = (c.cos[0] || {}).statement || "";
+    const head = named ? esc(c.code || "—")
+      : `<span class="tag t-warn">no header</span> block ${i + 1}`;
+    const body = named ? esc(c.title || "Untitled")
+      : esc(first.slice(0, 58)) + (first.length > 58 ? "…" : "");
+    return `<button class="course${i === S.ci ? " on" : ""}" data-i="${i}"
+        title="${esc(named ? [c.code, c.title].filter(Boolean).join(" — ") : first)}">
+      <span class="cc">${head}</span>
+      <span class="ct">${body}</span>
+      <span class="cm">${c.cos.length} CO${c.cos.length === 1 ? "" : "s"}${ltp ? " · " + ltp : ""}${un ? " · " + un + " units read" : ""}${inf ? " · " + inf + " K inferred" : ""}</span>
+    </button>`;
+  }).join("");
+  // Say it once, plainly, instead of leaving the reader to count the blanks.
+  $("#ccount").innerHTML = unnamed
+    ? `${S.courses.length} in this file <span class="tag t-warn">${unnamed} without a readable header</span>`
+    : `${S.courses.length} in this file`;
+  $("#courses").querySelectorAll(".course").forEach(b =>
+    b.onclick = () => pickCourse(+b.dataset.i));
+}
+function pickCourse(i){
+  S.ci = i;
+  const c = S.courses[i];
+  S.cos = c.cos.map(o => ({
+    code: o.code, statement: o.statement,
+    blooms: (o.blooms_levels || []).slice(), inferred: !!o.bloom_inferred,
+    userSet: false,
+  }));
+  S.comp = {}; S.proposed = {}; S.evidence = {}; S.levels = {}; S.expl = {};
+  $("#mxnote").innerHTML = "";     // the previous course's warnings are not this one's
+  S.unmapped = []; S.kind = ""; S.kindLabel = ""; S.coreApplied = null; S.sylSrc = null;
+  S.withheld = [];
+  $("#avgcard").classList.add("hide");
+  closeDrawer();
+  renderCourses(); renderCOs(); renderMatrix();
+  $("#cocard").classList.remove("hide");
+  $("#refcard").classList.remove("hide");
+}
+
+/* ------------------------------------------------------------ 3 · COs */
+function renderCOs(){
+  $("#cos").innerHTML = S.cos.map((co, i) => {
+    const cl = clOf(co.blooms);
+    // Three provenances, not two. "K declared" must mean the university said
+    // so; a level the reader set by hand or that came with a chosen verb is
+    // neither declared nor inferred, and CL depends on which it is.
+    const badge = co.blooms.length === 0
+      ? `<span class="tag t-err">no K level</span>`
+      : (co.userSet ? `<span class="tag t-info">K set by you</span>`
+        : co.inferred ? `<span class="tag t-warn">K inferred</span>`
+                      : `<span class="tag t-ok">K declared</span>`);
+    return `<div class="co">
+      <div class="co-head">
+        <span class="co-code">${esc(co.code)}</span>${badge}
+        <span class="hspace" style="flex:1"></span>
+        <span class="cl">CL <b>${cl ?? "–"}</b></span>
+      </div>
+      <textarea rows="2" data-st="${i}">${esc(co.statement)}</textarea>
+      <div class="ks" style="margin-top:6px">
+        <span class="k-lab">Bloom's</span>
+        ${[1,2,3,4,5,6].map(k =>
+          `<button class="k${co.blooms.includes(k) ? " on" : ""}" data-k="${i}:${k}"
+             title="K${k}">K${k}</button>`).join("")}
+      </div>
+      <div class="fix" data-fix="${i}"></div>
+    </div>`;
+  }).join("");
+
+  $("#cos").querySelectorAll("[data-st]").forEach(t => {
+    t.onchange = () => {
+      const co = S.cos[+t.dataset.st];
+      if (t.value.trim() === co.statement.trim()) return;
+      co.statement = t.value.trim();
+      // The matrix was proposed from the old wording. Levels still recompute
+      // from competency alone, so nothing is silently wrong -- but the
+      // proposal behind them is now stale, and only re-proposing fixes that.
+      if (Object.keys(S.proposed).length)
+        toast(co.code + " edited — propose the matrix again to re-read it.");
+    };
+  });
+  $("#cos").querySelectorAll("[data-k]").forEach(b => {
+    b.onclick = () => {
+      const [i, k] = b.dataset.k.split(":").map(Number);
+      const co = S.cos[i];
+      const at = co.blooms.indexOf(k);
+      if (at >= 0) co.blooms.splice(at, 1); else co.blooms.push(k);
+      co.blooms.sort((a, z) => a - z);
+      co.inferred = false;                 // a hand-set level is no longer a guess
+      co.userSet = true;
+      renderCOs(); recompute();
+    };
+  });
+  S.cos.forEach((_, i) => renderVerbFix(i));
+}
+
+/* ------------------------------------------------------- verb repair */
+// Two faults, both fatal to assessment: a vague verb, or no verb at all.
+// Screened here so a card that needs no repair costs no request — the engine
+// still has the final say, and it is stricter than these two patterns.
+const VAGUE_RE = /^\s*(?:to\s+)?(know|understand|learn|gain\s+knowledge|be\s+familiar\s+with|become\s+aware\s+of|appreciate)\b/i;
+// "Application of…", "Designing of…", "Introduction to…", "Building…",
+// "Interface mechanism of…" — the activity named as a noun.
+const NOUNY_RE = /^\s*(?:to\s+)?(?:[A-Za-z]+ing\b|(?:application|implementation|introduction|overview|analysis|evaluation|assessment|design|development|construction|comparison|identification|description|explanation|demonstration|simulation|measurement|verification|validation|investigation|classification|selection|definition|solution|calculation|study|knowledge|understanding|awareness|familiarity|review)s?\b|[A-Za-z]+\s+(?:mechanism|method|methodology|technique|process|procedure|concept|principle|structure|architecture|model|scheme|approach|technology|requirement|characteristic|behaviour|behavior|performance|aspect|issue|feature|function|role|scope|basics|fundamentals|overview|types|classification|working|operation|criteria|factors|parameters|effect|impact|theory|steps|stages|levels|layers)s?\s+(?:of|for|in|with|to)\b)/i;
+
+async function renderVerbFix(i){
+  const host = document.querySelector(`[data-fix="${i}"]`);
+  const co = S.cos[i];
+  if (!host || !co) return;
+  if (!VAGUE_RE.test(co.statement) && !NOUNY_RE.test(co.statement)){
+    host.innerHTML = ""; return;
+  }
+
+  host.innerHTML = `<div class="fixbar"><div class="lead">Checking…</div></div>`;
+  let d;
+  try {
+    d = await api("/api/verb-advice", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({statement: co.statement, blooms_levels: co.blooms}),
+    });
+  } catch (e) { host.innerHTML = ""; return; }
+  if (!d.issue || !d.suggestions.length){ host.innerHTML = ""; return; }
+
+  const chip = (s, best) => `<button class="vchip${s.moves_action_level ? " moves" : ""}${best ? " top" : ""}"
+      data-verb="${esc(s.verb)}" data-co="${i}"
+      title="${esc(s.preview)}${s.moves_action_level
+        ? " — this changes the action level from " + s.old_action_level + " to " + s.new_action_level
+        : ""}">${esc(s.verb)}<span class="k">K${s.new_bloom ?? s.bloom_level}</span></button>`;
+
+  const rec = d.recommended;
+  const lead = d.issue === "verbless"
+    ? `<b>${esc(d.phrase)}</b> names the activity as a noun — there is no action
+       to assess, so nothing a student does can be marked against it. Pick a verb:`
+    : `<b>${esc(d.phrase)}</b> cannot be assessed — nothing a student does would
+       settle whether they did it. Pick a measurable verb:`;
+
+  host.innerHTML = `<div class="fixbar">
+    <div class="lead">${lead}</div>
+    <div class="vchips">${d.suggestions.map(s => chip(s, rec && s.verb === rec.verb)).join("")}</div>
+    ${rec ? `<div class="rec">
+      <span class="tag t-auto">Recommended</span>
+      <b>${esc(rec.verb)}</b> — ${esc(rec.reason)}.
+      ${rec.clear ? "" : `<i>“${esc(rec.runner_up)}” fits just as well; either is defensible.</i>`}
+      <div class="prev">${esc(rec.preview)}</div>
+    </div>` : ""}
+    <div class="why">${d.suggestions.some(s => s.moves_action_level)
+      ? "A dashed chip changes this outcome's action level, which moves every strong cell in its row."
+      : "None of these change the action level, so no mapping level moves."}
+      ${d.ai ? `<br><span class="tag t-auto">AI</span> second opinion: <b>${esc(d.ai.verb)}</b>${
+        d.ai.reason ? " — " + esc(d.ai.reason) : ""}` : ""}</div>
+  </div>`;
+
+  host.querySelectorAll("[data-verb]").forEach(b => b.onclick = async () => {
+    const target = S.cos[+b.dataset.co];
+    const before = target.statement;
+    try {
+      const r = await api("/api/apply-verb", {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({statement: before, verb: b.dataset.verb}),
+      });
+      target.statement = r.statement;
+      // The verb carries a Bloom's level. Adopting the verb without it would
+      // leave CL saying one thing and the sentence another.
+      target.blooms = [r.new_bloom];
+      target.inferred = false;
+      target.userSet = true;
+      renderCOs();
+      recompute();
+      toast(`${target.code}: "${b.dataset.verb}" applied, Bloom's set to K${r.new_bloom}.`);
+    } catch (e) { toast(e.message); }
+  });
+}
+
+/* ------------------------------------------------------------ propose */
+$("#propose").onclick = async () => {
+  const cos = {};
+  S.cos.forEach(c => cos[c.code] = {statement: c.statement, blooms_levels: c.blooms});
+  $("#propose").disabled = true;
+  try {
+    const d = await api("/api/propose-mapping", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      // The course's identity goes with the outcomes so the server can stand
+      // in AKTU's published syllabus when this document carried none -- a lab
+      // block, or a course typed in by hand. Reported back, never silent.
+      body: JSON.stringify({framework_code: S.fw, cos, max_pos_per_co: 4,
+                            syllabus: S.courses[S.ci]?.syllabus || "",
+                            course_title: S.courses[S.ci]?.title || "",
+                            course_code: S.courses[S.ci]?.code || ""}),
+    });
+    S.proposed = {}; S.comp = {}; S.evidence = d.evidence || {};
+    for (const [co, m] of Object.entries(d.competency || {})){
+      S.proposed[co] = {...m}; S.comp[co] = {...m};
+    }
+    $("#mxcard").classList.remove("hide");
+    // Held in state rather than written here: the course kind comes back from
+    // /api/map, which runs inside recompute() below, so composing the note now
+    // would always print the previous course's classification -- or none.
+    S.unmapped = (d.summary?.unmapped_cos) || [];
+    await recompute();
+    $("#mxcard").scrollIntoView({behavior: "smooth", block: "start"});
+  } catch (e) { toast(e.message); }
+  finally { $("#propose").disabled = false; }
+};
+$("#clearall").onclick = () => {
+  S.comp = {}; S.levels = {}; S.expl = {}; closeDrawer(); renderMatrix();
+  $("#avgcard").classList.add("hide");
+};
+
+/* ------------------------------------------------------------ recompute */
+let _t = null;
+function recompute(){
+  clearTimeout(_t);
+  return new Promise(res => { _t = setTimeout(() => doCompute().then(res), 90); });
+}
+async function doCompute(){
+  const blooms = {}, comp = {};
+  let blocked = 0;
+  S.cos.forEach(c => {
+    blooms[c.code] = c.blooms;
+    const row = S.comp[c.code] || {};
+    const keep = {};
+    for (const [po, v] of Object.entries(row)){
+      // A strong match needs a Bloom's level: Rule 2 has nothing to work on
+      // without one. Flag it rather than sending a request that 400s.
+      if (Number(v) === 2 && !c.blooms.length){ blocked++; continue; }
+      keep[po] = Number(v);
+    }
+    if (Object.keys(keep).length) comp[c.code] = keep;
+  });
+  // The convention runs server-side even when the engine proposed nothing at
+  // all, so an empty matrix still gets its life-long learning column.
+  if (!Object.keys(comp).length && !((S.lifelong || S.core) && S.cos.length)){
+    S.levels = {}; S.expl = {}; S.conv = {}; renderMatrix(blocked); return;
+  }
+  try {
+    const d = await api("/api/map", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({framework_code: S.fw, co_blooms: blooms, competency: comp,
+                            ...conventions()}),
+    });
+    S.levels = d.levels || {};
+    S.expl = {};
+    (d.explanations || []).forEach(x => {
+      (S.expl[x.co_code] = S.expl[x.co_code] || {})[x.po_code] = x;
+    });
+    S.psoPL = {};
+    (d.pso_codes || []).forEach(c => S.psoPL[c] = (d.action_levels || {})[c]);
+    S.kind = d.course_kind || ""; S.kindLabel = d.course_kind_label || "";
+    S.weighed = !!d.core_evidence_used;
+    // Empty when the syllabus came from the uploaded document; set when
+    // AKTU's published one stood in for it. Shown, never assumed.
+    //
+    // Tested on a field rather than on the object: {} is truthy in JS, and
+    // the first version announced "undefined units of the university's own
+    // syllabus stood in" against every lab, which have no unit table at all.
+    S.sylSrc = (d.syllabus_source && d.syllabus_source.code) ? d.syllabus_source : null;
+    // Cells the scorer proposed and the course kind took back.
+    S.withheld = d.withheld_cells || [];
+    S.coreApplied = (d.core_codes || []).length ? d.core_codes : null;
+    // Kept apart from S.comp on purpose: a convention cell is the department's
+    // decision, not something the engine read, and the two must stay legible
+    // as different things all the way to the exported column header.
+    S.conv = {};
+    (d.convention_cells || []).forEach(x => {
+      (S.conv[x.co_code] = S.conv[x.co_code] || {})[x.po_code] = x;
+    });
+  } catch (e) { toast(e.message); }
+  renderMatrix(blocked);
+  if (S.sel) drawCell(S.sel[0], S.sel[1]);
+  renderAverages();
+}
+
+/* ---------------------------------------------- the assigned subject
+
+   Three rules live in this section, and they are the department's, not the
+   page's:
+
+     * a teacher maps only the subject assigned to them -- the server enforces
+       that, and this only ever asks about the one id in the URL;
+     * nothing reaches the database until Submit;
+     * work in progress must survive a refresh, because a teacher who loses
+       forty minutes of mapping to a stray Ctrl-W does not come back.
+
+   The last two pull against each other, and the resolution is where the draft
+   is kept. `localStorage` is this teacher's own browser: the department cannot
+   see it, no request carries it, and it is emptied the moment the mapping is
+   submitted. So the rule holds as stated -- the data is not stored -- while a
+   refresh still costs nothing.                                            */
+
+const draftKey = id => `autoobe.draft.${id}`;
+
+function saveDraft(){
+  if (!S.assign || !S.cos.length) return;
+  try {
+    localStorage.setItem(draftKey(S.assign.id), JSON.stringify({
+      at: new Date().toISOString(), fw: S.fw,
+      course: S.courses[S.ci] || null,
+      cos: S.cos, comp: S.comp, psos: S.psos,
+    }));
+  } catch { /* private window, or full. The mapping still works. */ }
+  paintAssignBar();
+}
+
+function readDraft(id){
+  try { return JSON.parse(localStorage.getItem(draftKey(id)) || "null"); }
+  catch { return null; }
+}
+
+function clearDraft(id){
+  try { localStorage.removeItem(draftKey(id)); } catch { /* nothing to do */ }
+}
+
+/* Is the block being mapped actually the subject that was assigned?
+
+   A teacher opens their assignment, drops in a whole-semester PDF and picks a
+   course card. Nothing stops them picking the wrong one, and the mapping
+   would then be filed against the right subject with the wrong course's
+   outcomes -- an error nobody downstream can see, because the sheet only ever
+   shows the subject name. So the two are compared and the difference is said
+   out loud. It is a warning and not a block: a department that codes its
+   subjects differently from AKTU is not wrong, and only the teacher knows. */
+function assignmentMismatch(){
+  const a = S.assign, c = S.courses[S.ci];
+  if (!a || !c) return "";
+  const key = t => String(t || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const codeA = key(a.code), codeB = key(c.code);
+  if (codeA && codeB){
+    // Codes agree if either contains the other -- BEC302 against BEC-302,
+    // and the department's KEC074 against AKTU's BEC073 will not, which is
+    // exactly when a human should look.
+    if (codeA.includes(codeB) || codeB.includes(codeA)) return "";
+  }
+  const ta = key(a.title), tb = key(c.title);
+  if (ta && tb && (ta.includes(tb) || tb.includes(ta))) return "";
+  return `${c.code || "this block"}${c.title ? " — " + c.title : ""}`;
+}
+
+function paintAssignBar(){
+  const a = S.assign;
+  if (!a) return;
+  $("#asgtitle").textContent = `${a.code} — ${a.title}`;
+  const d = readDraft(a.id);
+  const bits = [];
+  if (a.submitted) bits.push('<span class="tag t-ok">submitted</span> the department can see this');
+  else bits.push('<span class="tag t-warn">not submitted</span> the department cannot see this yet');
+  const wrong = assignmentMismatch();
+  if (wrong) bits.push(`<span class="tag t-err">check the subject</span> you are mapping `
+    + `<b>${esc(wrong)}</b>, which does not look like the subject assigned to you`);
+  if (d) bits.push(`draft saved in this browser at ${new Date(d.at).toLocaleTimeString()}`);
+  bits.push("nothing is stored until you press Submit");
+  $("#asgnote").innerHTML = bits.join(" · ");
+  $("#asgsubmit").disabled = !S.cos.length;
+}
+
+async function loadAssignment(){
+  const id = Number(new URLSearchParams(location.search).get("course_id") || 0);
+  if (!id) return;
+  let me;
+  try { me = await (await fetch("/api/auth/me")).json(); }
+  catch { location.replace("/login"); return; }
+  if (!me || !me.user) { location.replace("/login?next=" + encodeURIComponent(location.pathname + location.search)); return; }
+
+  const r = await fetch("/api/my/courses");
+  if (!r.ok) return;
+  const { courses } = await r.json();
+  const course = courses.find(c => c.id === id);
+  if (!course){
+    toast("That subject is not assigned to you.");
+    return;
+  }
+  S.assign = { id, code: course.code, title: course.title,
+               submitted: !!course.submitted, prefix: course.co_prefix || "" };
+  $("#assignbar").classList.remove("hide");
+
+  // Prefer the teacher's own unsubmitted draft over what they submitted
+  // before: it is the newer of the two by definition.
+  const draft = readDraft(id);
+  if (draft && draft.cos && draft.cos.length){
+    restoreInto(draft.course, draft.cos, draft.comp, draft.fw);
+    toast("Your draft for this subject was restored.");
+  } else if (course.submitted){
+    const got = await fetch(`/api/my/submission/${id}`);
+    const sub = got.ok ? (await got.json()).submission : null;
+    if (sub && sub.payload && (sub.payload.cos || []).length){
+      restoreInto(sub.payload.course || null,
+                  sub.payload.cos.map(c => ({
+                    code: c.code, statement: c.statement,
+                    blooms: (c.blooms_levels || []).slice(),
+                    inferred: false, userSet: true })),
+                  sub.payload.competency || {}, sub.framework_code);
+      toast("Your submitted mapping was loaded. Change it and submit again to replace it.");
+    }
+  }
+  paintAssignBar();
+}
+
+function restoreInto(course, cos, comp, fw){
+  if (fw && S.fws[fw]) { S.fw = fw; const sel = $("#fw"); if (sel) sel.value = fw; }
+  S.courses = [course || { code: S.assign.code, title: S.assign.title,
+                           cos: [], units: [], syllabus: "" }];
+  S.ci = 0;
+  S.cos = cos;
+  S.comp = JSON.parse(JSON.stringify(comp || {}));
+  S.proposed = {};
+  renderCourses(); renderCOs();
+  $("#cocard").classList.remove("hide");
+  $("#refcard").classList.remove("hide");
+  recompute();
+}
+
+$("#asgclear").onclick = () => {
+  if (!S.assign) return;
+  if (!confirm("Discard the draft held in this browser for this subject?")) return;
+  clearDraft(S.assign.id);
+  paintAssignBar();
+  toast("Draft discarded.");
+};
+
+$("#asgsubmit").onclick = async () => {
+  if (!S.assign) return;
+  if (!S.cos.length){ toast("There are no outcomes to submit."); return; }
+  const mapped = S.cos.some(c => Object.keys(S.levels[c.code] || {}).length);
+  if (!mapped){ toast("Nothing is mapped yet — press Propose first."); return; }
+  const wrong = assignmentMismatch();
+  if (wrong && !confirm(
+      `You are mapping ${wrong}, but this assignment is `
+      + `${S.assign.code} — ${S.assign.title}.
+
+Submit it anyway?`)) return;
+  const b = $("#asgsubmit"), was = b.textContent;
+  b.disabled = true; b.textContent = "Submitting…";
+  try {
+    const course = S.courses[S.ci] || {};
+    const r = await fetch("/api/my/submit", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        course_id: S.assign.id, framework_code: S.fw,
+        payload: {
+          // What the department's sheet needs, in the shape the workbook
+          // builder already reads.
+          cos: S.cos.map(c => ({ code: c.code, statement: c.statement,
+                                 blooms_levels: c.blooms })),
+          co_levels: S.levels,
+          // Kept so re-opening a submitted mapping restores the working
+          // state rather than just the numbers.
+          competency: S.comp, psos: S.psos,
+          course_kind: S.kind, course: course,
+        },
+      }),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.detail || r.statusText);
+    // Submitted, so the draft has done its job.
+    clearDraft(S.assign.id);
+    S.assign.submitted = true;
+    paintAssignBar();
+    toast("Submitted. It is on the department's dashboard now.");
+  } catch (ex) {
+    toast(ex.message);
+  } finally { b.disabled = false; b.textContent = was; }
+};
+
+/* ------------------------------------------------------------ 4 · matrix */
+function renderMatrix(blocked = 0){
+  const pos = cols();
+  if (!S.cos.length || !pos.length){ $("#mx").innerHTML = ""; return; }
+  $("#mxcard").classList.remove("hide");
+
+  const head = `<thead><tr><th class="corner">
+      <span class="rc">CO</span><span class="rs">${esc(S.courses[S.ci]?.code || "")}${
+        S.kindLabel ? " · " + esc(S.kindLabel) : ""}</span></th>
+    ${pos.map(p => `<th title="${esc(colText(p))}">
+      <span class="po-c">${esc(p)}</span>
+      <span class="po-t">${esc(colTitle(p))}</span>
+      <span class="pl">PL ${colPL(p)}</span></th>`).join("")}</tr></thead>`;
+
+  const body = S.cos.map(co => {
+    const lv = S.levels[co.code] || {}, cm = S.comp[co.code] || {},
+          pr = S.proposed[co.code] || {}, cv = S.conv[co.code] || {};
+    return `<tr><th>
+        <span class="rc">${esc(co.code)}</span>
+        <span class="rs">${esc(co.statement.slice(0, 74))}${co.statement.length > 74 ? "…" : ""}</span>
+      </th>` + pos.map(po => {
+      const conv = cv[po];
+      const c = conv ? Number(conv.competency) : Number(cm[po] || 0);
+      const strongNoK = c === 2 && !co.blooms.length;
+      const l = strongNoK ? null : (lv[po] || 0);
+      const isProp = pr[po] !== undefined && Number(pr[po]) === c;
+      const sel = S.sel && S.sel[0] === co.code && S.sel[1] === po;
+      const chip = c === 0 ? "" :
+        `<span class="cmp ${(conv || isProp) ? "p" : "o"}">c${c}</span>`;
+      const lvHtml = strongNoK
+        ? `<span class="lvl l1" title="A strong match needs a Bloom's level">!</span>`
+        : `<span class="lvl ${l ? "l" + l : "z"}">${l || "–"}</span>`;
+      return `<td class="${strongNoK ? "blocked" : ""}">
+        <button class="cell${sel ? " sel" : ""}"
+          data-c="${esc(co.code)}" data-p="${esc(po)}"
+          title="${esc(co.code)} → ${esc(po)}${conv ? " — " + esc(conv.reason) : ""}"
+          >${lvHtml}${chip}</button></td>`;
+    }).join("") + "</tr>";
+  }).join("");
+
+  $("#mx").innerHTML = head + "<tbody>" + body + "</tbody>";
+  $("#mx").querySelectorAll(".cell").forEach(b =>
+    b.onclick = () => { S.sel = [b.dataset.c, b.dataset.p]; renderMatrix(blocked); drawCell(b.dataset.c, b.dataset.p); });
+
+  // Every edit a teacher makes ends up here, so this is where the draft is
+  // kept current. Browser-local only -- see the section above.
+  saveDraft();
+
+  // ---- summary
+  // Counted off the cells that are actually in the matrix, convention cells
+  // included -- a summary that disagrees with the table above it is worse
+  // than no summary. Convention cells are counted again on their own, so
+  // "how much of this did the engine read?" still has an answer.
+  let mapped = 0, strong = 0, l3 = 0, over = 0, conv = 0, raised = 0;
+  S.cos.forEach(co => {
+    const cm = S.comp[co.code] || {}, pr = S.proposed[co.code] || {},
+          lv = S.levels[co.code] || {}, cv = S.conv[co.code] || {};
+    pos.forEach(po => {
+      const cell = cv[po];
+      const c = cell ? Number(cell.competency) : Number(cm[po] || 0);
+      if (c > 0) mapped++;
+      if (c === 2) strong++;
+      if ((lv[po] || 0) === 3) l3++;
+      if (cell){ conv++; if (cell.raised_from) raised++; }
+      else if (Number(pr[po] || 0) !== c) over++;
+    });
+  });
+  const perCO = S.cos.length ? (mapped / S.cos.length).toFixed(1) : "0";
+  $("#stats").innerHTML = [
+    ["Cells mapped", mapped, `of ${S.cos.length * pos.length}`],
+    ["POs per CO", perCO, "3–4 is healthy"],
+    ["Strong (c2)", strong, "each runs Rule 2"],
+    ["Level 3", l3, "what a peer team reads hardest"],
+    ["From your columns", conv, raised
+      ? `${raised} read weaker in the text` : "engine left these empty"],
+    ["Your overrides", over, "changed from proposed"],
+  ].map(([l, v, s]) =>
+    `<div class="stat"><div class="v">${v}</div><div class="l">${esc(l)}</div>
+     <div class="muted" style="font-size:11px">${esc(s)}</div></div>`).join("");
+
+  renderMxNote(blocked);
+}
+
+// Everything the matrix has to say about itself, in one place and in one
+// order, so no two writers can race to the same paragraph.
+function renderMxNote(blocked = 0){
+  const nu = (S.courses[S.ci]?.units || []).length;
+  const bits = [];
+  // The AKTU stand-in, named. A 2021 syllabus behind a 2026 course is a
+  // judgement the department may want to refuse, and they can only refuse
+  // what they can see.
+  const src = S.sylSrc;
+  if (blocked) bits.push(
+    `<span class="tag t-err">${blocked} blocked</span> a strong match needs a Bloom's level — set K above`);
+  if ((S.unmapped || []).length) bits.push(
+    `<span class="tag t-warn">unmapped</span> ${esc(S.unmapped.join(", "))} — no PO matched; map them by hand`);
+  const exp = (S.courses[S.ci]?.experiments || "").length;
+  bits.push(nu
+    ? `<span class="tag t-ok">syllabus read</span> ${nu} units of course content corroborated these proposals`
+    : exp
+      ? `<span class="tag t-ok">experiments read</span> this lab's list of experiments corroborated these proposals — it is where a lab names its instruments`
+    : src
+      ? `<span class="tag t-ok">AKTU syllabus</span> nothing in your document, so ${src.units} units of the university's own ${esc(src.code)} syllabus stood in <span class="muted">(${esc(src.year)}, ${esc(src.source)})</span>`
+      : `<span class="tag">outcomes only</span> no unit table in this course — labs list experiments instead`);
+  if (S.kindLabel && S.coreApplied){
+    const asked = S.coreApplied, got = new Set();
+    S.cos.forEach(c => Object.keys(S.conv[c.code] || {}).forEach(p => got.add(p)));
+    const empty = asked.filter(p => !got.has(p));
+    // Cells the department's curriculum argument put at 1, not the text.
+    // Counted separately so a reader can tell how much of this block is
+    // earned and how much is floor -- see CoreConfig.unevidenced.
+    let floored = 0;
+    S.cos.forEach(c => Object.values(S.conv[c.code] || {})
+      .forEach(x => { if (x.floored) floored++; }));
+    bits.push(`<span class="tag t-info">${esc(S.kindLabel)}</span> your columns here are ${esc(asked.join(", "))}`
+      + (S.weighed && empty.length
+        ? ` — ${esc(empty.join(", "))} left blank, nothing in these outcomes or the syllabus points there`
+        : "")
+      + (floored
+        ? ` — ${floored} core cell${floored > 1 ? "s" : ""} at 1, filled because a technical course contributes there even where the outcome does not say so`
+        : "")
+      + ((S.withheld || []).length
+        ? ` — ${S.withheld.length} engineering cell${S.withheld.length > 1 ? "s" : ""} withheld (${esc([...new Set(S.withheld.map(w => w.po_code))].join(", "))}); the verbs read that way but this is not an engineering course`
+        : ""));
+  }
+  $("#mxnote").innerHTML = bits.join(" ");
+}
+
+/* ------------------------------------------------------------ drawer */
+function closeDrawer(){ S.sel = null; $("#drawer").classList.remove("open"); $("#drawer").setAttribute("aria-hidden", "true"); }
+$("#dclose").onclick = () => { closeDrawer(); renderMatrix(); };
+document.addEventListener("keydown", e => { if (e.key === "Escape") { closeDrawer(); renderMatrix(); } });
+// Click away to dismiss. Without this the drawer sits over the course cards
+// and the CO editor, and the only way out is the Close button.
+document.addEventListener("mousedown", e => {
+  if (!S.sel) return;
+  if (e.target.closest("#drawer") || e.target.closest(".cell")) return;
+  closeDrawer(); renderMatrix();
+}, true);
+
+function drawCell(coCode, po){
+  const f = fwd();
+  const co = S.cos.find(c => c.code === coCode); if (!co) return;
+  const conv = (S.conv[coCode] || {})[po];
+  // The competency the MATRIX is showing, which for a convention cell is the
+  // department's and not S.comp's. Reading S.comp here printed "competency 0,
+  // no match" beside a cell displaying 3 -- the two views of one cell have to
+  // agree, and the matrix is the one the reader is looking at.
+  const c = conv ? Number(conv.competency) : Number((S.comp[coCode] || {})[po] || 0);
+  const ex = (S.expl[coCode] || {})[po];
+  const ev = (S.evidence[coCode] || []).find(e => e.po_code === po);
+  const cl = clOf(co.blooms), pl = colPL(po);
+  const prop = (S.proposed[coCode] || {})[po];
+
+  let rules = "";
+  if (c === 0){
+    rules = `<div class="rule"><b>Rule 1</b> — competency 0, no match. This cell is
+      blank in the SAR.</div>`;
+  } else if (c === 1){
+    rules = `<div class="rule"><b>Rule 1</b> — competency 1, partial. Mapping level
+      <b>1</b>. Rule 2 does not run.</div>`;
+  } else if (!co.blooms.length){
+    rules = `<div class="rule" style="border-color:var(--err)"><b>Blocked.</b> A strong
+      match runs Rule 2, which needs the CO's action level. Tag at least one Bloom's
+      level for ${esc(coCode)}.</div>`;
+  } else {
+    const win = cl >= pl;
+    rules = `<div class="rule"><b>Rule 1</b> — competency 2, strong. Defer to Rule 2.</div>
+      <div class="rule"><b>Rule 2</b> — CL ${cl} ${win ? "≥" : "<"} PL ${pl}, so the
+      mapping level is <b>${win ? 3 : cl}</b>${win ? "" : " — the outcome's own action level, not the PO's"}.</div>`;
+  }
+
+  const level = ex ? ex.level : (c === 1 ? 1 : 0);
+
+  $("#dtitle").textContent = coCode + " → " + po;
+  $("#dsub").innerHTML = `${esc(f.po_titles[po] || "")} · <span class="pl">PL ${pl}</span>
+     · CL ${cl ?? "–"} · mapping level <b style="font-size:15px">${co.blooms.length || c !== 2 ? level : "?"}</b>`;
+
+  $("#dbody").innerHTML = `
+    <div class="dsec">
+      <h4>Competency</h4>
+      <div class="setc">
+        ${[0, 1, 2].map(v => `<button class="${c === v ? "on" : ""}" data-set="${v}">${v}</button>`).join("")}
+      </div>
+      <p class="muted" style="margin-top:6px">
+        ${conv ? esc(conv.reason)
+          : prop === undefined ? "The engine proposed nothing here."
+          : (Number(prop) === c ? "This is the engine's proposal, unchanged."
+             : `The engine proposed <b>${prop}</b>; you changed it to <b>${c}</b>.`)}
+      </p>
+    </div>
+    <div class="dsec"><h4>How this level was reached</h4>${rules}</div>
+    ${ev && ev.matched_terms?.length ? `<div class="dsec"><h4>Terms that fired</h4>
+      <div class="terms">${ev.matched_terms.map(t => `<span class="term">${esc(t)}</span>`).join("")}</div>
+      <p class="muted" style="margin-top:6px">In the outcome's own sentence.</p></div>` : ""}
+    ${ev && ev.syllabus_terms?.length ? `<div class="dsec"><h4>In the course syllabus</h4>
+      <div class="terms">${ev.syllabus_terms.map(t => `<span class="term">${esc(t)}</span>`).join("")}</div>
+      <p class="muted" style="margin-top:6px">Read from this course's unit topics in the
+        same document, worth ${ev.syllabus_score} on top of the sentence's ${ev.score}.
+        Course content corroborates an outcome that already points at this PO; it can
+        never map one on its own.</p></div>` : ""}
+    <div class="dsec"><h4>${esc(coCode)}</h4>
+      <p>${esc(co.statement)}</p>
+      <p class="muted">Bloom's ${co.blooms.length ? co.blooms.map(k => "K" + k).join(", ") : "— none tagged"}
+        ${co.inferred ? " · inferred from the verb" : ""}</p></div>
+    <div class="dsec"><h4>${esc(po)} — ${esc(f.po_titles[po] || "")}</h4>
+      <p>${esc(f.po_statements[po] || "")}</p></div>`;
+
+  $("#dbody").querySelectorAll("[data-set]").forEach(b => b.onclick = () => {
+    const v = Number(b.dataset.set);
+    (S.comp[coCode] = S.comp[coCode] || {})[po] = v;
+    if (v === 0) delete S.comp[coCode][po];
+    recompute();
+  });
+
+  const d = $("#drawer"); d.classList.add("open"); d.setAttribute("aria-hidden", "false");
+}
+
+/* ------------------------------------------------------- PO averages */
+// Two decimals, matching the document exactly. The API already rounds; this
+// only stops JavaScript printing 3 where the .docx says 3.00.
+const dp2 = v => (v === null || v === undefined) ? "–" : Number(v).toFixed(2);
+
+function docPayload(){
+  const c = S.courses[S.ci] || {};
+  return {
+    framework_code: S.fw,
+    course_code: c.code || "",
+    course_title: c.title || "",
+    cos: S.cos.map(o => ({code: o.code, statement: o.statement,
+                          blooms_levels: o.blooms, bloom_inferred: o.inferred})),
+    co_po_levels: S.levels,
+    psos: S.psos,
+    convention_codes: conventionCodes(),
+  };
+}
+async function renderAverages(){
+  if (!S.cos.length){ $("#avgcard").classList.add("hide"); return; }
+  let d;
+  try {
+    d = await api("/api/copo-averages", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(docPayload()),
+    });
+  } catch (e) { $("#avgcard").classList.add("hide"); return; }
+
+  // Rendered from the engine's numbers, never recomputed here -- a mean the
+  // browser worked out itself could disagree with the downloaded document.
+  $("#avg").innerHTML =
+    `<thead><tr><th>PO</th><th>Outcome</th><th>PL</th><th>COs mapped</th>
+      <th>Levels</th><th>Total</th><th>Avg (mapped)</th><th>Rounded</th>
+      <th>Avg (all COs)</th></tr></thead><tbody>` +
+    d.averages.map(a => {
+      const dist = Object.entries(a.level_counts || {})
+        .filter(([, n]) => n).map(([lv, n]) => `${n}×${lv}`).join(", ") || "–";
+      const off = a.mapped_cos === 0;
+      return `<tr${off ? ' style="opacity:.5"' : ""}>
+        <td><b>${esc(a.po_code)}</b></td>
+        <td>${esc(a.po_title)}</td>
+        <td>${a.po_action_level || "–"}</td>
+        <td>${a.mapped_cos}/${a.total_cos}</td>
+        <td>${esc(dist)}</td>
+        <td>${a.total_level}</td>
+        <td><b style="font-size:14px">${dp2(a.average_over_mapped)}</b></td>
+        <td>${a.rounded ?? "–"}</td>
+        <td>${dp2(a.average_over_all)}</td></tr>`;
+    }).join("") + "</tbody>";
+
+  $("#avgnotes").innerHTML = (d.notes || []).slice(1).map(n =>
+    `<li><span class="tag t-info">note</span><span>${esc(n)}</span></li>`).join("");
+  $("#avgcard").classList.remove("hide");
+}
+
+document.querySelectorAll("[data-doc]").forEach(b => b.onclick = async () => {
+  const fmt = b.dataset.doc, was = b.textContent;
+  b.disabled = true; b.textContent = "Building…";
+  try {
+    const r = await fetch("/api/copo-document", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({...docPayload(), fmt}),
+    });
+    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || r.statusText);
+    const cd = r.headers.get("content-disposition") || "";
+    const name = (cd.match(/filename="([^"]+)"/) || [])[1]
+      || `${(S.courses[S.ci] || {}).code || "course"}_CO-PO.${fmt}`;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(await r.blob());
+    a.download = name; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    toast("Downloaded " + name);
+  } catch (e) { toast(e.message); }
+  finally { b.disabled = false; b.textContent = was; }
+});
+
+/* ------------------------------------ PSO columns and the convention */
+$("#psoedit").onclick = () => {
+  $("#psobar").classList.toggle("hide");
+  if (!$("#psobar").classList.contains("hide")){
+    $("#pso1").value = S.psos.PSO1 || "";
+    $("#pso2").value = S.psos.PSO2 || "";
+    $("#pso1").focus();
+  }
+};
+$("#psoclose").onclick = () => $("#psobar").classList.add("hide");
+$("#psoapply").onclick = async () => {
+  S.psos = {PSO1: $("#pso1").value.trim(), PSO2: $("#pso2").value.trim()};
+  const live = psoCodes();
+  if (!live.length){
+    $("#psostat").textContent = "No statement, no column — nothing was added.";
+  }
+  // The same check the workspace uses: a PSO that only restates a PO is the
+  // most common peer-team finding, and it is better heard here than there.
+  try {
+    const d = await api("/api/pso/check", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({psos: live.map(c => ({code: c, statement: S.psos[c]}))}),
+    });
+    const bad = (d.reports || []).flatMap(r =>
+      (r.findings || []).filter(f => f.severity !== "info").map(f => `${r.code}: ${f.message}`));
+    $("#psostat").textContent = bad.length ? bad[0]
+      : (live.length ? `${live.join(", ")} added.` : "");
+  } catch (e) { $("#psostat").textContent = live.length ? `${live.join(", ")} added.` : ""; }
+  await recompute();
+  renderMatrix();
+};
+/* --------------------------------------- the department's own workbook */
+$("#workbook").onclick = async () => {
+  const b = $("#workbook"), was = b.textContent;
+  if (!S.courses.length){ toast("Read a syllabus first."); return; }
+  b.disabled = true; b.textContent = "Building…";
+  try {
+    // Every course in the file, not just the one on screen: the department's
+    // sheet is the whole programme, and re-selecting 26 courses by hand to
+    // build it would be the opposite of what this tool is for.
+    const courses = [], failed = [], applied = new Set(), kinds = {};
+    let stood_in = 0;
+    for (const c of S.courses){
+      const cos = (c.cos || []).map(o => ({code: o.code, statement: o.statement}));
+      if (!cos.length) continue;
+      const blooms = {}, comp = {}, byCode = {};
+      (c.cos || []).forEach(o => {
+        blooms[o.code] = o.blooms_levels || o.blooms || [];
+        byCode[o.code] = {statement: o.statement, blooms_levels: blooms[o.code]};
+      });
+      // /api/propose-mapping keys its outcomes by code, the same shape the
+      // "Propose" button sends. A list here fails validation silently and
+      // every block comes out empty.
+      const d = await api("/api/propose-mapping", {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({framework_code: S.fw, cos: byCode, max_pos_per_co: 4,
+                              syllabus: c.syllabus || "",
+                              course_title: c.title || "", course_code: c.code || ""}),
+      }).catch(e => { failed.push(`${c.code}: ${e.message}`); return {competency: {}}; });
+      Object.entries(d.competency || {}).forEach(([co, row]) => comp[co] = {...row});
+      // Each block is classified on its own. Passing the course here is the
+      // whole difference between a workbook that maps a lab like a lab and
+      // one that gives Rural Development an engineering-knowledge column.
+      const m = await api("/api/map", {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({framework_code: S.fw, co_blooms: blooms, competency: comp,
+                              ...conventions(c, c.cos || [])}),
+      }).catch(e => { failed.push(`${c.code}: ${e.message}`); return {levels: {}}; });
+      (m.core_codes || []).forEach(x => applied.add(x));
+      if (m.course_kind) kinds[m.course_kind] = (kinds[m.course_kind] || 0) + 1;
+      // Blocks whose content came from AKTU rather than from this upload.
+      // Counted so the download says so: a workbook is the artefact a peer
+      // team reads, and where its content came from belongs with it.
+      if (m.syllabus_source && m.syllabus_source.code) stood_in++;
+      courses.push({course_code: c.code || "", course_title: c.title || "",
+                    cos, co_levels: m.levels || {}});
+    }
+    if (!courses.length){ toast("No course in this file has outcomes."); return; }
+    const r = await fetch("/api/copo-workbook", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        framework_code: S.fw, courses, psos: S.psos,
+        // The union across every block, since a workbook mixing theory, labs
+        // and non-technical courses asserts different columns in each.
+        convention_codes: [...applied, ...(S.lifelong && S.llpo ? [S.llpo] : [])],
+        program: "B.Tech", default_sheet: "CO-PO Mapping",
+      }),
+    });
+    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || r.statusText);
+    const name = ((r.headers.get("content-disposition") || "")
+      .match(/filename="([^"]+)"/) || [])[1] || "CO-PO_Mapping.xlsx";
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(await r.blob());
+    a.download = name; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    // A block that silently came out empty is worse than one that says so.
+    const mix = Object.entries(kinds).map(([k, n]) => `${n} ${k}`).join(", ");
+    const stood = stood_in ? `, ${stood_in} read against AKTU's published syllabus` : "";
+    toast(failed.length
+      ? `Downloaded ${name} — ${courses.length} blocks, ${failed.length} incomplete: ${failed[0]}`
+      : `Downloaded ${name} — ${courses.length} course blocks (${mix})${stood}.`);
+  } catch (e) { toast(e.message); }
+  finally { b.disabled = false; b.textContent = was; }
+};
+
+/* ------------------------------------------------------------ export */
+function matrixRows(){
+  const pos = cols();
+  const rows = [["CO", "Statement", "Bloom's", "CL", ...pos]];
+  S.cos.forEach(co => {
+    const lv = S.levels[co.code] || {};
+    rows.push([co.code, co.statement, co.blooms.map(k => "K" + k).join(" "),
+               clOf(co.blooms) ?? "", ...pos.map(p => lv[p] || "")]);
+  });
+  return rows;
+}
+$("#copy").onclick = async () => {
+  const tsv = matrixRows().map(r => r.join("\t")).join("\n");
+  try { await navigator.clipboard.writeText(tsv); toast("Matrix copied — paste into the SAR table."); }
+  catch { toast("Clipboard blocked; use the CSV download."); }
+};
+
+boot();
+</script>
+</body>
+</html>

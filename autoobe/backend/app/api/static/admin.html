@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Department dashboard — AutoOBE</title>
+<link rel="stylesheet" href="/static/app.css">
+<style>
+  /* Programme coverage. A PO nothing reaches is the finding a peer team
+     opens the file to look for, so it is drawn as loudly as a filled one. */
+  .pogrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:8px}
+  .po{background:var(--surface-2);border-radius:8px;padding:9px 10px;text-align:center;
+      border:1px solid transparent}
+  .po b{display:block;font-size:19px;letter-spacing:-.02em;line-height:1.2}
+  .po span{font-size:11px;color:var(--ink-soft)}
+  .po .code{font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--ink-faint)}
+  .po.gap{background:var(--err-bg);border-color:var(--err)}
+  .po.gap b{color:var(--err)}
+  .po.thin{background:var(--warn-bg)}
+  .po.thin b{color:var(--warn)}
+  .picker{max-height:260px;overflow-y:auto;border:1px solid var(--hair);border-radius:8px;
+          margin-top:9px}
+  .picker:empty{display:none}
+  .hit{display:flex;gap:10px;align-items:center;padding:7px 10px;border-bottom:1px solid var(--hair)}
+  .hit:last-child{border-bottom:0}
+  .hit .g{flex:1;min-width:0}
+  .hit .t{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--hair);margin:4px 0 12px}
+  .tabs button{border:0;border-bottom:2px solid transparent;border-radius:0;
+               background:none;padding:7px 11px;color:var(--ink-soft);font-size:13.5px}
+  .tabs button.on{border-bottom-color:var(--accent);color:var(--ink);font-weight:600}
+  .pane{display:none} .pane.on{display:block}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="brand">AutoOBE<small>Department dashboard</small></div>
+  <div class="spacer"></div>
+  <div class="who" id="who"></div>
+  <button class="mini" id="pw">Change password</button>
+  <button class="mini" id="out">Sign out</button>
+</header>
+
+<main>
+  <div class="grid stats" id="stats" style="margin-bottom:16px"></div>
+
+  <!-- ---------------------------------------------------- PO attainment -->
+  <div class="card" style="border-color:var(--accent)">
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div>
+        <h2>PO attainment</h2>
+        <p class="faint" style="margin:0">
+          The mapping and the marks, multiplied — SAR Table 3.8.1. A PO is the
+          attainment of the outcomes that serve it, weighted by how strongly
+          each one does.
+        </p>
+      </div>
+      <div class="row" style="gap:8px;align-items:center">
+        <div>
+          <label for="target" style="margin:0">Target</label>
+          <input id="target" type="number" min="0" max="3" step="0.1" value="2"
+                 style="width:74px;padding:4px 8px">
+        </div>
+        <button class="mini" id="dlsar">SAR tables (.xlsx)</button>
+      </div>
+    </div>
+    <div class="pogrid" id="poatt" style="margin-top:12px"></div>
+    <p class="faint" id="attbasis" style="margin:10px 0 0"></p>
+
+    <details style="margin-top:8px" id="perdetail">
+      <summary class="muted" style="cursor:pointer;font-size:13.5px">
+        Per subject</summary>
+      <div class="mwrap tall" style="margin-top:8px">
+        <table><thead id="perhead"></thead><tbody id="percourse"></tbody></table>
+      </div>
+    </details>
+  </div>
+
+  <!-- ------------------------------------------------- closing the loop -->
+  <div class="card">
+    <h2>Closing the loop</h2>
+    <p class="faint" style="margin:0">
+      Criterion 8 asks what was <i>done</i> about the gaps. These are drafted
+      from the numbers above — a starting point for the sentence a department
+      writes, never a substitute for it.
+    </p>
+    <div class="mwrap" style="margin-top:10px">
+      <table>
+        <thead><tr>
+          <th>PO</th><th>Attained</th><th>Target</th><th>Gap</th>
+          <th>Severity</th><th>Drafted action</th>
+        </tr></thead>
+        <tbody id="cqi"></tbody>
+      </table>
+    </div>
+    <div class="empty hide" id="nocqi"></div>
+  </div>
+
+  <!-- ------------------------------------------- programme PO coverage -->
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div>
+        <h2>Programme coverage</h2>
+        <p class="faint" style="margin:0">
+          Every PO across every submitted mapping — averaged over the outcomes
+          that reach it, then over the subjects that do. A column nothing
+          reaches is shown in red, because that is the gap a peer team looks
+          for.
+        </p>
+      </div>
+      <div class="faint" id="covmeta"></div>
+    </div>
+    <div class="pogrid" id="pos" style="margin-top:12px"></div>
+  </div>
+
+  <!-- ------------------------------------------------ submitted mappings -->
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div>
+        <h2>Submitted mappings</h2>
+        <p class="faint" style="margin:0">
+          A subject appears here because a teacher pressed Submit. Work they
+          have not submitted is not in the database at all.
+        </p>
+      </div>
+      <button class="mini" id="dl">Download the whole sheet (.xlsx)</button>
+    </div>
+    <div class="mwrap tall" style="margin-top:10px">
+      <table>
+        <thead><tr>
+          <th>Code</th><th>Subject</th><th>Teacher</th><th>Outcomes</th>
+          <th>Submitted</th><th></th>
+        </tr></thead>
+        <tbody id="subs"></tbody>
+      </table>
+    </div>
+    <div class="empty hide" id="nosubs">
+      Nothing has been submitted yet. Add subjects below, assign them, and the
+      mappings will land here as teachers submit.
+    </div>
+  </div>
+
+  <!-- ---------------------------------------------- internal attainment -->
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div>
+        <h2>Internal CO attainment</h2>
+        <p class="faint" style="margin:0">
+          Computed from each teacher's own marks — T1 is the mark a student
+          must cross, T2 the share of students that scores the full 3.
+        </p>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:26px;font-weight:700;letter-spacing:-.02em" id="attmean">–</div>
+        <div class="faint">programme mean</div>
+      </div>
+    </div>
+    <div class="mwrap tall" style="margin-top:10px">
+      <table>
+        <thead><tr>
+          <th>Code</th><th>Subject</th><th>Teacher</th><th>Students</th>
+          <th>T1 / T2</th><th>Per CO</th><th>Internal</th><th></th>
+        </tr></thead>
+        <tbody id="atts"></tbody>
+      </table>
+    </div>
+    <div class="empty hide" id="noatts">
+      No teacher has submitted an attainment sheet yet.
+    </div>
+  </div>
+
+  <!-- ---------------------------------------------------- add subjects -->
+  <div class="card">
+    <h2>Add subjects</h2>
+    <div class="tabs" id="tabs">
+      <button data-pane="p_cat" class="on">From the AKTU catalogue</button>
+      <button data-pane="p_paste">Paste a list</button>
+      <button data-pane="p_one">One at a time</button>
+    </div>
+
+    <div class="row" style="gap:10px;margin-bottom:10px">
+      <div style="flex:1;min-width:180px">
+        <label for="d_year" style="margin-top:0">Academic year for everything added here</label>
+        <input id="d_year" placeholder="2024-25">
+      </div>
+      <div style="flex:1;min-width:180px">
+        <label for="d_teacher" style="margin-top:0">Assign to</label>
+        <select id="d_teacher"></select>
+      </div>
+    </div>
+
+    <div class="pane on" id="p_cat">
+      <p class="faint" style="margin:0">
+        <span id="catcount">The bundled AKTU catalogue</span> — search by code
+        or name and the code, title and course kind come out right.
+      </p>
+      <label for="q">Search</label>
+      <input id="q" placeholder="digital signal processing, or BEC503" autocomplete="off">
+      <div class="picker" id="hits"></div>
+    </div>
+
+    <div class="pane" id="p_paste">
+      <p class="faint" style="margin:0">
+        One subject per line, <b>code</b> then the title — a comma, a tab or a
+        dash between them. Anything already in the sheet is reported rather
+        than silently skipped.
+      </p>
+      <label for="bulk">Subjects</label>
+      <textarea id="bulk" rows="7" placeholder="BEC-301, Electronic Devices
+BEC-302, Digital System Design
+BEC351, Electronic Devices Lab"></textarea>
+      <div class="row" style="margin-top:9px">
+        <button class="primary mini" id="bulkgo">Add these subjects</button>
+        <span class="faint" id="bulkcount"></span>
+      </div>
+    </div>
+
+    <div class="pane" id="p_one">
+      <form id="cform">
+        <div class="grid two" style="gap:0 12px">
+          <div>
+            <label for="c_code">Code</label>
+            <input id="c_code" placeholder="BEC-302" required>
+          </div>
+          <div>
+            <label for="c_prefix">CO prefix <span class="faint">— C202 → C202.1</span></label>
+            <input id="c_prefix" placeholder="C202">
+          </div>
+        </div>
+        <label for="c_title">Subject</label>
+        <input id="c_title" placeholder="Digital System Design" required>
+        <div class="row" style="margin-top:11px">
+          <button class="primary mini" type="submit">Add subject</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="grid two">
+    <!-- ------------------------------------------------------- subjects -->
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:baseline">
+        <h2 style="margin:0">Subjects</h2>
+        <input id="filter" placeholder="Filter…" style="width:150px;padding:4px 8px;font-size:13px">
+      </div>
+      <p class="faint">Every subject in the sheet, and who is mapping it.</p>
+      <div class="mwrap tall">
+        <table>
+          <thead><tr><th>Code</th><th>Subject</th><th>Assigned to</th><th></th></tr></thead>
+          <tbody id="courses"></tbody>
+        </table>
+      </div>
+      <div class="empty hide" id="nocourses">No subjects yet.</div>
+    </div>
+
+    <!-- --------------------------------------------------------- people -->
+    <div class="card">
+      <h2>People</h2>
+      <p class="faint">Teachers see only the subjects assigned to them.</p>
+      <div class="mwrap tall">
+        <table>
+          <thead><tr><th>Username</th><th>Name</th><th>Role</th><th>Subjects</th><th>Done</th><th></th></tr></thead>
+          <tbody id="users"></tbody>
+        </table>
+      </div>
+
+      <details style="margin-top:12px">
+        <summary class="muted" style="cursor:pointer;font-size:13.5px">Add a teacher</summary>
+        <form id="uform">
+          <div class="grid two" style="gap:0 12px">
+            <div>
+              <label for="u_name">Username</label>
+              <input id="u_name" placeholder="rgupta" required>
+            </div>
+            <div>
+              <label for="u_full">Full name</label>
+              <input id="u_full" placeholder="R Gupta">
+            </div>
+          </div>
+          <label for="u_pw">Password <span class="faint">— at least 8 characters; they can change it after signing in</span></label>
+          <input id="u_pw" type="password" minlength="8" required>
+          <div class="row" style="margin-top:11px">
+            <button class="primary mini" type="submit">Add teacher</button>
+          </div>
+        </form>
+      </details>
+    </div>
+  </div>
+
+  <div class="msg err" id="err"></div>
+  <div class="msg ok" id="ok"></div>
+</main>
+
+<script src="/static/shared.js"></script>
+<script>
+let USERS = [], COURSES = [];
+
+function teacherOptions(sel) {
+  return `<option value="">— unassigned —</option>` + USERS
+    .filter(u => u.role === "teacher")
+    .map(u => `<option value="${u.id}"${u.id === sel ? " selected" : ""}
+         >${esc(u.full_name || u.username)}</option>`).join("");
+}
+
+function paintCourses() {
+  const q = $("#filter").value.trim().toLowerCase();
+  const rows = COURSES.filter(c =>
+    !q || `${c.code} ${c.title} ${c.teacher_name || ""}`.toLowerCase().includes(q));
+  $("#nocourses").classList.toggle("hide", rows.length > 0);
+  $("#courses").innerHTML = rows.map(c => `
+    <tr>
+      <td class="mono">${esc(c.code)}
+        ${c.submitted ? '<div><span class="tag ok">mapped</span></div>' : ""}</td>
+      <td>${esc(c.title)}<div class="faint">${esc(c.academic_year || "")}</div></td>
+      <td><select data-assign="${c.id}">${teacherOptions(c.teacher_id)}</select></td>
+      <td style="text-align:right">
+        <button class="mini danger" data-delcourse="${c.id}"
+                data-label="${esc(c.code)}">Delete</button>
+      </td>
+    </tr>`).join("");
+}
+
+async function load() {
+  const d = await api("/api/admin/overview");
+  USERS = d.users; COURSES = d.courses;
+  const s = d.stats;
+  $("#stats").innerHTML = `
+    <div class="stat"><b>${s.courses}</b><span>subjects in the sheet</span></div>
+    <div class="stat"><b>${s.submitted}</b><span>mappings submitted</span></div>
+    <div class="stat"><b>${s.attainment_done}</b><span>attainment submitted</span></div>
+    <div class="stat"><b>${s.teachers}</b><span>teachers</span></div>`;
+
+  paintCourses();
+  // Keep the teacher the admin picked. `load()` runs after every add, and
+  // rebuilding this list with no selection silently reset it to "unassigned"
+  // — so an admin who chose a teacher and then added five subjects got the
+  // first one assigned and the other four not, with nothing saying so.
+  const keepTeacher = $("#d_teacher").value;
+  $("#d_teacher").innerHTML = teacherOptions(
+    keepTeacher ? Number(keepTeacher) : null);
+
+  // ---- people, with how far each teacher has got
+  const done = {};
+  COURSES.forEach(c => {
+    if (!c.teacher_id) return;
+    done[c.teacher_id] = done[c.teacher_id] || { n: 0, of: 0 };
+    done[c.teacher_id].of++;
+    if (c.submitted) done[c.teacher_id].n++;
+  });
+  $("#users").innerHTML = USERS.map(u => {
+    const p = done[u.id];
+    const prog = u.role === "admin" ? "—"
+      : p ? `${p.n}/${p.of}${p.n === p.of ? ' <span class="tag ok">all in</span>' : ""}`
+          : "—";
+    return `
+    <tr>
+      <td class="mono">${esc(u.username)}</td>
+      <td>${esc(u.full_name || "")}</td>
+      <td><span class="tag ${u.role === "admin" ? "ok" : ""}">${esc(u.role)}</span></td>
+      <td>${u.courses}</td>
+      <td>${prog}</td>
+      <td style="text-align:right;white-space:nowrap">
+        ${u.role === "admin" ? "" : `
+          <button class="mini" data-resetpw="${u.id}" data-label="${esc(u.username)}">Reset password</button>
+          <button class="mini danger" data-deluser="${u.id}" data-label="${esc(u.username)}">Remove</button>`}
+      </td>
+    </tr>`;
+  }).join("");
+
+  // ---- submissions
+  const { submissions } = await api("/api/admin/submissions");
+  $("#nosubs").classList.toggle("hide", submissions.length > 0);
+  $("#subs").innerHTML = submissions.map(s => {
+    const cos = (s.payload?.cos || []).length;
+    const cells = Object.values(s.payload?.co_levels || {})
+      .reduce((n, row) => n + Object.keys(row || {}).length, 0);
+    return `
+    <tr>
+      <td class="mono">${esc(s.code)}</td>
+      <td>${esc(s.title)}<div class="faint">${esc(s.academic_year || "")}</div></td>
+      <td>${esc(s.submitted_by_name || s.submitted_by || "—")}</td>
+      <td>${cos} COs<div class="faint">${cells} cells</div></td>
+      <td class="faint">${esc(when(s.updated_at))}</td>
+      <td style="text-align:right;white-space:nowrap">
+        <a href="/?course_id=${s.course_id}"><button class="mini">Open / edit</button></a>
+        <button class="mini danger" data-unsubmit="${s.course_id}"
+                data-label="${esc(s.code)}">Send back</button>
+      </td>
+    </tr>`;
+  }).join("");
+
+  // ---- internal CO attainment
+  const at = await api("/api/admin/attainment");
+  $("#noatts").classList.toggle("hide", at.attainment.length > 0);
+  $("#attmean").textContent =
+    at.programme_mean === null ? "–" : at.programme_mean.toFixed(2);
+  $("#atts").innerHTML = at.attainment.map(a => {
+    const cos = (a.payload?.cos || []);
+    const chips = cos.map(c =>
+      `<span class="tag" title="${esc(c.co_code)}: ${c.crossing}/${c.appeared} crossed T1"
+       >${esc(c.co_code)} ${Number(c.attainment).toFixed(2)}</span>`).join(" ");
+    const v = a.internal === null ? null : Number(a.internal);
+    return `
+    <tr>
+      <td class="mono">${esc(a.code)}</td>
+      <td>${esc(a.title)}<div class="faint">${esc(a.academic_year || "")}</div></td>
+      <td>${esc(a.submitted_by_name || a.submitted_by || "—")}</td>
+      <td>${a.students}</td>
+      <td class="faint">${Number(a.t1_pct)}% / ${Number(a.t2_pct)}%</td>
+      <td>${chips}</td>
+      <td><b>${v === null ? "–" : v.toFixed(2)}</b>
+          <div class="faint">${esc(when(a.updated_at))}</div></td>
+      <td style="text-align:right;white-space:nowrap">
+        <a href="/attainment?course_id=${a.course_id}"><button class="mini">Open</button></a>
+        <button class="mini danger" data-unatt="${a.course_id}"
+                data-label="${esc(a.code)}">Send back</button>
+      </td>
+    </tr>`;
+  }).join("");
+
+  await loadAttainment();
+
+  // ---- programme coverage
+  const cov = await api("/api/admin/po-coverage");
+  $("#covmeta").textContent = `${cov.framework_code} · over ${cov.courses} submitted `
+    + `subject${cov.courses === 1 ? "" : "s"}`;
+  $("#pos").innerHTML = cov.pos.map(p => {
+    const cls = !p.courses ? "gap" : (p.courses < Math.max(2, cov.courses * 0.25) ? "thin" : "");
+    return `<div class="po ${cls}" title="${esc(cov.po_titles[p.po_code] || "")}">
+      <span class="code">${esc(p.po_code)}</span>
+      <b>${p.average === null ? "–" : p.average.toFixed(2)}</b>
+      <span>${p.courses ? p.courses + " subject" + (p.courses === 1 ? "" : "s") : "nothing"}</span>
+    </div>`;
+  }).join("");
+}
+
+/* ------------------------------------------- PO attainment and the loop */
+
+async function loadAttainment() {
+  const target = Number($("#target").value) || 2;
+  const d = await api(`/api/admin/po-attainment?target=${target}`);
+
+  // The programme row. A PO no course addresses is null, not zero: "not
+  // taught here" and "taught and not attained" are different findings.
+  $("#poatt").innerHTML = d.po_codes.map(po => {
+    const v = d.direct_attainment[po];
+    const cls = v === null ? "gap" : (v < target ? "thin" : "");
+    return `<div class="po ${cls}" title="${esc(d.po_titles[po] || "")}">
+      <span class="code">${esc(po)}</span>
+      <b>${v === null ? "–" : v.toFixed(2)}</b>
+      <span>${v === null ? "no course" : (v < target ? "below target" : "at target")}</span>
+    </div>`;
+  }).join("");
+
+  const r = d.readiness;
+  const waiting = [];
+  if (r.mapping_only) waiting.push(`${r.mapping_only} mapped but not yet measured`);
+  if (r.marks_only) waiting.push(`${r.marks_only} measured but not yet mapped`);
+  $("#attbasis").innerHTML = d.courses.length
+    ? `Computed from <b>${d.courses.length}</b> of ${r.courses} subjects — the `
+      + `ones with both a submitted mapping and a submitted attainment.`
+      + (waiting.length ? ` Still waiting: ${esc(waiting.join(", "))}.` : "")
+    : `<span class="tag warn">nothing yet</span> A subject needs <b>both</b> a `
+      + `submitted CO → PO mapping and a submitted CO attainment before its PO `
+      + `attainment can be computed.`
+      + (waiting.length ? ` Right now: ${esc(waiting.join(", "))}.` : "");
+
+  // ---- per subject
+  $("#perdetail").classList.toggle("hide", !d.courses.length);
+  $("#perhead").innerHTML = `<tr><th>Code</th><th>Subject</th>`
+    + d.po_codes.map(p => `<th>${esc(p)}</th>`).join("") + `</tr>`;
+  $("#percourse").innerHTML = d.courses.map(c => `
+    <tr>
+      <td class="mono">${esc(c.code)}</td>
+      <td>${esc(c.title)}
+        ${c.unmatched_cos.length
+          ? `<div class="faint">outcomes in one half only: ${esc(c.unmatched_cos.join(", "))}</div>`
+          : ""}</td>
+      ${d.po_codes.map(p => {
+        const v = c.po[p];
+        return `<td>${v === null || v === undefined ? "–" : Number(v).toFixed(2)}</td>`;
+      }).join("")}
+    </tr>`).join("");
+
+  // ---- the loop
+  $("#nocqi").classList.toggle("hide", d.cqi.length > 0);
+  $("#nocqi").innerHTML = d.courses.length
+    ? `Every PO that any subject addresses is at or above ${target.toFixed(2)}.`
+      + (d.untouched.length
+         ? ` ${esc(d.untouched.join(", "))} ${d.untouched.length === 1 ? "is" : "are"} `
+           + `not addressed by any subject at all — a curriculum gap rather than `
+           + `a CQI action.`
+         : "")
+    : "Nothing to act on until PO attainment can be computed.";
+  $("#cqi").innerHTML = d.cqi.map(x => `
+    <tr>
+      <td class="mono">${esc(x.code)}</td>
+      <td>${x.attained.toFixed(2)}</td>
+      <td>${x.target.toFixed(2)}</td>
+      <td><b>${x.gap.toFixed(2)}</b></td>
+      <td><span class="tag ${x.severity === "critical" ? "err" : "warn"}"
+           >${esc(x.severity)}</span></td>
+      <td>${esc(x.action)}<div class="faint">${esc(x.rationale)}</div></td>
+    </tr>`).join("");
+}
+
+let ttimer;
+$("#target").oninput = () => {
+  clearTimeout(ttimer);
+  ttimer = setTimeout(() => loadAttainment().catch(ex => flash("err", ex.message)), 350);
+};
+
+$("#dlsar").onclick = async () => {
+  const b = $("#dlsar"), was = b.textContent;
+  b.disabled = true; b.textContent = "Building…";
+  try {
+    await download(`/api/admin/sar?target=${Number($("#target").value) || 2}`,
+                   "PO_Attainment_CQI.xlsx");
+  } catch (ex) { flash("err", ex.message); }
+  finally { b.disabled = false; b.textContent = was; }
+};
+
+/* --------------------------------------------------------- add subjects */
+
+$("#tabs").onclick = e => {
+  const b = e.target.closest("button"); if (!b) return;
+  $("#tabs").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+  document.querySelectorAll(".pane").forEach(p => p.classList.toggle("on", p.id === b.dataset.pane));
+};
+
+const defaults = () => ({
+  academic_year: $("#d_year").value.trim(),
+  teacher_id: $("#d_teacher").value ? Number($("#d_teacher").value) : null,
+});
+
+let qtimer;
+$("#q").oninput = () => {
+  clearTimeout(qtimer);
+  qtimer = setTimeout(async () => {
+    const q = $("#q").value.trim();
+    if (q.length < 2) { $("#hits").innerHTML = ""; return; }
+    try {
+      const { results } = await api("/api/admin/catalogue-search?q=" + encodeURIComponent(q));
+      $("#hits").innerHTML = results.length ? results.map(r => `
+        <div class="hit">
+          <span class="mono" style="width:88px;flex:none">${esc(r.code)}</span>
+          <span class="g"><span class="t">${esc(r.title)}</span>
+            <span class="faint">${esc(r.kind)}${r.units ? " · " + r.units + " units" : ""}</span></span>
+          <button class="mini" data-add="${esc(r.code)}" data-title="${esc(r.title)}">Add</button>
+        </div>`).join("")
+        : `<div class="hit faint">Nothing in the catalogue matches that.</div>`;
+    } catch (ex) { flash("err", ex.message); }
+  }, 220);
+};
+
+function parseBulk(text) {
+  return text.split(/\r?\n/).map(l => l.trim()).filter(Boolean).map(line => {
+    // "BEC-302, Digital System Design" — comma, tab, or a dash with spaces
+    // around it. A hyphen inside a code (BEC-302) must not split the line,
+    // which is why the dash form needs the surrounding spaces.
+    const m = line.match(/^(\S+)\s*(?:,|\t|\s+-\s+|\s{2,})\s*(.+)$/)
+           || line.match(/^(\S+)\s+(.+)$/);
+    return m ? { code: m[1].replace(/[,;]$/, ""), title: m[2].trim() } : null;
+  }).filter(Boolean);
+}
+
+$("#bulk").oninput = () => {
+  const n = parseBulk($("#bulk").value).length;
+  $("#bulkcount").textContent = n ? `${n} subject${n === 1 ? "" : "s"} recognised` : "";
+};
+
+async function addCourses(list) {
+  if (!list.length) { flash("err", "Nothing to add."); return; }
+  const d = await api("/api/admin/courses/bulk", {
+    method: "POST",
+    body: JSON.stringify({ courses: list.map(c => ({ ...c, ...defaults() })) }),
+  });
+  if (d.added.length) flash("ok", `Added ${d.added.length} subject${d.added.length === 1 ? "" : "s"}.`);
+  if (d.skipped.length) flash("err",
+    `${d.skipped.length} skipped — ${d.skipped.slice(0, 3).map(s => s.code + ": " + s.reason).join("; ")}`);
+  load();
+}
+
+$("#bulkgo").onclick = async () => {
+  try { await addCourses(parseBulk($("#bulk").value)); $("#bulk").value = ""; $("#bulkcount").textContent = ""; }
+  catch (ex) { flash("err", ex.message); }
+};
+
+$("#cform").onsubmit = async e => {
+  e.preventDefault();
+  try {
+    await addCourses([{ code: $("#c_code").value.trim(),
+                        title: $("#c_title").value.trim(),
+                        co_prefix: $("#c_prefix").value.trim() }]);
+    e.target.reset();
+  } catch (ex) { flash("err", ex.message); }
+};
+
+/* -------------------------------------------------------- interactions */
+
+$("#filter").oninput = paintCourses;
+
+document.addEventListener("change", async e => {
+  const id = e.target.dataset.assign;
+  if (!id) return;
+  const v = e.target.value;
+  try {
+    await api(`/api/admin/courses/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(v ? { teacher_id: Number(v) } : { unassign: true }),
+    });
+    flash("ok", v ? "Assigned." : "Unassigned.");
+    load();
+  } catch (ex) { flash("err", ex.message); }
+});
+
+document.addEventListener("click", async e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  const label = b.dataset.label || "";
+  try {
+    if (b.dataset.add) {
+      await addCourses([{ code: b.dataset.add, title: b.dataset.title }]);
+      b.disabled = true; b.textContent = "Added";
+      return;
+    }
+    if (b.dataset.delcourse) {
+      if (!confirm(`Delete ${label}? Its submitted mapping goes with it.`)) return;
+      await api(`/api/admin/courses/${b.dataset.delcourse}`, { method: "DELETE" });
+      flash("ok", `${label} deleted.`);
+    } else if (b.dataset.deluser) {
+      if (!confirm(`Remove ${label}? Their subjects become unassigned.`)) return;
+      await api(`/api/admin/users/${b.dataset.deluser}`, { method: "DELETE" });
+      flash("ok", `${label} removed.`);
+    } else if (b.dataset.resetpw) {
+      const pw = prompt(`New password for ${label} — at least 8 characters.`);
+      if (!pw) return;
+      await api(`/api/admin/users/${b.dataset.resetpw}/password`, {
+        method: "POST", body: JSON.stringify({ password: pw }) });
+      flash("ok", `Password reset. Tell ${label} to change it after signing in.`);
+      return;
+    } else if (b.dataset.unatt) {
+      if (!confirm(`Send the attainment for ${label} back? The subject stays; `
+                 + `its attainment is removed and the teacher can submit again.`)) return;
+      await api(`/api/admin/attainment/${b.dataset.unatt}`, { method: "DELETE" });
+      flash("ok", `${label} attainment sent back.`);
+    } else if (b.dataset.unsubmit) {
+      if (!confirm(`Send ${label} back? The subject stays; its mapping is removed `
+                 + `and the teacher can submit again.`)) return;
+      await api(`/api/admin/submissions/${b.dataset.unsubmit}`, { method: "DELETE" });
+      flash("ok", `${label} sent back.`);
+    } else return;
+    load();
+  } catch (ex) { flash("err", ex.message); }
+});
+
+$("#uform").onsubmit = async e => {
+  e.preventDefault();
+  try {
+    await api("/api/admin/users", {
+      method: "POST",
+      body: JSON.stringify({
+        username: $("#u_name").value.trim(), password: $("#u_pw").value,
+        full_name: $("#u_full").value.trim(), role: "teacher",
+      }),
+    });
+    e.target.reset();
+    flash("ok", "Teacher added.");
+    load();
+  } catch (ex) { flash("err", ex.message); }
+};
+
+$("#dl").onclick = async () => {
+  const b = $("#dl"), was = b.textContent;
+  b.disabled = true; b.textContent = "Building…";
+  try { await download("/api/admin/workbook", "CO-PO_Mapping.xlsx"); }
+  catch (ex) { flash("err", ex.message); }
+  finally { b.disabled = false; b.textContent = was; }
+};
+
+$("#pw").onclick = changePassword;
+$("#out").onclick = signOut;
+
+(async () => {
+  const user = await requireUser("admin");
+  if (!user) return;
+  $("#who").innerHTML = `<b>${esc(user.full_name || user.username)}</b> · administrator`;
+  try {
+    const { results } = await api("/api/admin/catalogue-search?q=a&limit=1");
+    $("#catcount").textContent = "The bundled AKTU catalogue";
+  } catch { /* the count is decoration */ }
+  load().catch(ex => flash("err", ex.message));
+})();
+</script>
+</body>
+</html>

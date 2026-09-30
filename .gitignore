@@ -1,0 +1,28 @@
+# Secrets -- the Neon connection string and CLI link live here.
+.env.local
+.neon
+
+# Dependencies and build output
+node_modules/
+
+# The AKTU syllabus corpus: 181 MB of PDFs downloaded from aktu.ac.in by
+# backend/tools/fetch_aktu_syllabi.py. The built catalogue that the app
+# actually reads (app/data/aktu_catalogue.json, 1.2 MB) IS committed, so a
+# clone works without these; re-run the fetcher to rebuild the corpus.
+aktu_corpus/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Local single-user workspace database -- per-machine state, not source.
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+
+# Relocated history of the former nested autoobe repo (7 commits).
+# Restore with: mv .autoobe-git-history autoobe/.git
+.autoobe-git-history/
